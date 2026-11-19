@@ -38,6 +38,7 @@ pnpm install
 pnpm run dev     # dev server (basePath applies: /api/)
 pnpm run build   # static export → out/ (uploaded to Pages by CI)
 pnpm run lint && pnpm run typecheck && pnpm run test
+pnpm run test:coverage   # vitest + v8 coverage; thresholds 80% (stmts/branch/funcs/lines)
 
 # rebuild the wasm package consumed by /app (from repo root or crates/api-wasm)
 pnpm --filter @api/wasm run build:wasm
