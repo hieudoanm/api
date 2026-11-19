@@ -1,0 +1,14 @@
+/* TEAM */
+Project: api — OpenAPI to API client collections
+Site: https://hieudoanm.github.io/api/
+Source: https://github.com/hieudoanm/api
+
+/* SITE */
+Last update: 2026/11/19
+Language: English
+Doctype: HTML5
+
+/* NOTE */
+This site is a static export of a Next.js app. Source lives in packages/landing.
+
+Sitemap: https://hieudoanm.github.io/api/sitemap.xml

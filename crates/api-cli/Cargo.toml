@@ -1,0 +1,15 @@
+[package]
+name = "api-cli"
+description = "Command-line interface for converting OpenAPI specs to API client collections"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "api"
+path = "src/main.rs"
+
+[dependencies]
+api-core = { path = "../api-core" }
+api-mcp = { path = "../api-mcp" }
+anyhow.workspace = true
+clap.workspace = true

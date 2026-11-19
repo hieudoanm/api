@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img">
+  <rect width="1280" height="640" fill="#0b0b0b"/>
+  <rect x="12" y="12" width="1256" height="616" rx="28" fill="#141414" stroke="#2e2e2e" stroke-width="2"/>
+  <path d="M12 68V40a28 28 0 0 1 28-28h1200a28 28 0 0 1 28 28v28H12Z" fill="#1c1c1c"/>
+  <circle cx="56" cy="40" r="8" fill="#ff5f57"/>
+  <circle cx="84" cy="40" r="8" fill="#febc2e"/>
+  <circle cx="112" cy="40" r="8" fill="#28c840"/>
+  <text x="640" y="47" text-anchor="middle" font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="17" fill="#8a8a8a">api — zsh</text>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="104"><tspan fill="#a5b4fc">$</tspan> <tspan fill="#e5e5e5">api --version</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="131"><tspan fill="#9ca3af">api 0.0.1 (build 2026.01.01.12.00.00)</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="158"><tspan fill="#a5b4fc">$</tspan> <tspan fill="#e5e5e5">api formats</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="185"><tspan fill="#9ca3af">postman</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="212"><tspan fill="#9ca3af">bruno</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="239"><tspan fill="#9ca3af">insomnia</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="266"><tspan fill="#9ca3af">hoppscotch</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="293"><tspan fill="#9ca3af">rest-client</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="320"><tspan fill="#9ca3af">thunder-client</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="347"><tspan fill="#9ca3af">yaak</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="374"><tspan fill="#9ca3af">hurl</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="401"><tspan fill="#9ca3af">kreya</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="428"><tspan fill="#9ca3af">curl</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="455"><tspan fill="#a5b4fc">$</tspan> <tspan fill="#e5e5e5">api convert petstore.yaml -f all --out ./api-collections</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="482"><tspan fill="#7dd3a8">wrote api-collections/postman/petstore.postman_collection.json</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="509"><tspan fill="#7dd3a8">wrote api-collections/thunder-client/thunder-collection_petstore.json</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="536"><tspan fill="#7dd3a8">wrote api-collections/yaak/workspace.yaml</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="563"><tspan fill="#7dd3a8">wrote api-collections/kreya/swagger-petstore/swagger-petstore.krproj</tspan></text></g>
+  <g font-family="'JetBrains Mono', 'Fira Code', 'SF Mono', Menlo, Consolas, monospace" font-size="18"><text x="44" y="590"><tspan fill="#7dd3a8">wrote 94 file(s) to ./api-collections</tspan></text></g>
+  <rect x="44" y="608" width="10" height="18" rx="2" fill="#e5e5e5"/>
+</svg>

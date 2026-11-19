@@ -1,0 +1,14 @@
+[package]
+name = "api-wasm"
+description = "WebAssembly bindings for api-core"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+name = "api_wasm"
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+api-core = { path = "../api-core" }
+serde_json.workspace = true
+wasm-bindgen = "=0.2.130"

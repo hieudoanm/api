@@ -1,0 +1,25 @@
+[workspace]
+resolver = "2"
+members = [
+  "crates/api-core",
+  "crates/api-cli",
+  "crates/api-mcp",
+  "crates/api-wasm",
+]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2021"
+
+[workspace.dependencies]
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+serde_yml = "=0.0.13"
+thiserror = "=2.0.21"
+clap = { version = "=4.6.8", features = ["derive"] }
+anyhow = "=1.0.104"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1

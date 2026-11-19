@@ -1,0 +1,7 @@
+packages:
+  - 'packages/**'
+  - '!packages/landing/out/**'
+  - '!packages/landing/.next/**'
+  - 'crates/api-wasm'
+
+minimumReleaseAge: 0
