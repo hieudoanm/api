@@ -27,7 +27,9 @@ pub fn parse_openapi(source: &str) -> Result<ApiCollection> {
         ));
     }
 
-    normalize(&value)
+    let mut collection = normalize(&value)?;
+    collection.spec = value;
+    Ok(collection)
 }
 
 pub fn convert_openapi(
@@ -131,6 +133,7 @@ fn normalize(root: &Value) -> Result<ApiCollection> {
         version,
         servers,
         folders,
+        spec: Value::Null,
     })
 }
 

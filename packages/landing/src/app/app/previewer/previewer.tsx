@@ -1,106 +1,47 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ChangeEvent, DragEvent, FC } from 'react';
-import { strToU8, zipSync } from 'fflate';
-import init, { convert, convert_all, openapi_info } from '@api/wasm';
+import { convert, convert_all, openapi_info } from '@api/wasm';
+import { log } from '@/lib/log';
 import {
   LuCheck,
   LuCopy,
   LuDownload,
-  LuEye,
+  LuExternalLink,
   LuFileJson,
   LuPlay,
   LuSearch,
   LuTrash2,
   LuUpload,
 } from 'react-icons/lu';
-import SwaggerPreview from './swagger-preview';
+import { downloadBlob, ensureWasm, errorMessage, formatBytes } from '../shared';
+import type { SpecInfo, WasmFile } from '../shared';
 
-type OutputFormat =
-  | 'postman'
-  | 'bruno'
-  | 'insomnia'
-  | 'hoppscotch'
-  | 'rest-client'
-  | 'thunder-client'
-  | 'yaak'
-  | 'hurl'
-  | 'kreya'
-  | 'curl'
-  | 'all';
+type PreviewFormat =
+  'swagger-ui' | 'redoc' | 'scalar' | 'stoplight' | 'rapidoc' | 'all';
 
-const FORMATS: { value: OutputFormat; label: string }[] = [
-  { value: 'postman', label: 'Postman' },
-  { value: 'bruno', label: 'Bruno' },
-  { value: 'insomnia', label: 'Insomnia' },
-  { value: 'hoppscotch', label: 'Hoppscotch' },
-  { value: 'rest-client', label: 'REST Client (.http)' },
-  { value: 'thunder-client', label: 'Thunder Client' },
-  { value: 'yaak', label: 'Yaak' },
-  { value: 'hurl', label: 'Hurl' },
-  { value: 'kreya', label: 'Kreya' },
-  { value: 'curl', label: 'curl (.sh)' },
-  { value: 'all', label: 'All formats' },
+const PREVIEW_FORMATS = new Set([
+  'swagger-ui',
+  'redoc',
+  'scalar',
+  'stoplight',
+  'rapidoc',
+]);
+
+const FORMATS: { value: PreviewFormat; label: string }[] = [
+  { value: 'swagger-ui', label: 'Swagger UI' },
+  { value: 'redoc', label: 'ReDoc' },
+  { value: 'scalar', label: 'Scalar' },
+  { value: 'stoplight', label: 'Stoplight Elements' },
+  { value: 'rapidoc', label: 'RapiDoc' },
+  { value: 'all', label: 'All previews' },
 ];
 
-interface WasmFile {
-  format: string;
-  path: string;
-  content: string;
-}
-
-interface SpecInfo {
-  name: string;
-  description: string;
-  version: string;
-  servers: string[];
-  folders: { name: string; requests: number }[];
-  requests: number;
-}
-
-let wasmReady: Promise<unknown> | null = null;
-const ensureWasm = (): Promise<unknown> => {
-  if (!wasmReady) wasmReady = init();
-  return wasmReady;
-};
-
-const errorMessage = (error: unknown): string => {
-  if (error instanceof Error) return error.message;
-  return String(error);
-};
-
-const formatBytes = (value: string): string => {
-  const bytes = new TextEncoder().encode(value).length;
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
-
-const slugify = (value: string): string => {
-  const slug = value
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-  return slug || 'openapi';
-};
-
-const downloadBlob = (blob: Blob, filename: string): void => {
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = filename;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-};
-
-const ConverterApp: FC = () => {
+const PreviewerApp: FC = () => {
   const [source, setSource] = useState('');
-  const [format, setFormat] = useState<OutputFormat>('postman');
+  const [format, setFormat] = useState<PreviewFormat>('swagger-ui');
   const [name, setName] = useState('');
-  const [baseUrl, setBaseUrl] = useState('');
   const [wasmState, setWasmState] = useState<'loading' | 'ready' | 'error'>(
     'loading'
   );
@@ -112,8 +53,42 @@ const ConverterApp: FC = () => {
   const [error, setError] = useState('');
   const [dragging, setDragging] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const onError = (event: ErrorEvent): void => {
+      log.error('[previewer]', event.message, event.filename, event.lineno);
+    };
+    const onRejection = (event: PromiseRejectionEvent): void => {
+      log.error('[previewer]', 'unhandled rejection', event.reason);
+    };
+    window.addEventListener('error', onError);
+    window.addEventListener('unhandledrejection', onRejection);
+    return () => {
+      window.removeEventListener('error', onError);
+      window.removeEventListener('unhandledrejection', onRejection);
+    };
+  }, []);
+
+  const selectedFile = useMemo(
+    () => files?.[selected] ?? null,
+    [files, selected]
+  );
+
+  const onIframeLoad = useCallback((): void => {
+    const frame = iframeRef.current?.contentWindow;
+    if (!frame) return;
+    const label = selectedFile?.path ?? 'preview';
+    frame.addEventListener('error', (event: Event) => {
+      const errorEvent = event as ErrorEvent;
+      log.error(`[preview:${label}]`, errorEvent.message);
+    });
+    frame.addEventListener('unhandledrejection', (event: Event) => {
+      const rejection = event as PromiseRejectionEvent;
+      log.error(`[preview:${label}]`, 'unhandled rejection', rejection.reason);
+    });
+  }, [selectedFile]);
 
   useEffect(() => {
     let cancelled = false;
@@ -125,6 +100,7 @@ const ConverterApp: FC = () => {
         if (cancelled) return;
         setWasmState('error');
         setWasmError(errorMessage(err));
+        log.error('[previewer] wasm init failed', err);
       });
     return () => {
       cancelled = true;
@@ -132,11 +108,17 @@ const ConverterApp: FC = () => {
   }, []);
 
   const ready = wasmState === 'ready' && !busy;
-  const selectedFile = useMemo(
-    () => files?.[selected] ?? null,
-    [files, selected]
-  );
-  const collectionName = name.trim() || info?.name || 'openapi';
+  const previewUrl = useMemo(() => {
+    if (!selectedFile || !selectedFile.path.endsWith('.html')) return null;
+    return URL.createObjectURL(
+      new Blob([selectedFile.content], { type: 'text/html' })
+    );
+  }, [selectedFile]);
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
 
   const inspect = async (): Promise<void> => {
     if (!source.trim()) {
@@ -152,6 +134,7 @@ const ConverterApp: FC = () => {
       setSelected(0);
     } catch (err) {
       setError(errorMessage(err));
+      log.error('[previewer] inspect failed', err);
     } finally {
       setBusy(null);
     }
@@ -167,10 +150,12 @@ const ConverterApp: FC = () => {
     try {
       const payload =
         format === 'all'
-          ? convert_all(source, name, baseUrl)
-          : convert(source, format, name, baseUrl);
+          ? convert_all(source, name, '')
+          : convert(source, format, name, '');
       const parsed = JSON.parse(payload) as { files?: WasmFile[] };
-      const produced = parsed.files ?? [];
+      const produced = (parsed.files ?? []).filter((file) =>
+        PREVIEW_FORMATS.has(file.format)
+      );
       if (produced.length === 0) {
         throw new Error('converter produced no files');
       }
@@ -184,6 +169,7 @@ const ConverterApp: FC = () => {
     } catch (err) {
       setError(errorMessage(err));
       setFiles(null);
+      log.error('[previewer] convert failed', err);
     } finally {
       setBusy(null);
     }
@@ -211,31 +197,9 @@ const ConverterApp: FC = () => {
   };
 
   const downloadFile = (file: WasmFile): void => {
-    const type = file.path.endsWith('.json')
-      ? 'application/json'
-      : file.path.endsWith('.http')
-        ? 'text/plain'
-        : 'text/plain';
     downloadBlob(
-      new Blob([file.content], { type }),
+      new Blob([file.content], { type: 'text/html' }),
       file.path.split('/').pop() ?? file.path
-    );
-  };
-
-  const downloadAll = (): void => {
-    if (!files || files.length === 0) return;
-    if (files.length === 1) {
-      downloadFile(files[0]);
-      return;
-    }
-    const zipped: Record<string, Uint8Array> = {};
-    for (const file of files) {
-      zipped[`${file.format}/${file.path}`] = strToU8(file.content);
-    }
-    const archive = zipSync(zipped, { level: 6 });
-    downloadBlob(
-      new Blob([archive], { type: 'application/zip' }),
-      `${slugify(collectionName)}-api-clients.zip`
     );
   };
 
@@ -246,11 +210,8 @@ const ConverterApp: FC = () => {
       window.setTimeout(() => setCopied(false), 1500);
     } catch (err) {
       setError(errorMessage(err));
+      log.error('[previewer] clipboard copy failed', err);
     }
-  };
-
-  const copySelected = async (): Promise<void> => {
-    if (selectedFile) await copyContent(selectedFile.content);
   };
 
   const clear = (): void => {
@@ -260,22 +221,21 @@ const ConverterApp: FC = () => {
     setSelected(0);
     setError('');
     setCopied(false);
-    setShowPreview(false);
   };
 
   return (
     <main className="mx-auto w-full max-w-6xl px-5 py-12">
       <div className="mb-8">
         <p className="text-primary text-sm font-semibold tracking-wide uppercase">
-          Browser converter
+          Browser previewer
         </p>
         <h1 className="text-base-content m-0 mt-2 text-3xl font-bold tracking-tight text-balance md:text-4xl">
-          Convert OpenAPI in the browser.
+          Preview API docs in the browser.
         </h1>
         <p className="text-base-content/60 mt-3 max-w-2xl text-lg">
-          The same <code>api-core</code> Rust engine that powers the CLI runs
-          here as WebAssembly. Paste a spec or drop a file — nothing is
-          uploaded.
+          Render your OpenAPI spec with Swagger UI, ReDoc, Scalar, Stoplight
+          Elements or RapiDoc — generated locally by the same Rust engine as the
+          CLI.
         </p>
       </div>
 
@@ -334,12 +294,12 @@ const ConverterApp: FC = () => {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <label className="block">
                 <span className="text-base-content/70 mb-1 block text-sm font-semibold">
-                  Output format
+                  Preview format
                 </span>
                 <select
                   value={format}
                   onChange={(event) =>
-                    setFormat(event.target.value as OutputFormat)
+                    setFormat(event.target.value as PreviewFormat)
                   }
                   className="select select-bordered w-full">
                   {FORMATS.map((item) => (
@@ -360,17 +320,6 @@ const ConverterApp: FC = () => {
                   className="input input-bordered w-full"
                 />
               </label>
-              <label className="block md:col-span-2">
-                <span className="text-base-content/70 mb-1 block text-sm font-semibold">
-                  Base URL override
-                </span>
-                <input
-                  value={baseUrl}
-                  onChange={(event) => setBaseUrl(event.target.value)}
-                  placeholder={info?.servers[0] ?? 'https://api.example.com'}
-                  className="input input-bordered w-full"
-                />
-              </label>
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -388,15 +337,7 @@ const ConverterApp: FC = () => {
                 onClick={() => void runConvert()}
                 disabled={!ready || !source.trim()}>
                 <LuPlay className="h-4 w-4" />
-                {busy === 'convert' ? 'Converting…' : 'Convert'}
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline"
-                onClick={() => setShowPreview((value) => !value)}
-                disabled={!source.trim()}>
-                <LuEye className="h-4 w-4" />
-                {showPreview ? 'Hide preview' : 'Preview'}
+                {busy === 'convert' ? 'Generating…' : 'Generate preview'}
               </button>
               {wasmState === 'loading' && (
                 <span className="text-base-content/50 text-sm">
@@ -442,38 +383,51 @@ const ConverterApp: FC = () => {
                   <span>v{info.version}</span>
                 </div>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {info.servers.slice(0, 3).map((server) => (
-                  <code
-                    key={server}
-                    className="bg-base-200 text-base-content/70 rounded-lg px-2 py-1 text-xs">
-                    {server}
-                  </code>
-                ))}
+            </div>
+          )}
+
+          {previewUrl && selectedFile && (
+            <div className="border-base-content/10 bg-base-100 overflow-hidden rounded-2xl border">
+              <div className="border-base-content/10 bg-base-200/60 flex flex-wrap items-center justify-between gap-3 border-b px-4 py-3">
+                <span className="text-base-content truncate font-mono text-xs font-semibold">
+                  {selectedFile.path}
+                </span>
+                <div className="flex gap-2">
+                  <a
+                    href={previewUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-ghost btn-xs">
+                    <LuExternalLink className="h-3.5 w-3.5" /> Open
+                  </a>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs"
+                    onClick={() => downloadFile(selectedFile)}>
+                    <LuDownload className="h-3.5 w-3.5" /> Download
+                  </button>
+                </div>
               </div>
+              <iframe
+                ref={iframeRef}
+                onLoad={onIframeLoad}
+                title={`${selectedFile.path} preview`}
+                src={previewUrl}
+                sandbox="allow-scripts allow-same-origin allow-popups"
+                className="bg-base-100 h-[70vh] w-full"
+              />
             </div>
           )}
         </section>
 
         <aside className="space-y-4">
           <div className="border-base-content/10 bg-base-100 rounded-2xl border p-5">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="text-base-content m-0 text-lg font-bold">
-                Output files
-              </h2>
-              <button
-                type="button"
-                className="btn btn-primary btn-sm"
-                onClick={downloadAll}
-                disabled={!files || files.length === 0}>
-                <LuDownload className="h-4 w-4" />
-                Download {files && files.length > 1 ? 'ZIP' : ''}
-              </button>
-            </div>
-
+            <h2 className="text-base-content m-0 mb-4 text-lg font-bold">
+              Preview files
+            </h2>
             {!files || files.length === 0 ? (
               <div className="border-base-content/10 text-base-content/50 rounded-xl border border-dashed p-6 text-center text-sm">
-                Converted files will appear here.
+                Generated HTML previews will appear here.
               </div>
             ) : (
               <ul className="space-y-2">
@@ -522,46 +476,10 @@ const ConverterApp: FC = () => {
               </ul>
             )}
           </div>
-
-          {selectedFile && (
-            <div className="border-base-content/10 bg-base-100 overflow-hidden rounded-2xl border">
-              <div className="border-base-content/10 bg-base-200/60 flex items-center justify-between gap-3 border-b px-4 py-3">
-                <span className="text-base-content truncate font-mono text-xs font-semibold">
-                  {selectedFile.path}
-                </span>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-xs"
-                  onClick={() => void copySelected()}>
-                  <LuCopy className="h-3.5 w-3.5" />
-                  {copied ? 'Copied' : 'Copy content'}
-                </button>
-              </div>
-              <pre className="text-base-content/80 max-h-[28rem] overflow-auto p-4 font-mono text-xs leading-relaxed">
-                {selectedFile.content}
-              </pre>
-            </div>
-          )}
         </aside>
       </div>
-
-      {showPreview && (
-        <section className="mt-8">
-          <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h2 className="text-base-content m-0 text-xl font-bold">
-                Swagger UI preview
-              </h2>
-              <p className="text-base-content/60 mt-1 text-sm">
-                Renders the pasted or dropped OpenAPI document locally.
-              </p>
-            </div>
-          </div>
-          <SwaggerPreview source={source} />
-        </section>
-      )}
     </main>
   );
 };
 
-export default ConverterApp;
+export default PreviewerApp;

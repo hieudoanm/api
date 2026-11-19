@@ -13,9 +13,14 @@ to GitHub Pages at `https://hieudoanm.github.io/api` (project site —
 
 - `src/app/page.tsx` — landing page (hero, features, output-format cards,
   quickstart terminals, CTA, footer)
-- `src/app/app/` — browser converter UI (`/app/`): paste/drop OpenAPI specs,
-  preview them in Swagger UI, and download converted client files via the WASM
-  build of `api-core`
+- `src/app/app/` — browser apps hub (`/app/`) linking to:
+  - `app/converter/` (`/app/converter/`) — paste/drop OpenAPI specs and download
+    converted API client files (10 formats) via the WASM build of `api-core`
+  - `app/previewer/` (`/app/previewer/`) — paste/drop OpenAPI specs and
+    download/preview standalone HTML docs (Swagger UI, ReDoc, Scalar, Stoplight
+    Elements, RapiDoc) via the same WASM build
+  - `app/converter.tsx`, `app/previewer/previewer.tsx`, `app/shared.ts` — the
+    client components behind those routes
 - `@api/wasm` — workspace dependency backed by `crates/api-wasm`; its generated
   `pkg/` bindings are gitignored and built with `make build-wasm` (needs the
   `wasm32-unknown-unknown` Rust target and `wasm-bindgen` CLI)

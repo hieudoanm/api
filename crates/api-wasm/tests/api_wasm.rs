@@ -62,7 +62,7 @@ fn parse_json(text: &str) -> Value {
 fn formats_returns_all_client_formats() {
     let value = parse_json(&api_wasm::formats());
     let formats = value.as_array().expect("formats is an array");
-    assert_eq!(formats.len(), 10);
+    assert_eq!(formats.len(), 15);
     for expected in [
         "postman",
         "bruno",
@@ -74,6 +74,11 @@ fn formats_returns_all_client_formats() {
         "hurl",
         "kreya",
         "curl",
+        "swagger-ui",
+        "redoc",
+        "scalar",
+        "stoplight",
+        "rapidoc",
     ] {
         assert!(
             formats.iter().any(|f| f == expected),

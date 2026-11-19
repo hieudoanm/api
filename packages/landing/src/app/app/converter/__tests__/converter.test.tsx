@@ -61,12 +61,6 @@ vi.mock('@api/wasm', () => ({
   openapi_info: wasmMocks.openapiInfo,
 }));
 
-vi.mock('swagger-ui-react', () => ({
-  default: ({ spec }: { spec: Record<string, unknown> }) => (
-    <div data-testid="swagger-ui">{JSON.stringify(spec).slice(0, 40)}</div>
-  ),
-}));
-
 describe('ConverterApp', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -197,17 +191,6 @@ describe('ConverterApp', () => {
     expect(
       screen.getByText('Converted files will appear here.')
     ).toBeInTheDocument();
-  });
-
-  it('toggles the Swagger preview panel', async () => {
-    render(<ConverterApp />);
-    await screen.findByText('WASM ready');
-    fireEvent.change(screen.getByPlaceholderText(/Paste an OpenAPI document/), {
-      target: { value: SPEC },
-    });
-    fireEvent.click(screen.getByRole('button', { name: 'Preview' }));
-    expect(await screen.findByText('Swagger UI preview')).toBeInTheDocument();
-    expect(await screen.findByTestId('swagger-ui')).toBeInTheDocument();
   });
 });
 

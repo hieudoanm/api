@@ -1,5 +1,7 @@
 use std::fmt;
 
+use serde_json::Value;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ClientFormat {
     Postman,
@@ -12,10 +14,15 @@ pub enum ClientFormat {
     Hurl,
     Kreya,
     Curl,
+    SwaggerUi,
+    Redoc,
+    Scalar,
+    Stoplight,
+    RapiDoc,
 }
 
 impl ClientFormat {
-    pub const ALL: [Self; 10] = [
+    pub const CLIENTS: [Self; 10] = [
         Self::Postman,
         Self::Bruno,
         Self::Insomnia,
@@ -26,6 +33,32 @@ impl ClientFormat {
         Self::Hurl,
         Self::Kreya,
         Self::Curl,
+    ];
+
+    pub const PREVIEWS: [Self; 5] = [
+        Self::SwaggerUi,
+        Self::Redoc,
+        Self::Scalar,
+        Self::Stoplight,
+        Self::RapiDoc,
+    ];
+
+    pub const ALL: [Self; 15] = [
+        Self::Postman,
+        Self::Bruno,
+        Self::Insomnia,
+        Self::Hoppscotch,
+        Self::RestClient,
+        Self::ThunderClient,
+        Self::Yaak,
+        Self::Hurl,
+        Self::Kreya,
+        Self::Curl,
+        Self::SwaggerUi,
+        Self::Redoc,
+        Self::Scalar,
+        Self::Stoplight,
+        Self::RapiDoc,
     ];
 
     pub fn parse(value: &str) -> Option<Self> {
@@ -40,6 +73,11 @@ impl ClientFormat {
             "hurl" => Some(Self::Hurl),
             "kreya" => Some(Self::Kreya),
             "curl" | "curl.sh" | "sh" | "shell" => Some(Self::Curl),
+            "swagger-ui" | "swaggerui" | "swagger" => Some(Self::SwaggerUi),
+            "redoc" => Some(Self::Redoc),
+            "scalar" => Some(Self::Scalar),
+            "stoplight" | "stoplight-elements" | "elements" => Some(Self::Stoplight),
+            "rapidoc" => Some(Self::RapiDoc),
             _ => None,
         }
     }
@@ -56,6 +94,11 @@ impl ClientFormat {
             Self::Hurl => "hurl",
             Self::Kreya => "kreya",
             Self::Curl => "curl",
+            Self::SwaggerUi => "swagger-ui",
+            Self::Redoc => "redoc",
+            Self::Scalar => "scalar",
+            Self::Stoplight => "stoplight",
+            Self::RapiDoc => "rapidoc",
         }
     }
 
@@ -68,6 +111,9 @@ impl ClientFormat {
             Self::ThunderClient => format!("thunder-collection_{collection_name}.json"),
             Self::Curl => format!("{collection_name}.sh"),
             Self::Bruno | Self::Yaak | Self::Hurl | Self::Kreya => "collection".to_string(),
+            Self::SwaggerUi | Self::Redoc | Self::Scalar | Self::Stoplight | Self::RapiDoc => {
+                format!("{collection_name}.{}.html", self.as_str())
+            }
         }
     }
 }
@@ -98,6 +144,7 @@ pub struct ApiCollection {
     pub version: String,
     pub servers: Vec<String>,
     pub folders: Vec<ApiFolder>,
+    pub spec: Value,
 }
 
 #[derive(Debug, Clone)]

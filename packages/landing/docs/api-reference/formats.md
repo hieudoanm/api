@@ -83,3 +83,22 @@ For single-file formats, `<name>` is `--name` when given, otherwise `info.title`
 from the spec sanitized to a file-safe string. Directory formats always write
 under `<out>/<format>/` and store the collection name inside their metadata
 files.
+
+## Documentation previews
+
+`api preview --format <name>` accepts: `swagger-ui`, `redoc`, `scalar`,
+`stoplight`, `rapidoc` — or `all`. Each emits a single self-contained HTML file
+that loads its UI from a CDN and embeds the OpenAPI document, so the result can
+be opened offline-of-our-server (it still needs internet for the CDN assets) or
+hosted anywhere as static files.
+
+| Format     | Output file pattern      | UI library           |
+| ---------- | ------------------------ | -------------------- |
+| swagger-ui | `<name>.swagger-ui.html` | Swagger UI           |
+| redoc      | `<name>.redoc.html`      | ReDoc                |
+| scalar     | `<name>.scalar.html`     | Scalar API Reference |
+| stoplight  | `<name>.stoplight.html`  | Stoplight Elements   |
+| rapidoc    | `<name>.rapidoc.html`    | RapiDoc              |
+
+Like client formats, `<name>` is `--name` when given, otherwise `info.title`
+sanitized to a file-safe string.

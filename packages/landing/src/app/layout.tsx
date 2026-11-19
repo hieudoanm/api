@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: 'Features', href: '/#features' },
   { label: 'Formats', href: '/#formats' },
   { label: 'Quickstart', href: '/#quickstart' },
-  { label: 'Converter', href: '/app/' },
+  { label: 'Apps', href: '/app/' },
   { label: 'Docs', href: '/docs/' },
 ];
 

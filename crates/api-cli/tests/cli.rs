@@ -73,6 +73,11 @@ fn formats_lists_all_formats() {
         "hurl",
         "kreya",
         "curl",
+        "swagger-ui",
+        "redoc",
+        "scalar",
+        "stoplight",
+        "rapidoc",
     ] {
         assert!(
             stdout.lines().any(|line| line == expected),
@@ -367,6 +372,159 @@ fn convert_fails_when_output_path_is_a_file() {
     assert!(!output.status.success());
     let stderr = String::from_utf8_lossy(&output.stderr);
     assert!(stderr.contains("failed to create"), "stderr: {stderr}");
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn preview_writes_swagger_ui_by_default() {
+    let dir = temp_dir("preview-default");
+    let spec = spec_file(&dir);
+    let out = dir.join("out");
+
+    let output = api()
+        .arg("preview")
+        .arg(&spec)
+        .arg("--out")
+        .arg(&out)
+        .output()
+        .unwrap();
+
+    assert!(
+        output.status.success(),
+        "{}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let html = out.join("swagger-ui").join("cli-petstore.swagger-ui.html");
+    assert!(html.exists());
+    let content = std::fs::read_to_string(html).unwrap();
+    assert!(content.contains("Cli Petstore"));
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn preview_format_all_emits_every_preview() {
+    let dir = temp_dir("preview-all");
+    let spec = spec_file(&dir);
+    let out = dir.join("out");
+
+    let output = api()
+        .arg("preview")
+        .arg(&spec)
+        .arg("--format")
+        .arg("all")
+        .arg("--out")
+        .arg(&out)
+        .output()
+        .unwrap();
+
+    assert!(output.status.success());
+    for format in ["swagger-ui", "redoc", "scalar", "stoplight", "rapidoc"] {
+        assert!(out.join(format).exists(), "missing {format} output");
+    }
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn preview_accepts_single_format_and_name() {
+    let dir = temp_dir("preview-single");
+    let spec = spec_file(&dir);
+    let out = dir.join("out");
+
+    let output = api()
+        .arg("preview")
+        .arg(&spec)
+        .arg("--format")
+        .arg("redoc")
+        .arg("--name")
+        .arg("Renamed API")
+        .arg("--out")
+        .arg(&out)
+        .output()
+        .unwrap();
+
+    assert!(output.status.success());
+    let html = out.join("redoc").join("renamed-api.redoc.html");
+    assert!(html.exists());
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn preview_reads_spec_from_stdin() {
+    let dir = temp_dir("preview-stdin");
+    let out = dir.join("out");
+
+    let mut child = api()
+        .arg("preview")
+        .arg("-")
+        .arg("--format")
+        .arg("scalar")
+        .arg("--out")
+        .arg(&out)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .unwrap();
+    child
+        .stdin
+        .as_mut()
+        .unwrap()
+        .write_all(SPEC.as_bytes())
+        .unwrap();
+    let output = child.wait_with_output().unwrap();
+
+    assert!(output.status.success());
+    assert!(out.join("scalar").join("cli-petstore.scalar.html").exists());
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn convert_rejects_preview_formats() {
+    let dir = temp_dir("convert-preview");
+    let spec = spec_file(&dir);
+
+    let output = api()
+        .arg("convert")
+        .arg(&spec)
+        .arg("--format")
+        .arg("redoc")
+        .arg("--out")
+        .arg(dir.join("out"))
+        .output()
+        .unwrap();
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("unsupported format"), "stderr: {stderr}");
+    assert!(stderr.contains("postman"), "stderr: {stderr}");
+
+    std::fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn preview_rejects_client_formats() {
+    let dir = temp_dir("preview-client");
+    let spec = spec_file(&dir);
+
+    let output = api()
+        .arg("preview")
+        .arg(&spec)
+        .arg("--format")
+        .arg("postman")
+        .arg("--out")
+        .arg(dir.join("out"))
+        .output()
+        .unwrap();
+
+    assert!(!output.status.success());
+    let stderr = String::from_utf8_lossy(&output.stderr);
+    assert!(stderr.contains("unsupported format"), "stderr: {stderr}");
+    assert!(stderr.contains("swagger-ui"), "stderr: {stderr}");
 
     std::fs::remove_dir_all(&dir).ok();
 }

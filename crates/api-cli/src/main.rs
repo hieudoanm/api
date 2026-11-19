@@ -31,7 +31,7 @@ enum Commands {
             default_value = "api-collections"
         )]
         output: PathBuf,
-        /// Comma-separated formats: postman, bruno, insomnia, hoppscotch, rest-client, thunder-client, yaak, hurl, kreya, curl, all
+        /// Comma-separated client formats: postman, bruno, insomnia, hoppscotch, rest-client, thunder-client, yaak, hurl, kreya, curl, all
         #[arg(short, long, value_delimiter = ',')]
         format: Vec<String>,
         /// Collection name override
@@ -40,6 +40,25 @@ enum Commands {
         /// Base URL override
         #[arg(long)]
         base_url: Option<String>,
+    },
+    /// Generate browsable API documentation (HTML) from an OpenAPI document
+    Preview {
+        /// OpenAPI file path, or `-` for stdin
+        input: String,
+        /// Output directory (default: ./api-docs)
+        #[arg(
+            short,
+            long = "out",
+            visible_alias = "output",
+            default_value = "api-docs"
+        )]
+        output: PathBuf,
+        /// Comma-separated preview formats: swagger-ui, redoc, scalar, stoplight, rapidoc, all
+        #[arg(short, long, value_delimiter = ',')]
+        format: Vec<String>,
+        /// Collection name override
+        #[arg(long)]
+        name: Option<String>,
     },
     /// List supported output formats
     Formats,
@@ -72,24 +91,66 @@ fn run() -> Result<()> {
             name,
             base_url,
         } => {
-            let source = read_input(&input)?;
             let formats = if format.is_empty() {
                 vec![ClientFormat::Postman]
             } else {
-                parse_formats(&format)?
+                parse_formats(
+                    &format,
+                    &ClientFormat::CLIENTS,
+                    "postman, bruno, insomnia, hoppscotch, rest-client, thunder-client, yaak, hurl, kreya, curl",
+                )?
             };
-            let options = ConvertOptions {
-                collection_name: name,
-                base_url,
+            run_conversion(
+                &input,
+                &output,
+                formats,
+                ConvertOptions {
+                    collection_name: name,
+                    base_url,
+                },
+            )?;
+        }
+        Commands::Preview {
+            input,
+            output,
+            format,
+            name,
+        } => {
+            let formats = if format.is_empty() {
+                vec![ClientFormat::SwaggerUi]
+            } else {
+                parse_formats(
+                    &format,
+                    &ClientFormat::PREVIEWS,
+                    "swagger-ui, redoc, scalar, stoplight, rapidoc",
+                )?
             };
-            let mut files = Vec::new();
-            for format in formats {
-                files.extend(convert_openapi(&source, format, &options)?);
-            }
-            write_files(&output, files)?;
+            run_conversion(
+                &input,
+                &output,
+                formats,
+                ConvertOptions {
+                    collection_name: name,
+                    base_url: None,
+                },
+            )?;
         }
     }
     Ok(())
+}
+
+fn run_conversion(
+    input: &str,
+    output: &Path,
+    formats: Vec<ClientFormat>,
+    options: ConvertOptions,
+) -> Result<()> {
+    let source = read_input(input)?;
+    let mut files = Vec::new();
+    for format in formats {
+        files.extend(convert_openapi(&source, format, &options)?);
+    }
+    write_files(output, files)
 }
 
 fn read_input(input: &str) -> Result<String> {
@@ -105,7 +166,11 @@ fn read_input(input: &str) -> Result<String> {
     }
 }
 
-fn parse_formats(values: &[String]) -> Result<Vec<ClientFormat>> {
+fn parse_formats(
+    values: &[String],
+    allowed: &[ClientFormat],
+    hint: &str,
+) -> Result<Vec<ClientFormat>> {
     let mut formats = Vec::new();
     for value in values {
         for part in value.split(',') {
@@ -114,16 +179,18 @@ fn parse_formats(values: &[String]) -> Result<Vec<ClientFormat>> {
                 continue;
             }
             if trimmed.eq_ignore_ascii_case("all") {
-                for format in ClientFormat::ALL {
-                    if !formats.contains(&format) {
-                        formats.push(format);
+                for format in allowed {
+                    if !formats.contains(format) {
+                        formats.push(*format);
                     }
                 }
                 continue;
             }
-            let format = ClientFormat::parse(trimmed).with_context(|| {
-                format!("unsupported format {trimmed}; expected one of: postman, bruno, insomnia, hoppscotch, rest-client, thunder-client, yaak, hurl, kreya, curl")
-            })?;
+            let format = ClientFormat::parse(trimmed)
+                .filter(|format| allowed.contains(format))
+                .with_context(|| {
+                    format!("unsupported format {trimmed}; expected one of: {hint}")
+                })?;
             if !formats.contains(&format) {
                 formats.push(format);
             }

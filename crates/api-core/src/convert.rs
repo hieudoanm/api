@@ -17,5 +17,10 @@ pub fn convert_collection(
         ClientFormat::Hurl => formats::hurl::convert(collection, options),
         ClientFormat::Kreya => formats::kreya::convert(collection, options),
         ClientFormat::Curl => formats::curl::convert(collection, options),
+        ClientFormat::SwaggerUi => formats::swagger_ui::convert(collection, options),
+        ClientFormat::Redoc => formats::redoc::convert(collection, options),
+        ClientFormat::Scalar => formats::scalar::convert(collection, options),
+        ClientFormat::Stoplight => formats::stoplight::convert(collection, options),
+        ClientFormat::RapiDoc => formats::rapidoc::convert(collection, options),
     }
 }

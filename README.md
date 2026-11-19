@@ -2,9 +2,11 @@
 
 [![CI](https://github.com/hieudoanm/api/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/hieudoanm/api/actions/workflows/ci.yaml?branch=master) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-OpenAPI to API client collections — a Rust CLI that converts OpenAPI 3.x specs
-(JSON or YAML) into ready-to-import collections for Postman, Bruno, Insomnia,
-Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl.
+OpenAPI to API client collections and docs — a Rust CLI that converts OpenAPI
+3.x specs (JSON or YAML) into ready-to-import collections for Postman, Bruno,
+Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl,
+or into standalone browsable API documentation pages (Swagger UI, ReDoc,
+Scalar, Stoplight Elements, RapiDoc).
 
 ![api — OpenAPI to API client collections](assets/branding/png/og.png)
 
@@ -18,11 +20,16 @@ Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl.
 cargo run -p api-cli -- convert examples/petstore.yaml --format all --out ./collections
 # or, after installing the binary:
 api convert openapi.yaml --format postman --out ./collections
+# or generate browsable API docs (HTML):
+api preview openapi.yaml --format all --out ./docs
 ```
 
-Supported formats: `postman`, `bruno`, `insomnia`, `hoppscotch`,
-`rest-client`, `thunder-client`, `yaak`, `hurl`, `kreya`, `curl` — or `all`. Inputs are OpenAPI 3.x JSON/YAML files, or `-` for
-stdin. A no-install browser version lives on the landing page's `/app` route.
+`api convert` supports `postman`, `bruno`, `insomnia`, `hoppscotch`,
+`rest-client`, `thunder-client`, `yaak`, `hurl`, `kreya`, `curl` — or `all`.
+`api preview` supports `swagger-ui`, `redoc`, `scalar`, `stoplight`, `rapidoc`
+— or `all`. Inputs are OpenAPI 3.x JSON/YAML files, or `-` for
+stdin. No-install browser apps live on the landing page: `/app/converter` and
+`/app/previewer` under <https://hieudoanm.github.io/api/app/>.
 See `packages/landing/docs/` for the full CLI reference.
 
 ## Repository layout

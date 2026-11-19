@@ -3,7 +3,9 @@
 ![api — OpenAPI to API client collections](assets/branding/png/og.png)
 
 api converts OpenAPI 3.x specs (JSON or YAML) into ready-to-import collections
-for Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl — one Rust CLI, no
+for Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl — or into
+standalone browsable API docs pages (Swagger UI, ReDoc, Scalar, Stoplight
+Elements, RapiDoc) via `api preview`. One Rust CLI, no
 cloud, no accounts.
 
 ### Download
@@ -25,6 +27,7 @@ cargo install api-cli           # once published
 
 ```sh
 api convert openapi.yaml --format all --out ./collections
+api preview openapi.yaml --format all --out ./docs
 ```
 
 ### Documentation

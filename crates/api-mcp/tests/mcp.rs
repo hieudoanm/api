@@ -115,9 +115,10 @@ fn list_formats_returns_all() {
     let resp = call_tool("list_formats", json!({}), 3);
     let parsed = tool_payload(&resp);
     let formats = parsed["formats"].as_array().unwrap();
-    assert_eq!(formats.len(), 10);
+    assert_eq!(formats.len(), 15);
     assert!(formats.contains(&json!("postman")));
     assert!(formats.contains(&json!("curl")));
+    assert!(formats.contains(&json!("redoc")));
 }
 
 #[test]

@@ -148,3 +148,17 @@ pub fn pseudo_uuid(seed: &str) -> String {
         &digits[20..32]
     )
 }
+
+pub fn spec_literal(spec: &serde_json::Value) -> String {
+    serde_json::to_string(spec)
+        .unwrap_or_else(|_| "{}".to_string())
+        .replace("</", "<\\/")
+}
+
+pub fn escape_html(text: &str) -> String {
+    text.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&#39;")
+}
