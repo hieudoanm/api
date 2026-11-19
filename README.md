@@ -34,15 +34,15 @@ See `packages/landing/docs/` for the full CLI reference.
 
 ## Repository layout
 
-| Path               | What it is                                                                            |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `crates/api-core`  | Conversion engine: OpenAPI parsing, intermediate collection model, emitters.          |
-| `crates/api-cli`   | The `api` command-line binary on top of `api-core`.                                   |
-| `crates/api-wasm`  | WebAssembly bindings over `api-core`, consumed by the landing app as `@api/wasm`.     |
-| `packages/landing` | Next.js static-export landing page + docs site → GitHub Pages at `/api`.              |
-| `assets/`          | Canonical branding/demo SVGs; PNGs are generated (`svg-to-png.sh`, `sync-assets.sh`). |
-| `examples/`        | `petstore.yaml` sample spec + `examples.sh` batch conversion.                         |
-| `scripts/`         | `install.sh` / `install-local.sh` installers.                                         |
+| Path               | What it is                                                                             |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| `crates/api-core`  | Conversion engine: OpenAPI parsing, intermediate collection model, emitters.           |
+| `crates/api-cli`   | The `api` command-line binary on top of `api-core`.                                    |
+| `crates/api-wasm`  | WebAssembly bindings over `api-core`, consumed by the landing app as `@api/wasm`.      |
+| `packages/landing` | Next.js static-export landing page + docs site → GitHub Pages at `/api`.               |
+| `assets/`          | Canonical branding/demo SVGs; PNGs are generated (`svg-to-png.sh`, `sync-assets.sh`).  |
+| `examples/`        | `petstore.yaml` sample spec + `examples.sh` batch conversion (clients + doc previews). |
+| `scripts/`         | `install.sh` / `install-local.sh` installers.                                          |
 
 ## Commands
 

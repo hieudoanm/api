@@ -18,14 +18,24 @@ pub fn convert(
 </head>
 <body>
 <div id="redoc"></div>
+<script>
+window.process = window.process || {{
+  env: {{ NODE_ENV: "production" }},
+  cwd: function () {{ return "/"; }},
+  browser: true,
+  platform: "browser",
+  version: "v20.0.0",
+  versions: {{}},
+  nextTick: function (fn) {{ setTimeout(fn, 0); }},
+  stderr: {{ write: function () {{ return true; }} }},
+  stdout: {{ write: function () {{ return true; }} }},
+}};
+</script>
 <script src="https://cdn.jsdelivr.net/npm/redoc@2.5.4/bundles/redoc.standalone.js"></script>
 <script>
 (function () {{
   var spec = {spec};
-  var url = URL.createObjectURL(
-    new Blob([JSON.stringify(spec)], {{ type: "application/json" }})
-  );
-  Redoc.init(url, document.getElementById("redoc"), {{}});
+  Redoc.init(spec, {{}}, document.getElementById("redoc"));
 }})();
 </script>
 </body>
