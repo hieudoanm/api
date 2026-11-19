@@ -9,6 +9,7 @@
   <text x="80" y="288" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="76" font-weight="800" fill="#1c1917" letter-spacing="-2">api</text>
   <text x="82" y="352" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="34" font-weight="500" fill="#57534e">OpenAPI to API client collections</text>
   <text x="82" y="416" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="24" fill="#78716c">Postman  ·  Bruno  ·  Insomnia  ·  Hoppscotch  ·  REST Client</text>
+  <text x="82" y="452" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="24" fill="#78716c">Thunder Client  ·  Yaak  ·  Hurl  ·  Kreya  ·  curl</text>
 
   <!-- right: terminal card, vertically centered -->
   <g transform="translate(660,170)">
@@ -21,7 +22,7 @@
       <text x="36" y="142" fill="#93c5fd">$ ls collections/</text>
       <text x="36" y="184" fill="#9ca3af">acme.postman_collection.json</text>
       <text x="36" y="226" fill="#9ca3af">acme/   acme.insomnia.json   acme.hoppscotch.json   acme.http</text>
-      <text x="36" y="272" fill="#6b7280">five formats · one spec · zero accounts</text>
+      <text x="36" y="272" fill="#6b7280">ten formats · one spec · zero accounts</text>
     </g>
   </g>
 </svg>

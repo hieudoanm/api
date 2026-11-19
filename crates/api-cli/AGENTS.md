@@ -14,4 +14,5 @@ Thin `api` binary over `api-core` + `api-mcp`. See the root
   logic itself.
 - Keep it thin: argument parsing + file/stdin I/O only; all conversion lives
   in `api-core`, all protocol handling in `api-mcp`.
-- `cargo run -p api-cli -- --help`; `cargo test --workspace`.
+- `cargo run -p api-cli -- --help`; `cargo test --workspace`; keep coverage
+  at or above 80% lines and functions (`cargo llvm-cov -p api-cli`).

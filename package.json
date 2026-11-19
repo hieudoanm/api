@@ -15,11 +15,12 @@
   },
   "scripts": {
     "dev": "turbo run dev",
-    "build": "turbo run build",
     "lint": "turbo run lint",
-    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "build": "turbo run build",
     "format": "turbo run format",
-    "prepare": "husky"
+    "typecheck": "turbo run typecheck",
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@commitlint/cli": "21.2.4",

@@ -25,6 +25,7 @@ conversion as tools over stdio. Part of the `api-*` workspace.
 ```bash
 cd crates
 cargo test -p api-mcp
+cargo llvm-cov -p api-mcp --summary-only   # lines+functions >= 80%
 cargo clippy -p api-mcp
 printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}' \
   '{"jsonrpc":"2.0","id":2,"method":"tools/list"}' | ./target/debug/api mcp

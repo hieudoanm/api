@@ -58,8 +58,8 @@ pnpm --filter @api/wasm run build:wasm
   `src/components/molecules/DocsSearch.tsx` → `/api/api/search-index`).
 - **DaisyUI + Tailwind v4** — `globals.css` has only `@import 'tailwindcss'`
   plus official plugins; the `api` theme (set via `data-theme` on `<html>`) maps
-  `primary` to indigo (`#4f46e5`). Use DaisyUI components (`btn`, `badge`,
-  `card`) and theme tokens (`bg-base-100`, `text-base-content`, `text-primary`,
+  `primary` to blue (`#2563eb`). Use DaisyUI components (`btn`, `badge`, `card`)
+  and theme tokens (`bg-base-100`, `text-base-content`, `text-primary`,
   `bg-primary/10`) — no custom CSS.
 - **Docs are Markdown**, rendered at build time — no MDX, no client JS. Links
   between docs use relative `.md` paths; `src/lib/docs.ts` rewrites them. Links
@@ -69,6 +69,9 @@ pnpm --filter @api/wasm run build:wasm
   changes.
 - **Deploy:** CI builds `out/` and uploads via `upload-pages-artifact` +
   `deploy-pages` (see `.github/workflows/ci.yaml`, `landing-*` jobs).
+- **Coverage:** keep test coverage at or above 80% for new and changed code —
+  `pnpm run test:coverage` enforces 80% on statements, branches, functions and
+  lines (vitest v8 thresholds in `vitest.config.ts`).
 
 ## Footer
 

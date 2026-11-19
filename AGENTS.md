@@ -52,6 +52,10 @@ Run locally: `cargo run -p api-cli -- convert openapi.yaml --format all`.
   `unwrap()` on I/O or external input.
 - `api-core` must not depend on clap/stdout concerns; `api-cli` owns argument
   parsing and I/O. Keep the dependency graph acyclic.
+- Keep test coverage at or above 80% lines and functions for new and changed
+  code — Rust: `cargo llvm-cov -p <crate> --summary-only`; landing:
+  `pnpm --filter @api/landing run test:coverage` (vitest enforces 80% on
+  statements, branches, functions and lines).
 - New client formats: add `crates/api-core/src/formats/<name>.rs`, register in
   `formats/mod.rs` and `convert.rs`, extend `ClientFormat` in `model.rs`.
 - Docs live in `packages/landing/docs/` as Markdown — update them when the

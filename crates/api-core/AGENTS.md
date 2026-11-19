@@ -22,4 +22,5 @@ Conversion engine for api. See the root [`AGENTS.md`](../../AGENTS.md).
   `formats/mod.rs`, add the `ClientFormat` variant + match arm in
   `convert.rs`, extend `parse`/`as_str`/`ALL`/file-name helpers in
   `model.rs`.
-- Tests: `cargo test -p api-core`.
+- Tests: `cargo test -p api-core`; keep coverage at or above 80% lines and
+  functions — verify with `cargo llvm-cov -p api-core --summary-only`.

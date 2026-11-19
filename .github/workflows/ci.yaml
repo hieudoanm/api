@@ -17,8 +17,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  rust-check:
-    name: Rust check
+  cli-quality:
+    name: CLI - Quality
     runs-on: ubuntu-latest
 
     steps:
@@ -49,9 +49,9 @@ jobs:
     name: CLI - Build (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     # Release binaries are only needed for the master-branch release job;
-    # PRs are covered by the `rust-check` job.
+    # PRs are covered by the `cli-quality` job.
     if: github.event_name != 'pull_request'
-    needs: rust-check
+    needs: cli-quality
     strategy:
       fail-fast: false
       matrix:

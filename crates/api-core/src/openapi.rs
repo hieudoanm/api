@@ -512,7 +512,11 @@ fn first_server_url(value: &Value, root: &Value) -> Option<String> {
         .and_then(Value::as_array)
         .and_then(|servers| servers.first())
         .and_then(|server| server.get("url").and_then(Value::as_str))
-        .map(|url| resolve_server_variables(url, server_variables(root)))
+        .map(|url| {
+            let mut variables = server_variables(root);
+            variables.extend(server_variables(value));
+            resolve_server_variables(url, variables)
+        })
         .map(|url| url.trim_end_matches('/').to_string())
         .filter(|url| !url.is_empty())
 }
