@@ -1,0 +1,35 @@
+{
+  "name": "@api/wasm",
+  "version": "0.0.1",
+  "description": "api - WebAssembly bindings for api-core",
+  "types": "./pkg/api_wasm.d.ts",
+  "main": "./pkg/api_wasm.js",
+  "exports": {
+    ".": {
+      "types": "./pkg/api_wasm.d.ts",
+      "import": "./pkg/api_wasm.js"
+    }
+  },
+  "keywords": [
+    "api",
+    "openapi",
+    "wasm"
+  ],
+  "author": {
+    "name": "Hieu Doan",
+    "email": "hieu.doan.professional@gmail.com",
+    "url": "https://hieudoanm.github.io"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": "26.13.1"
+  },
+  "scripts": {
+    "lint": "make lint",
+    "test": "make test",
+    "build:wasm": "make build-wasm",
+    "build": "make build",
+    "format": "make format"
+  }
+}

@@ -1,0 +1,9 @@
+[package]
+name = "api-mcp"
+description = "MCP server exposing OpenAPI-to-collection conversion as tools over stdio"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+api-core = { path = "../api-core" }
+serde_json.workspace = true

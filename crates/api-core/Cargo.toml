@@ -1,0 +1,11 @@
+[package]
+name = "api-core"
+description = "Core OpenAPI to API client collection converter"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+serde_yml.workspace = true
+thiserror.workspace = true

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640">
+  <!-- flat white background -->
+  <rect width="1280" height="640" fill="#ffffff"/>
+
+  <!-- top right: repo link -->
+  <text x="1200" y="72" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="24" fill="#78716c">github.com/hieudoanm/api</text>
+
+  <!-- left: wordmark, vertically centered -->
+  <text x="80" y="288" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="76" font-weight="800" fill="#1c1917" letter-spacing="-2">API</text>
+  <text x="82" y="352" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="34" font-weight="500" fill="#57534e">OpenAPI to API client collections</text>
+  <text x="82" y="396" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" fill="#78716c">Postman  ·  Bruno  ·  Insomnia  ·  Hoppscotch</text>
+  <text x="82" y="428" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" fill="#78716c">REST Client  ·  Thunder Client  ·  Yaak</text>
+  <text x="82" y="460" font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="22" fill="#78716c">Hurl  ·  Kreya  ·  curl</text>
+
+  <!-- right: terminal card, vertically centered -->
+  <g transform="translate(660,150)">
+    <rect width="560" height="340" rx="18" fill="#020617"/>
+    <circle cx="30" cy="30" r="7" fill="#f87171"/>
+    <circle cx="54" cy="30" r="7" fill="#fbbf24"/>
+    <circle cx="78" cy="30" r="7" fill="#34d399"/>
+    <g font-family="ui-monospace, 'SF Mono', Menlo, monospace" font-size="20">
+      <text x="36" y="104" fill="#93c5fd">$ api convert openapi.yaml -f all</text>
+      <text x="36" y="142" fill="#9ca3af">postman   acme.postman_collection.json</text>
+      <text x="36" y="180" fill="#9ca3af">bruno        acme/  (5 .bru files)</text>
+      <text x="36" y="218" fill="#9ca3af">insomnia     acme.insomnia.json</text>
+      <text x="36" y="256" fill="#9ca3af">hopscotch    acme.hoppscotch.json</text>
+      <text x="36" y="294" fill="#9ca3af">rest-client  acme.http</text>
+      <text x="36" y="322" font-size="18" fill="#6b7280">… +5 more formats</text>
+    </g>
+  </g>
+</svg>

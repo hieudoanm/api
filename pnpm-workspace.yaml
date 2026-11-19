@@ -1,0 +1,14 @@
+packages:
+  - 'packages/**'
+  - '!packages/landing/out/**'
+  - '!packages/landing/.next/**'
+  - 'crates/api-wasm'
+
+minimumReleaseAge: 0
+
+allowBuilds:
+  '@scarf/scarf': false
+  '@tree-sitter-grammars/tree-sitter-yaml': true
+  core-js-pure: false
+  tree-sitter: true
+  tree-sitter-json: true

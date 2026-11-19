@@ -1,0 +1,27 @@
+# api
+
+> Convert OpenAPI 3.x specs into ready-to-use collections for Postman, Bruno, Insomnia, Hoppscotch and REST Client — one Rust CLI, no cloud, no accounts.
+
+- Repository: https://github.com/hieudoanm/api
+- Site: https://hieudoanm.github.io/api/
+
+## Documentation
+
+### getting-started
+
+- [Installation](https://hieudoanm.github.io/api/docs/getting-started/installation/)
+- [Quickstart](https://hieudoanm.github.io/api/docs/getting-started/quickstart/)
+
+### concepts
+
+- [OpenAPI support](https://hieudoanm.github.io/api/docs/concepts/openapi/)
+- [Collections & formats](https://hieudoanm.github.io/api/docs/concepts/collections/)
+
+### api-reference
+
+- [Output formats](https://hieudoanm.github.io/api/docs/api-reference/formats/)
+- [CLI reference](https://hieudoanm.github.io/api/docs/api-reference/cli/)
+
+### guides
+
+- [Using api in CI](https://hieudoanm.github.io/api/docs/guides/ci/)

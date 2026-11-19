@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- flat white badge -->
+  <rect width="512" height="512" rx="112" fill="#ffffff" stroke="#e5e7eb" stroke-width="8"/>
+  <!-- api wordmark, flat indigo -->
+  <text x="256" y="256" text-anchor="middle" dominant-baseline="central" font-family="Helvetica, Arial, sans-serif" font-size="180" font-weight="800" fill="#2563eb" letter-spacing="-8">API</text>
+</svg>
