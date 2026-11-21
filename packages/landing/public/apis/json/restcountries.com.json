@@ -1,0 +1,3330 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "REST Countries",
+    "version": "2026-11-09",
+    "summary": "Country data, currency exchange-rate, IP geolocation, and user-agent parsing APIs: 250+ countries with 90+ normalized fields each, currency conversion and rates across fiat and crypto, IP lookups, and user-agent string analysis.",
+    "description": "REST Countries is a read-only API family served as JSON over HTTPS and authenticated with a single Bearer token. It provides five APIs that share one account, one key, and one request quota: the Countries API (/countries/v5) for structured country data, the Currencies API (/currencies/v1) for currency conversion and exchange rates across fiat and crypto, the IP API (/ip/v1) for IP geolocation, the User Agent API (/user-agent/v1) for user-agent string parsing, and the Email Intelligence API (/email-intelligence/v1) for email address analysis. Each API is versioned in its path; additive changes ship inside the current version, and breaking changes get a new version. See https://restcountries.com/docs for the full reference and https://restcountries.com/docs#versioning for the versioning policy.",
+    "termsOfService": "https://restcountries.com/legal/terms-of-service",
+    "contact": {
+      "name": "REST Countries Support",
+      "url": "https://restcountries.com/support",
+      "email": "support@restcountries.com"
+    },
+    "license": {
+      "name": "Proprietary"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.restcountries.com",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "BearerAuth": []
+    },
+    {
+      "KeyQuery": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Countries",
+      "description": "Country data endpoints."
+    },
+    {
+      "name": "Aggregates",
+      "description": "Aggregate searches across code and name field families."
+    },
+    {
+      "name": "Currencies",
+      "description": "Currency conversion and exchange-rate endpoints."
+    },
+    {
+      "name": "IP",
+      "description": "IP geolocation endpoints."
+    },
+    {
+      "name": "User Agent",
+      "description": "User-agent parsing endpoints."
+    },
+    {
+      "name": "Email Intelligence",
+      "description": "Email address analysis endpoints."
+    }
+  ],
+  "paths": {
+    "/countries/v5": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "List or search countries",
+        "description": "Returns a paginated list of countries. Supports full-text search via q, per-property filter chains (e.g. ?region=Europe&landlocked=1), pagination via limit/offset, and response shaping via response_fields / response_fields_omit. Per-property filters use any searchable field name as a query parameter; see https://restcountries.com/docs#fields for the full list.",
+        "operationId": "listCountries",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Q"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CountryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/countries/v5/code": {
+      "get": {
+        "tags": ["Aggregates"],
+        "summary": "Aggregate search across every code property",
+        "description": "Searches the q value across alpha_2, alpha_3, ccn3, fips, gec, fifa, and cioc simultaneously. Useful when the caller has a code but doesn't know which standard it belongs to.",
+        "operationId": "searchCodes",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QRequired"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CountryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/countries/v5/name": {
+      "get": {
+        "tags": ["Aggregates"],
+        "summary": "Aggregate search across every name field",
+        "description": "Searches the q value across common, official, native, and alternates simultaneously.",
+        "operationId": "searchNames",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/QRequired"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CountryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/countries/v5/{property}": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Search within a single property",
+        "description": "Returns a paginated list of countries whose {property} value matches q (or all countries when q is omitted). Property accepts any searchable field name as a dot-path (e.g. codes.alpha_3, names.common, region, landlocked, memberships.eu). See https://restcountries.com/docs#fields for the full list.",
+        "operationId": "searchByProperty",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Property"
+          },
+          {
+            "$ref": "#/components/parameters/Q"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CountryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/countries/v5/{property}/{value}": {
+      "get": {
+        "tags": ["Countries"],
+        "summary": "Filter by property value",
+        "description": "Returns a paginated list of countries whose {property} value equals {value} (case-insensitive, URL-decoded; spaces accept either + or %20). For unique fields like codes.alpha_3 this returns at most one record; for non-unique fields like region this returns every match. An empty result returns an empty objects array, not 404. Supports an optional q to refine within the filtered set.",
+        "operationId": "filterByPropertyValue",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Property"
+          },
+          {
+            "$ref": "#/components/parameters/Value"
+          },
+          {
+            "$ref": "#/components/parameters/Q"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Offset"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CountryList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/currencies/v1/convert": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Convert an amount between currencies",
+        "description": "Converts amount from one currency into one or more targets. from and to are required; amount is optional and defaults to 1, so omitting it returns the unit rate as result. to accepts a comma-separated list of up to 5 currencies, and the response carries one object per target, in the order requested. The call is all-or-nothing: an unknown from, any unknown to, or more than 5 targets fails the whole request with 400. Both fiat and crypto codes are accepted.",
+        "operationId": "convertCurrency",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/From"
+          },
+          {
+            "$ref": "#/components/parameters/To"
+          },
+          {
+            "$ref": "#/components/parameters/Amount"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ConvertList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/currencies/v1/rates/{base}": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Exchange-rate table for a base currency (path slug)",
+        "description": "Returns the full exchange-rate table for a base currency: every supported currency expressed as units per one unit of the base. Supply the base as the path slug. Every key in the returned rates map is itself a queryable base. Both fiat and crypto codes are accepted.",
+        "operationId": "ratesByBasePath",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/BasePath"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RatesList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/currencies/v1/rates": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "Exchange-rate table for a base currency (query param)",
+        "description": "Same as /currencies/v1/rates/{base}, but with the base supplied via the base query parameter (e.g. ?base=USD). When both the path slug and the query param are given, the path wins. A bare /rates with no base resolves to 400.",
+        "operationId": "ratesByBaseQuery",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Base"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/RatesList"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/currencies/v1/symbols": {
+      "get": {
+        "tags": ["Currencies"],
+        "summary": "List supported currencies",
+        "description": "Returns the supported-currency catalog: one object per currency (code, name, symbol), sorted by code. symbol is null where the currency has no conventional sign (e.g. XAU, gold). Takes no parameters beyond the key. Every code listed here is usable as a from, to, or base elsewhere in the API.",
+        "operationId": "listSymbols",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/SymbolsList"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/ip/v1/{ip}": {
+      "get": {
+        "tags": ["IP"],
+        "summary": "Look up an IP address (path slug)",
+        "description": "Returns the geolocation record for the IP address given as the path slug: location (continent, country, subdivision, city, coordinates, postal), connection (ASN, organization, domain), security signals, and timezone. Both IPv4 and IPv6 are accepted; a value that isn't a valid IP address returns HTTP 400 before any lookup, and a valid but unlocatable address (private/reserved) returns HTTP 400 with the reason in the message. Every response carries the full canonical key tree; a leaf that can't be resolved for an address ships as null. See https://restcountries.com/docs/ip for the full reference.",
+        "operationId": "lookupIPByPath",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IPPath"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/IPLookup"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          }
+        }
+      }
+    },
+    "/ip/v1": {
+      "get": {
+        "tags": ["IP"],
+        "summary": "Look up an IP address (query param or the caller's own)",
+        "description": "Same as /ip/v1/{ip}, but with the address supplied via the ip query parameter; the path slug takes precedence when both are present. Omit the parameter entirely to look up the caller's own address (\"where am I?\").",
+        "operationId": "lookupIPByQuery",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IPQuery"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/IPLookup"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          },
+          "502": {
+            "$ref": "#/components/responses/Error502"
+          }
+        }
+      }
+    },
+    "/user-agent/v1": {
+      "get": {
+        "tags": ["User Agent"],
+        "summary": "Parse a user-agent string",
+        "description": "Parses a user-agent string into a structured record: client (with its type, version, maker, rendering engine, and browser-family flags), the operator the traffic acts for, os, device, and classification flags like is_bot and is_ai_crawler. Supply the string via the ua query parameter, or omit it to parse the request's own User-Agent header (\"what browser am I?\"). Parsing is first-party: the strings you submit are never forwarded to a third-party service. A leaf the string doesn't reveal ships as null, and a block whose every leaf resolved null collapses to a single null (os, client.engine, operator, and any maker), so guard those before reading into them. See https://restcountries.com/docs/user-agent for the full reference.",
+        "operationId": "parseUserAgent",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/UA"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/UserAgentParse"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    },
+    "/email-intelligence/v1/process": {
+      "get": {
+        "tags": ["Email Intelligence"],
+        "summary": "Analyze an email address",
+        "description": "Runs one email address through the pipeline and returns a single record describing it: its parts (local, username, tag, domain), the top-level domain and the country that administers it, what's known about the domain (mail provider, category, live MX records, SPF and DMARC policy, registration dates), whether it has a Gravatar, a did_you_mean correction for likely typos, and boolean attributes such as is_free, is_disposable, is_forwarder, and is_likely_role_based. The address is read from email, or from q as an alias, and one of the two is required; a request naming neither is rejected with a 400 (email_intelligence.email_missing). A malformed address is not an error: it answers 200 with attributes.is_valid_syntax false and no lookups run. Every response carries the same shape, and a value the data can't name comes back null. Omitting a branch with response_fields_omit also skips the lookup behind it (for example gravatar or domain.registration), which makes the request faster. See https://restcountries.com/docs/email-intelligence for the full reference.",
+        "operationId": "processEmail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Email"
+          },
+          {
+            "$ref": "#/components/parameters/EmailQ"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFields"
+          },
+          {
+            "$ref": "#/components/parameters/ResponseFieldsOmit"
+          },
+          {
+            "$ref": "#/components/parameters/Pretty"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EmailProcess"
+          },
+          "400": {
+            "$ref": "#/components/responses/Error400"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error401"
+          },
+          "403": {
+            "$ref": "#/components/responses/Error403"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error404"
+          },
+          "405": {
+            "$ref": "#/components/responses/Error405"
+          },
+          "410": {
+            "$ref": "#/components/responses/Error410"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error429"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "rc_live_...",
+        "description": "Pass your API key as a bearer token: Authorization: Bearer rc_live_..."
+      },
+      "KeyQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api-key",
+        "description": "API key as a query parameter. The Bearer header form is preferred so the key never lands in server logs or browser history."
+      }
+    },
+    "parameters": {
+      "Q": {
+        "name": "q",
+        "in": "query",
+        "required": false,
+        "description": "Full-text search across every searchable property. Case-insensitive substring match.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "canada"
+      },
+      "QRequired": {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "description": "Search term. Case-insensitive substring match.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "EU"
+      },
+      "Property": {
+        "name": "property",
+        "in": "path",
+        "required": true,
+        "description": "Dot-path field name to filter or look up on. See https://restcountries.com/docs#fields for the full set of accepted values.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "codes.alpha_3"
+      },
+      "Value": {
+        "name": "value",
+        "in": "path",
+        "required": true,
+        "description": "Exact value to match (case-insensitive, URL-decoded).",
+        "schema": {
+          "type": "string"
+        },
+        "example": "CAN"
+      },
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "description": "Number of records to return. Defaults to 25; accepts an integer from 1 to 100 on the free plan, or up to 500 on paid plans. Non-integer or below-range values return HTTP 400; a value above your plan's ceiling but within the paid maximum (e.g. 200 on a free plan) returns HTTP 403 indicating it is valid only on paid plans. See https://restcountries.com/docs#pagination for details.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500,
+          "default": 25
+        }
+      },
+      "Offset": {
+        "name": "offset",
+        "in": "query",
+        "required": false,
+        "description": "Number of records to skip for pagination. Default 0.",
+        "schema": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0
+        }
+      },
+      "ResponseFields": {
+        "name": "response_fields",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated dot-path projection. Only the specified fields are returned. Example: names.common,codes.alpha_2,flag.emoji",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ResponseFieldsOmit": {
+        "name": "response_fields_omit",
+        "in": "query",
+        "required": false,
+        "description": "Comma-separated dot-path blocklist. The specified fields are removed from the response. Useful for trimming heavy branches like names.translations.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Pretty": {
+        "name": "pretty",
+        "in": "query",
+        "required": false,
+        "description": "Set to true (a bare ?pretty, 1, or true) to pretty-print the JSON response; 0 or false keep it minified. Default is minified.",
+        "schema": {
+          "type": "boolean"
+        }
+      },
+      "From": {
+        "name": "from",
+        "in": "query",
+        "required": true,
+        "description": "Source currency code to convert from (e.g. USD). Case-insensitive. Also accepted under the alias base.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "USD"
+      },
+      "To": {
+        "name": "to",
+        "in": "query",
+        "required": true,
+        "description": "Target currency code, or a comma-separated list of up to 5 (e.g. EUR or EUR,CAD). Returns one object per target. More than 5 targets returns HTTP 400.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "EUR,CAD"
+      },
+      "Amount": {
+        "name": "amount",
+        "in": "query",
+        "required": false,
+        "description": "Amount in the source currency to convert. Must be a number; defaults to 1 when omitted.",
+        "schema": {
+          "type": "number",
+          "default": 1
+        },
+        "example": 100
+      },
+      "Base": {
+        "name": "base",
+        "in": "query",
+        "required": false,
+        "description": "Base currency the rate table is expressed against (e.g. USD). Optional when supplied as the /rates/{base} path slug, which takes precedence when both are present. Also accepted under the alias from. A bare /rates with no base returns HTTP 400.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "USD"
+      },
+      "BasePath": {
+        "name": "base",
+        "in": "path",
+        "required": true,
+        "description": "Base currency code the rate table is expressed against (e.g. USD). Case-insensitive.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "USD"
+      },
+      "IPPath": {
+        "name": "ip",
+        "in": "path",
+        "required": true,
+        "description": "IP address to look up. Both IPv4 and IPv6 are accepted. A value that isn't a valid IP address returns HTTP 400 before any lookup is attempted.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "8.8.8.8"
+      },
+      "IPQuery": {
+        "name": "ip",
+        "in": "query",
+        "required": false,
+        "description": "IP address to look up when it isn't given as the path slug; the path slug takes precedence when both are present. Both IPv4 and IPv6 are accepted. Omit it (and the path slug) to look up the caller's own address.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "8.8.8.8"
+      },
+      "UA": {
+        "name": "ua",
+        "in": "query",
+        "required": false,
+        "description": "User-agent string to parse. Values may be sent raw, percent-encoded, or with + for spaces; a + is always read as a space. Omit it to parse the request's own User-Agent header. Strings longer than 2,048 characters are rejected with HTTP 400 (user_agent.ua_too_long).",
+        "schema": {
+          "type": "string",
+          "maxLength": 2048
+        },
+        "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+      },
+      "Email": {
+        "name": "email",
+        "in": "query",
+        "required": false,
+        "description": "Email address to analyze. Required unless the q alias is supplied instead; email wins when both are present. Encode a + in plus-addressed aliases as %2B, since a bare + is read as a space.",
+        "schema": {
+          "type": "string"
+        },
+        "example": "someone@gmail.com"
+      },
+      "EmailQ": {
+        "name": "q",
+        "in": "query",
+        "required": false,
+        "description": "Alias for email, used only when email is absent.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "CountryList": {
+        "description": "Paginated list of countries.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CountryListResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "uuid": "189581ed-44b0-47d7-9849-6b097401a7d6",
+                    "names": {
+                      "common": "Canada",
+                      "official": "Canada",
+                      "alternates": [],
+                      "native": {
+                        "eng": {
+                          "common": "Canada",
+                          "official": "Canada"
+                        },
+                        "fra": {
+                          "common": "Canada",
+                          "official": "Canada"
+                        }
+                      }
+                    },
+                    "codes": {
+                      "alpha_2": "CA",
+                      "alpha_3": "CAN",
+                      "ccn3": "124",
+                      "fips": "CA",
+                      "gec": "CA",
+                      "fifa": "CAN",
+                      "cioc": "CAN"
+                    },
+                    "capitals": [
+                      {
+                        "name": "Ottawa",
+                        "coordinates": {
+                          "lat": 45.42,
+                          "lng": -75.7
+                        },
+                        "attributes": {
+                          "primary": true,
+                          "constitutional": false,
+                          "administrative": false,
+                          "executive": false,
+                          "legislative": false,
+                          "judicial": false
+                        }
+                      }
+                    ],
+                    "flag": {
+                      "emoji": "\ud83c\udde8\ud83c\udde6",
+                      "url_png": "https://flags.restcountries.com/v5/w640/ca.png",
+                      "url_svg": "https://flags.restcountries.com/v5/svg/ca.svg"
+                    },
+                    "region": "Americas",
+                    "subregion": "North America",
+                    "continents": ["North America"],
+                    "landlocked": false,
+                    "borders": ["USA"],
+                    "area": {
+                      "kilometers": 9984670,
+                      "miles": 3855101.1
+                    },
+                    "population": 38005238,
+                    "currencies": [
+                      {
+                        "code": "CAD",
+                        "name": "Canadian dollar",
+                        "symbol": "$"
+                      }
+                    ],
+                    "languages": [
+                      {
+                        "iso639_1": "en",
+                        "iso639_3": "eng",
+                        "bcp47": "en",
+                        "name": "English",
+                        "native_name": "English"
+                      },
+                      {
+                        "iso639_1": "fr",
+                        "iso639_3": "fra",
+                        "bcp47": "fr",
+                        "name": "French",
+                        "native_name": "fran\u00e7ais"
+                      }
+                    ],
+                    "calling_codes": ["1"],
+                    "tlds": [".ca"],
+                    "memberships": {
+                      "un": true,
+                      "g7": true,
+                      "g20": true,
+                      "nato": true,
+                      "commonwealth": true,
+                      "oecd": true
+                    }
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "count": 1,
+                  "limit": 25,
+                  "offset": 0,
+                  "more": false,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 12
+                }
+              }
+            }
+          }
+        }
+      },
+      "Error400": {
+        "description": "Bad request. Malformed parameters or unsupported property.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "general.limit_out_of_range",
+                  "message": "Limit must be an integer between 1 and 500."
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Error401": {
+        "description": "Unauthorized. Missing, invalid, expired, or revoked API key.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Error403": {
+        "description": "Forbidden. The account is deleted, disabled, frozen, or pending approval; the request origin isn't in the key's allowed CORS origins; a paid-only field was used as a search, filter, or lookup target on a plan that doesn't include it; a limit above the plan's ceiling but within the paid maximum was requested on a non-paid plan; or the monthly quota has been exceeded past the soft-limit grace period.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Error404": {
+        "description": "Not found. The route doesn't match any defined endpoint, the API isn't active, or listing isn't supported for this API version.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Error405": {
+        "description": "Method not allowed. Every endpoint is GET-only.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Error410": {
+        "description": "Gone. The requested API version is no longer active.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            }
+          }
+        }
+      },
+      "Error429": {
+        "description": "Too Many Requests. Sustained traffic above the edge rate limit (20 requests per 10 seconds) is rejected by Cloudflare before the request reaches the API, so this response is generated at the edge and does not carry the standard JSON error envelope. Back off briefly and retry. The IP API can also answer 429 itself when the upstream geolocation service is rate limiting lookups; that response does carry the standard JSON error envelope, with the code ip.lookup_rate_limited."
+      },
+      "Error502": {
+        "description": "Bad Gateway. The upstream IP geolocation service is unavailable (network failure, timeout, or a non-200 upstream status). Generic by design; no upstream detail is leaked. Retry shortly.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "errors": [
+                {
+                  "code": "ip.lookup_unavailable",
+                  "message": "The IP geolocation service is currently unavailable. Please try again later."
+                }
+              ]
+            }
+          }
+        }
+      },
+      "ConvertList": {
+        "description": "Conversion result, one object per requested target currency.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ConvertResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "from": {
+                      "code": "USD",
+                      "name": "United States dollar",
+                      "symbol": "$"
+                    },
+                    "to": {
+                      "code": "EUR",
+                      "name": "Euro",
+                      "symbol": "\u20ac"
+                    },
+                    "amount": 100,
+                    "rate": 0.8772645,
+                    "result": 87.72645,
+                    "as_of": 1782691200
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 4
+                }
+              }
+            }
+          }
+        }
+      },
+      "RatesList": {
+        "description": "Full exchange-rate table for a base currency.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RatesResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "base": "USD",
+                    "as_of": 1782691200,
+                    "rates": {
+                      "EUR": 0.8772645,
+                      "GBP": 0.75560016,
+                      "CAD": 1.42319257,
+                      "JPY": 162.17946627
+                    }
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 3
+                }
+              }
+            }
+          }
+        }
+      },
+      "SymbolsList": {
+        "description": "Supported-currency catalog, one object per currency, sorted by code.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SymbolsResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "code": "AED",
+                    "name": "United Arab Emirates dirham",
+                    "symbol": "\u062f.\u0625"
+                  },
+                  {
+                    "code": "EUR",
+                    "name": "Euro",
+                    "symbol": "\u20ac"
+                  },
+                  {
+                    "code": "USD",
+                    "name": "United States dollar",
+                    "symbol": "$"
+                  },
+                  {
+                    "code": "XAU",
+                    "name": "Gold (troy ounce)",
+                    "symbol": null
+                  }
+                ],
+                "meta": {
+                  "total": 4,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 2
+                }
+              }
+            }
+          }
+        }
+      },
+      "IPLookup": {
+        "description": "Geolocation record for the resolved IP address, always a single object.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IPLookupResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "ip": "8.8.8.8",
+                    "type": "IPv4",
+                    "location": {
+                      "label": "Mountain View, California",
+                      "continent": {
+                        "name": "North America",
+                        "codes": {
+                          "common": "NA"
+                        }
+                      },
+                      "country": {
+                        "name": "United States",
+                        "codes": {
+                          "alpha_2": "US"
+                        },
+                        "flag": {
+                          "emoji": "\ud83c\uddfa\ud83c\uddf8",
+                          "html_entity": "&#127482;&#127480;",
+                          "url_png": "https://flags.restcountries.com/v5/w640/us.png",
+                          "url_svg": "https://flags.restcountries.com/v5/svg/us.svg"
+                        },
+                        "attributes": {
+                          "is_eu": false
+                        }
+                      },
+                      "subdivision": {
+                        "name": "California",
+                        "codes": {
+                          "common": "CA",
+                          "iso_3166_2": "US-CA"
+                        }
+                      },
+                      "city": {
+                        "name": "Mountain View"
+                      },
+                      "coordinates": {
+                        "lat": 37.38605,
+                        "lng": -122.08385
+                      },
+                      "postal": {
+                        "code": "94039"
+                      }
+                    },
+                    "connection": {
+                      "asn": {
+                        "number": 15169
+                      },
+                      "organization": {
+                        "name": "Google LLC"
+                      },
+                      "domain": "google.com"
+                    },
+                    "security": {
+                      "tor": false,
+                      "proxy": false,
+                      "vpn": null,
+                      "anonymous": false,
+                      "data_center": true
+                    },
+                    "timezone": {
+                      "id": "America/Los_Angeles",
+                      "current": {
+                        "abbreviation": "PDT",
+                        "offset": {
+                          "seconds": -25200,
+                          "iso_8601": "-07:00"
+                        },
+                        "attributes": {
+                          "is_dst": true
+                        }
+                      }
+                    }
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 45
+                }
+              }
+            }
+          }
+        }
+      },
+      "UserAgentParse": {
+        "description": "Parse record for the resolved user-agent string, always a single object.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UserAgentParseResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36",
+                    "label": "Chrome on macOS",
+                    "client": {
+                      "label": "Google Chrome (v150)",
+                      "name": "Chrome",
+                      "type": "browser",
+                      "version": {
+                        "full": "150.0.0.0",
+                        "major": 150
+                      },
+                      "maker": {
+                        "name": "Google",
+                        "links": {
+                          "wikipedia": "https://en.wikipedia.org/wiki/Google",
+                          "official": "https://www.google.com/"
+                        }
+                      },
+                      "engine": {
+                        "label": "Google Blink (v150)",
+                        "name": "Blink",
+                        "version": {
+                          "full": "150.0.0.0",
+                          "major": 150
+                        },
+                        "maker": {
+                          "name": "Google",
+                          "links": {
+                            "wikipedia": "https://en.wikipedia.org/wiki/Google",
+                            "official": "https://www.google.com/"
+                          }
+                        }
+                      },
+                      "attributes": {
+                        "is_android": false,
+                        "is_chrome": true,
+                        "is_chromium": false,
+                        "is_chromium_based": true,
+                        "is_edge": false,
+                        "is_safari": false,
+                        "is_firefox": false,
+                        "is_headless": false,
+                        "is_internet_explorer": false,
+                        "is_opera": false,
+                        "is_web_view": false
+                      }
+                    },
+                    "operator": null,
+                    "os": {
+                      "label": "Apple macOS (v10)",
+                      "name": "macOS",
+                      "version": {
+                        "full": "10.15.7",
+                        "major": 10
+                      },
+                      "maker": {
+                        "name": "Apple",
+                        "links": {
+                          "wikipedia": "https://en.wikipedia.org/wiki/Apple_Inc.",
+                          "official": "https://www.apple.com/"
+                        }
+                      }
+                    },
+                    "device": {
+                      "label": "Apple Macintosh",
+                      "name": "Macintosh",
+                      "type": "desktop",
+                      "maker": {
+                        "name": "Apple",
+                        "links": {
+                          "wikipedia": "https://en.wikipedia.org/wiki/Apple_Inc.",
+                          "official": "https://www.apple.com/"
+                        }
+                      },
+                      "attributes": {
+                        "is_camera": false,
+                        "is_desktop": true,
+                        "is_media_player": false,
+                        "is_mobile": false,
+                        "is_phone": false,
+                        "is_set_top_box": false,
+                        "is_smart_tv": false,
+                        "is_tablet": false,
+                        "is_watch": false,
+                        "is_wearable": false
+                      }
+                    },
+                    "flags": {
+                      "is_ai_assistant": false,
+                      "is_ai_crawler": false,
+                      "is_bot": false,
+                      "is_crawler": false
+                    }
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 38
+                }
+              }
+            }
+          }
+        }
+      },
+      "EmailProcess": {
+        "description": "Analysis record for the requested email address, always a single object.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/EmailProcessResponse"
+            },
+            "example": {
+              "data": {
+                "objects": [
+                  {
+                    "email": "someone+newsletter@gmail.com",
+                    "did_you_mean": null,
+                    "parts": {
+                      "local": "someone+newsletter",
+                      "username": "someone",
+                      "tag": "newsletter",
+                      "domain": "gmail.com"
+                    },
+                    "tld": {
+                      "name": "com",
+                      "country": {
+                        "name": null,
+                        "emoji": null
+                      }
+                    },
+                    "domain": {
+                      "provider": {
+                        "name": "Google",
+                        "type": "mailbox",
+                        "url": "https://workspace.google.com"
+                      },
+                      "category": "free",
+                      "mx": [
+                        {
+                          "exchange": "gmail-smtp-in.l.google.com",
+                          "priority": 5
+                        },
+                        {
+                          "exchange": "alt1.gmail-smtp-in.l.google.com",
+                          "priority": 10
+                        }
+                      ],
+                      "registration": {
+                        "registered_on": "1995-08-13",
+                        "updated_on": "2026-07-11",
+                        "transferred_on": null,
+                        "expires_on": "2027-08-12",
+                        "age_days": 11316
+                      },
+                      "authentication": {
+                        "spf": {
+                          "present": true,
+                          "policy": "softfail",
+                          "record": "v=spf1 redirect=_spf.google.com"
+                        },
+                        "dmarc": {
+                          "present": true,
+                          "policy": "none",
+                          "subdomain_policy": "quarantine",
+                          "percentage": 100,
+                          "record": "v=DMARC1; p=none; sp=quarantine; rua=mailto:..."
+                        }
+                      }
+                    },
+                    "gravatar": {
+                      "exists": false,
+                      "avatar_url": null,
+                      "profile_url": null
+                    },
+                    "attributes": {
+                      "is_valid_syntax": true,
+                      "is_free": true,
+                      "is_disposable": false,
+                      "is_forwarder": false,
+                      "is_likely_role_based": false,
+                      "has_plus_addressing": true
+                    }
+                  }
+                ],
+                "meta": {
+                  "total": 1,
+                  "request_id": "b3f1c2a8-9d4e-4c7a-8f21-6e0a1b2c3d4e",
+                  "duration": 212
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CountryListResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Country"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ListMeta"
+              }
+            }
+          }
+        }
+      },
+      "ListMeta": {
+        "type": "object",
+        "required": [
+          "total",
+          "count",
+          "limit",
+          "offset",
+          "more",
+          "request_id",
+          "duration"
+        ],
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total records matching the query (independent of limit/offset)."
+          },
+          "count": {
+            "type": "integer",
+            "description": "Number of records in this page (length of objects)."
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "more": {
+            "type": "boolean",
+            "description": "True when records remain beyond this page."
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Server-side processing time in milliseconds."
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["errors"],
+        "properties": {
+          "errors": {
+            "type": "array",
+            "description": "One or more error objects describing what went wrong.",
+            "items": {
+              "type": "object",
+              "required": ["message", "code"],
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string",
+                  "pattern": "^[a-z_]+\\.[a-z0-9_]+$",
+                  "description": "Machine-readable error code in the form {namespace}.{error}, both in snake_case. The namespace is the API that defines the error (countries, currencies, ip, user_agent), or general for errors any API can return, such as authentication, plan, and request-validation failures. Stays the same even if the message wording changes, so branch on this rather than the message.",
+                  "example": "ip.ip_invalid"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Country": {
+        "type": "object",
+        "description": "A single country record. See https://restcountries.com/docs#fields for the canonical field reference.",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Stable per-country identifier independent of code revisions."
+          },
+          "names": {
+            "type": "object",
+            "properties": {
+              "common": {
+                "type": "string"
+              },
+              "official": {
+                "type": "string"
+              },
+              "alternates": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "native": {
+                "type": "object",
+                "description": "Map of ISO 639-3 language code to native name pair.",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "common": {
+                      "type": "string"
+                    },
+                    "official": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "translations": {
+                "type": "object",
+                "description": "Map of ISO 639-3 language code to translated name pair. Heavy field; trim with response_fields_omit when not needed.",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "common": {
+                      "type": "string"
+                    },
+                    "official": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "codes": {
+            "type": "object",
+            "properties": {
+              "alpha_2": {
+                "type": "string",
+                "description": "ISO 3166-1 alpha-2 (two-letter) code."
+              },
+              "alpha_3": {
+                "type": "string",
+                "description": "ISO 3166-1 alpha-3 (three-letter) code."
+              },
+              "ccn3": {
+                "type": "string",
+                "description": "ISO 3166-1 numeric (three-digit) code."
+              },
+              "fips": {
+                "type": "string",
+                "description": "FIPS 10-4 country code."
+              },
+              "gec": {
+                "type": "string",
+                "description": "GEC code."
+              },
+              "fifa": {
+                "type": "string",
+                "description": "FIFA code."
+              },
+              "cioc": {
+                "type": "string",
+                "description": "International Olympic Committee code."
+              }
+            }
+          },
+          "capitals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "coordinates": {
+                  "type": "object",
+                  "properties": {
+                    "lat": {
+                      "type": "number"
+                    },
+                    "lng": {
+                      "type": "number"
+                    }
+                  }
+                },
+                "attributes": {
+                  "type": "object",
+                  "description": "Role flags for this capital. Multi-capital countries set whichever flags fit each city; single-capital countries set primary.",
+                  "properties": {
+                    "primary": {
+                      "type": "boolean"
+                    },
+                    "constitutional": {
+                      "type": "boolean"
+                    },
+                    "administrative": {
+                      "type": "boolean"
+                    },
+                    "executive": {
+                      "type": "boolean"
+                    },
+                    "legislative": {
+                      "type": "boolean"
+                    },
+                    "judicial": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "continents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "region": {
+            "type": "string"
+          },
+          "subregion": {
+            "type": "string"
+          },
+          "landlocked": {
+            "type": "boolean"
+          },
+          "coordinates": {
+            "type": "object",
+            "properties": {
+              "lat": {
+                "type": "number"
+              },
+              "lng": {
+                "type": "number"
+              }
+            }
+          },
+          "area": {
+            "type": "object",
+            "properties": {
+              "kilometers": {
+                "type": "number"
+              },
+              "miles": {
+                "type": "number"
+              }
+            }
+          },
+          "borders": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "Neighboring country alpha-3 code."
+            }
+          },
+          "timezones": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "government_type": {
+            "type": "string"
+          },
+          "leaders": {
+            "type": "array",
+            "description": "Heads of state and government. Paid-plan field, and the gating shows up two ways. As a response field it stays an array on every plan: on a plan that doesn't include it the array holds exactly one LeadersNotice element ({message, sample}) rather than leader records, so check for a message key before treating an entry as a leader. As a search, filter, or lookup target it returns HTTP 403 on those plans instead.",
+            "items": {
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/Leader"
+                },
+                {
+                  "$ref": "#/components/schemas/LeadersNotice"
+                }
+              ]
+            }
+          },
+          "flag": {
+            "type": "object",
+            "properties": {
+              "emoji": {
+                "type": "string"
+              },
+              "unicode": {
+                "type": "string"
+              },
+              "html_entity": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "url_png": {
+                "type": "string",
+                "format": "uri"
+              },
+              "url_svg": {
+                "type": "string",
+                "format": "uri"
+              },
+              "colors": {
+                "type": "object",
+                "properties": {
+                  "dominant": {
+                    "type": "string",
+                    "description": "Dominant flag color as a hex string."
+                  },
+                  "prominent": {
+                    "type": "string",
+                    "description": "Most prominent flag color (the single color covering the largest share of the flag's area) as a hex string."
+                  },
+                  "palette": {
+                    "type": "array",
+                    "description": "Flag color palette as an array of {hex, proportion} maps, each pairing a hex color with the share (0-1) of the flag it covers.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "hex": {
+                          "type": "string"
+                        },
+                        "proportion": {
+                          "type": "number"
+                        }
+                      }
+                    }
+                  },
+                  "swatches": {
+                    "type": "object",
+                    "description": "Flag semantic color swatches keyed by role. All six roles are always present; a role the flag has no matching color for is null.",
+                    "properties": {
+                      "vibrant": {
+                        "type": ["string", "null"]
+                      },
+                      "muted": {
+                        "type": ["string", "null"]
+                      },
+                      "dark_vibrant": {
+                        "type": ["string", "null"]
+                      },
+                      "dark_muted": {
+                        "type": ["string", "null"]
+                      },
+                      "light_vibrant": {
+                        "type": ["string", "null"]
+                      },
+                      "light_muted": {
+                        "type": ["string", "null"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "currencies": {
+            "type": "array",
+            "description": "Currencies used by the country.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "symbol": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "population": {
+            "type": "integer"
+          },
+          "economy": {
+            "type": "object",
+            "properties": {
+              "gini_coefficient": {
+                "type": "object",
+                "description": "Map of year (string) to Gini value (number).",
+                "additionalProperties": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "demonyms": {
+            "type": "object",
+            "description": "Map of ISO 639-3 language code to {m, f} demonym pair.",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "m": {
+                  "type": "string"
+                },
+                "f": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "languages": {
+            "type": "array",
+            "description": "Languages used in the country, each with ISO 639 identifiers, BCP 47 tag, English name, and native name.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "iso639_1": {
+                  "type": "string"
+                },
+                "iso639_2t": {
+                  "type": "string"
+                },
+                "iso639_2b": {
+                  "type": "string"
+                },
+                "iso639_3": {
+                  "type": "string"
+                },
+                "bcp47": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "native_name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "calling_codes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tlds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cars": {
+            "type": "object",
+            "properties": {
+              "driving_side": {
+                "type": "string",
+                "enum": ["left", "right"]
+              },
+              "signs": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "postal_code": {
+            "type": "object",
+            "properties": {
+              "format": {
+                "type": "string"
+              },
+              "regex": {
+                "type": "string"
+              }
+            }
+          },
+          "number_format": {
+            "type": "object",
+            "properties": {
+              "decimal_separator": {
+                "type": "string"
+              },
+              "thousands_separator": {
+                "type": "string"
+              }
+            }
+          },
+          "units": {
+            "type": "object",
+            "properties": {
+              "measurement_system": {
+                "type": "string",
+                "enum": ["metric", "imperial"]
+              },
+              "temperature_scale": {
+                "type": "string",
+                "enum": ["Celsius", "Fahrenheit"]
+              }
+            }
+          },
+          "memberships": {
+            "type": "object",
+            "properties": {
+              "un": {
+                "type": "boolean"
+              },
+              "african_union": {
+                "type": "boolean"
+              },
+              "arab_league": {
+                "type": "boolean"
+              },
+              "asean": {
+                "type": "boolean"
+              },
+              "brics": {
+                "type": "boolean"
+              },
+              "commonwealth": {
+                "type": "boolean"
+              },
+              "eu": {
+                "type": "boolean"
+              },
+              "eurozone": {
+                "type": "boolean"
+              },
+              "g7": {
+                "type": "boolean"
+              },
+              "g20": {
+                "type": "boolean"
+              },
+              "nato": {
+                "type": "boolean"
+              },
+              "oecd": {
+                "type": "boolean"
+              },
+              "opec": {
+                "type": "boolean"
+              },
+              "schengen": {
+                "type": "boolean"
+              }
+            }
+          },
+          "classification": {
+            "type": "object",
+            "properties": {
+              "sovereign": {
+                "type": "boolean"
+              },
+              "disputed": {
+                "type": "boolean"
+              },
+              "iso_status": {
+                "type": "string",
+                "enum": ["official", "user_assigned", "unassigned"]
+              },
+              "un_member": {
+                "type": "boolean"
+              },
+              "un_observer": {
+                "type": "boolean"
+              },
+              "dependency": {
+                "type": "boolean"
+              },
+              "dependency_type": {
+                "type": "string",
+                "description": "Kind of dependency for dependent entities (e.g. overseas_territory, crown_dependency, special_administrative_region, constituent_country); empty string when the entity is not a dependency."
+              }
+            }
+          },
+          "parent": {
+            "type": "object",
+            "description": "Present on dependent entities (overseas territories, crown dependencies, SARs).",
+            "properties": {
+              "alpha_2": {
+                "type": "string"
+              },
+              "alpha_3": {
+                "type": "string"
+              }
+            }
+          },
+          "date": {
+            "type": "object",
+            "properties": {
+              "start_of_week": {
+                "type": "string",
+                "enum": ["monday", "sunday", "saturday"]
+              },
+              "academic_year_start": {
+                "type": "object",
+                "properties": {
+                  "month": {
+                    "type": "integer"
+                  },
+                  "day": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "fiscal_year_start": {
+                "type": "object",
+                "properties": {
+                  "government": {
+                    "type": "object",
+                    "properties": {
+                      "month": {
+                        "type": "integer"
+                      },
+                      "day": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "corporate": {
+                    "type": "object",
+                    "properties": {
+                      "month": {
+                        "type": "integer"
+                      },
+                      "day": {
+                        "type": "integer"
+                      },
+                      "basis": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "personal": {
+                    "type": "object",
+                    "properties": {
+                      "month": {
+                        "type": "integer"
+                      },
+                      "day": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "wikipedia": {
+                "type": "string",
+                "format": "uri"
+              },
+              "official": {
+                "type": "string",
+                "format": "uri"
+              },
+              "google_maps": {
+                "type": "string",
+                "format": "uri"
+              },
+              "open_street_maps": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "assets": {
+            "type": "array",
+            "description": "Hosted files and media associated with the country (e.g. a link to a photo of the parliament building). Currently always empty; each item will be an object describing one asset.",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      },
+      "Leader": {
+        "type": "object",
+        "description": "A single head of state or government.",
+        "properties": {
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "attributes": {
+            "type": "object",
+            "properties": {
+              "administers_executive": {
+                "type": ["boolean", "null"]
+              },
+              "de_facto_executive": {
+                "type": ["boolean", "null"]
+              },
+              "head_of_government": {
+                "type": ["boolean", "null"]
+              },
+              "head_of_state": {
+                "type": ["boolean", "null"]
+              },
+              "is_representative": {
+                "type": ["boolean", "null"]
+              },
+              "pending_office": {
+                "type": ["boolean", "null"]
+              },
+              "provisional": {
+                "type": ["boolean", "null"]
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "wikipedia": {
+                "type": ["string", "null"],
+                "format": "uri"
+              }
+            }
+          },
+          "name": {
+            "type": ["string", "null"]
+          },
+          "title": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "LeadersNotice": {
+        "type": "object",
+        "description": "The single element the leaders array carries on a plan that doesn't include the field, in place of leader records.",
+        "required": ["message", "sample"],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Explains that leaders is paid-plan only and links to the plans page."
+          },
+          "sample": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of a hosted sample payload showing the shape a paid plan receives."
+          }
+        }
+      },
+      "Currency": {
+        "type": "object",
+        "description": "A currency as { code, name, symbol }. symbol is null where the currency has no conventional sign (e.g. precious metals).",
+        "required": ["code", "name", "symbol"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Uppercase currency code (e.g. USD, BTC)."
+          },
+          "name": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": ["string", "null"]
+          }
+        }
+      },
+      "ConvertObject": {
+        "type": "object",
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/Currency"
+          },
+          "to": {
+            "$ref": "#/components/schemas/Currency"
+          },
+          "amount": {
+            "type": "number",
+            "description": "The input amount in the source currency (the amount sent, or 1 by default)."
+          },
+          "rate": {
+            "type": "number",
+            "description": "Units of the target currency per one unit of the source, read from the as_of snapshot."
+          },
+          "result": {
+            "type": "number",
+            "description": "The converted amount (amount x rate)."
+          },
+          "as_of": {
+            "type": "integer",
+            "description": "Unix timestamp (seconds) the rate was sourced. Day-granular today."
+          }
+        }
+      },
+      "RatesObject": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "string",
+            "description": "The base currency code (uppercase) the table is expressed against."
+          },
+          "as_of": {
+            "type": "integer",
+            "description": "Unix timestamp (seconds) the table was sourced."
+          },
+          "rates": {
+            "type": "object",
+            "description": "Map of uppercase currency code to its rate (units per one unit of base). Every key is itself a queryable base.",
+            "additionalProperties": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "ResultMeta": {
+        "type": "object",
+        "required": ["total", "request_id", "duration"],
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Number of objects returned."
+          },
+          "request_id": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Server-side processing time in milliseconds."
+          }
+        }
+      },
+      "ConvertResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ConvertObject"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      },
+      "RatesResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/RatesObject"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      },
+      "SymbolsResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Currency"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      },
+      "IPRecord": {
+        "type": "object",
+        "description": "A single IP geolocation record. Every response carries the full key tree; a leaf that can't be resolved for an address ships as null, the record-wide marker for unknown. See https://restcountries.com/docs/ip for the canonical field reference.",
+        "properties": {
+          "ip": {
+            "type": "string",
+            "description": "The IP address the record describes."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["IPv4", "IPv6"]
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": ["string", "null"],
+                "description": "Display-ready place label, degrading city to subdivision to country as values go unresolved; null only when nothing is nameable."
+              },
+              "continent": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"]
+                  },
+                  "codes": {
+                    "type": "object",
+                    "properties": {
+                      "common": {
+                        "type": ["string", "null"],
+                        "description": "Two-letter continent code (e.g. NA, EU)."
+                      }
+                    }
+                  }
+                }
+              },
+              "country": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"]
+                  },
+                  "codes": {
+                    "type": "object",
+                    "properties": {
+                      "alpha_2": {
+                        "type": ["string", "null"],
+                        "description": "ISO 3166-1 alpha-2 (two-letter) code."
+                      }
+                    }
+                  },
+                  "flag": {
+                    "type": "object",
+                    "description": "Flag assets derived from the alpha-2 code, so every lookup ships identical values for a given country.",
+                    "properties": {
+                      "emoji": {
+                        "type": ["string", "null"]
+                      },
+                      "html_entity": {
+                        "type": ["string", "null"]
+                      },
+                      "url_png": {
+                        "type": ["string", "null"],
+                        "format": "uri"
+                      },
+                      "url_svg": {
+                        "type": ["string", "null"],
+                        "format": "uri"
+                      }
+                    }
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "is_eu": {
+                        "type": ["boolean", "null"],
+                        "description": "Whether the country is an EU member; null when the data source doesn't report it."
+                      }
+                    }
+                  }
+                }
+              },
+              "subdivision": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"]
+                  },
+                  "codes": {
+                    "type": "object",
+                    "properties": {
+                      "common": {
+                        "type": ["string", "null"],
+                        "description": "Bare subdivision code (e.g. ON, ENG)."
+                      },
+                      "iso_3166_2": {
+                        "type": ["string", "null"],
+                        "description": "Full ISO 3166-2 code (e.g. CA-ON, GB-ENG)."
+                      }
+                    }
+                  }
+                }
+              },
+              "city": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"]
+                  }
+                }
+              },
+              "coordinates": {
+                "type": "object",
+                "properties": {
+                  "lat": {
+                    "type": ["number", "null"]
+                  },
+                  "lng": {
+                    "type": ["number", "null"]
+                  }
+                }
+              },
+              "postal": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": ["string", "null"]
+                  }
+                }
+              }
+            }
+          },
+          "connection": {
+            "type": "object",
+            "properties": {
+              "asn": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": ["integer", "null"],
+                    "description": "Autonomous system number."
+                  }
+                }
+              },
+              "organization": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"],
+                    "description": "Operator of the address block."
+                  }
+                }
+              },
+              "domain": {
+                "type": ["string", "null"]
+              }
+            }
+          },
+          "security": {
+            "type": "object",
+            "description": "Tri-state threat signals: true or false when the data source reports one, null when it can't say.",
+            "properties": {
+              "tor": {
+                "type": ["boolean", "null"]
+              },
+              "proxy": {
+                "type": ["boolean", "null"]
+              },
+              "vpn": {
+                "type": ["boolean", "null"]
+              },
+              "anonymous": {
+                "type": ["boolean", "null"]
+              },
+              "data_center": {
+                "type": ["boolean", "null"]
+              }
+            }
+          },
+          "timezone": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": ["string", "null"],
+                "description": "Stable IANA timezone identifier (e.g. America/Los_Angeles)."
+              },
+              "current": {
+                "type": "object",
+                "description": "Moment-of-request values for the timezone.",
+                "properties": {
+                  "abbreviation": {
+                    "type": ["string", "null"]
+                  },
+                  "offset": {
+                    "type": "object",
+                    "properties": {
+                      "seconds": {
+                        "type": ["integer", "null"]
+                      },
+                      "iso_8601": {
+                        "type": ["string", "null"],
+                        "description": "UTC offset as +HH:MM / -HH:MM."
+                      }
+                    }
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "is_dst": {
+                        "type": ["boolean", "null"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "IPLookupResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/IPRecord"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      },
+      "VersionBlock": {
+        "type": ["object", "null"],
+        "description": "A parsed version as {full, major}. major is a derived integer parsed from full's leading digits. The whole block collapses to a single null when no version was parsed.",
+        "properties": {
+          "full": {
+            "type": ["string", "null"]
+          },
+          "major": {
+            "type": ["integer", "null"]
+          }
+        }
+      },
+      "UserAgentImage": {
+        "type": ["object", "null"],
+        "description": "A brand image for the name it sits beside, served from the free brand CDN. Collapses to a single null when no image of that kind exists.",
+        "properties": {
+          "url_svg": {
+            "type": ["string", "null"],
+            "format": "uri",
+            "description": "Absolute URL of the SVG. Free to hotlink, no key required."
+          }
+        }
+      },
+      "UserAgentLinks": {
+        "type": ["object", "null"],
+        "description": "Reference links for an organization. Collapses to a single null when neither link resolved.",
+        "properties": {
+          "wikipedia": {
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "official": {
+            "type": ["string", "null"],
+            "format": "uri"
+          }
+        }
+      },
+      "UserAgentMaker": {
+        "type": ["object", "null"],
+        "description": "The organization that makes the thing this block names (the browser, the engine, the OS, the hardware), resolved from the block's own name. Distinct from the root operator, which is who the traffic acts for: an Instagram webview has engine maker Google and operator Meta. Collapses to a single null when the name matched no known organization.",
+        "properties": {
+          "name": {
+            "type": ["string", "null"]
+          },
+          "logo": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "wordmark": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "links": {
+            "$ref": "#/components/schemas/UserAgentLinks"
+          }
+        }
+      },
+      "UserAgentEngine": {
+        "type": ["object", "null"],
+        "description": "The client's rendering engine. Reported as the string claims it, so a bot borrowing browser tokens shows the engine those tokens name. Collapses to a single null when nothing about the engine parsed.",
+        "properties": {
+          "label": {
+            "type": ["string", "null"],
+            "description": "Display-ready engine summary, maker-first with the major version (e.g. \"Google Blink (v150)\")."
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "Engine name (e.g. Blink, WebKit, Gecko, Trident)."
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionBlock"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "wordmark": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "maker": {
+            "$ref": "#/components/schemas/UserAgentMaker"
+          }
+        }
+      },
+      "UserAgentOperator": {
+        "type": ["object", "null"],
+        "description": "Who the traffic acts for, as opposed to who built the client. Populated for bots and in-app browsers (GPTBot: OpenAI, Instagram: Meta), so \"all of OpenAI's traffic\" is one comparison whatever the individual agent names. Collapses to a single null for ordinary browsers, whose traffic acts for the human using them.",
+        "properties": {
+          "name": {
+            "type": ["string", "null"],
+            "description": "Canonical organization name (e.g. OpenAI), resolved from name_legal against the organization registry, falling back to name_legal verbatim when the producer isn't a known organization."
+          },
+          "name_legal": {
+            "type": ["string", "null"],
+            "description": "The producer exactly as the string or the vendor data declares it (e.g. \"OpenAI OpCo, LLC\")."
+          },
+          "email_address": {
+            "type": ["string", "null"],
+            "description": "Contact address the string itself declares (e.g. claudebot@anthropic.com); null when it declares none."
+          },
+          "logo": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "wordmark": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "links": {
+            "type": ["object", "null"],
+            "description": "Collapses to a single null when neither link resolved.",
+            "properties": {
+              "info": {
+                "type": ["string", "null"],
+                "format": "uri",
+                "description": "The policy or documentation page the bot declares in its own string (e.g. http://www.google.com/bot.html)."
+              },
+              "wikipedia": {
+                "type": ["string", "null"],
+                "format": "uri",
+                "description": "The operator's Wikipedia article, resolved from name."
+              }
+            }
+          }
+        }
+      },
+      "UserAgentOS": {
+        "type": ["object", "null"],
+        "description": "The operating system. Collapses to a single null when the string names no OS, which is the common case for bots.",
+        "properties": {
+          "label": {
+            "type": ["string", "null"],
+            "description": "Display-ready OS summary, maker-first with the major version (e.g. \"Apple macOS (v10)\")."
+          },
+          "name": {
+            "type": ["string", "null"],
+            "description": "OS name (e.g. macOS, Windows, iOS, Android, Ubuntu)."
+          },
+          "version": {
+            "$ref": "#/components/schemas/VersionBlock"
+          },
+          "logo": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "wordmark": {
+            "$ref": "#/components/schemas/UserAgentImage"
+          },
+          "maker": {
+            "$ref": "#/components/schemas/UserAgentMaker"
+          }
+        }
+      },
+      "UserAgentRecord": {
+        "type": "object",
+        "description": "A single user-agent parse record. A leaf the string doesn't reveal ships as null, and a block whose every leaf resolved null collapses to a single null rather than a tree of them (os, client.engine, operator, every maker, and any version). The blocks carrying a boolean sub-block never collapse: client, device, and flags are always objects. See https://restcountries.com/docs/user-agent for the canonical field reference.",
+        "properties": {
+          "ua": {
+            "type": "string",
+            "description": "The user-agent string that was analyzed."
+          },
+          "label": {
+            "type": ["string", "null"],
+            "description": "Display-ready summary: the client name plus the one context that best identifies the traffic \u2014 recognized hardware when the device is something other than a desktop (\"Mobile Safari on Apple iPhone\"), otherwise the OS (\"Chrome on macOS\"), and the bare client name when neither resolved (\"GPTBot\"). Null only when the client name itself didn't parse."
+          },
+          "client": {
+            "type": "object",
+            "description": "The agent itself. Always an object.",
+            "properties": {
+              "label": {
+                "type": ["string", "null"],
+                "description": "Display-ready client summary, maker-first with the major version (e.g. \"Google Chrome (v150)\")."
+              },
+              "name": {
+                "type": ["string", "null"],
+                "description": "Client name (e.g. Chrome, Mobile Safari, Googlebot, curl)."
+              },
+              "type": {
+                "type": ["string", "null"],
+                "enum": [
+                  "browser",
+                  "cli",
+                  "crawler",
+                  "desktop_app",
+                  "email",
+                  "fetcher",
+                  "library",
+                  "media_player",
+                  "mobile_app",
+                  null
+                ]
+              },
+              "version": {
+                "$ref": "#/components/schemas/VersionBlock"
+              },
+              "logo": {
+                "$ref": "#/components/schemas/UserAgentImage"
+              },
+              "wordmark": {
+                "$ref": "#/components/schemas/UserAgentImage"
+              },
+              "maker": {
+                "$ref": "#/components/schemas/UserAgentMaker"
+              },
+              "engine": {
+                "$ref": "#/components/schemas/UserAgentEngine"
+              },
+              "attributes": {
+                "type": "object",
+                "description": "Browser-family flags, matched across variants (e.g. Mobile Safari counts as is_safari, Chrome Headless as is_chrome). Always an object, and every leaf is a definite boolean: a flag nothing spoke to answers false, never null.",
+                "properties": {
+                  "is_android": {
+                    "type": "boolean",
+                    "description": "The client is the stock Android Browser. This names the client, not the OS: Chrome on Android is is_chrome, not is_android."
+                  },
+                  "is_chrome": {
+                    "type": "boolean",
+                    "description": "Chrome family (Chrome, Chrome Mobile, Chrome Headless, Chrome WebView). Excludes Chromium, which has its own flag."
+                  },
+                  "is_chromium": {
+                    "type": "boolean",
+                    "description": "The client is Chromium itself."
+                  },
+                  "is_chromium_based": {
+                    "type": "boolean",
+                    "description": "Built on Chromium: Chrome, Chromium, Edge 79+, or any client whose engine reports Blink (Opera, Vivaldi, Samsung Internet, Brave)."
+                  },
+                  "is_edge": {
+                    "type": "boolean"
+                  },
+                  "is_safari": {
+                    "type": "boolean",
+                    "description": "Safari family, including Mobile Safari."
+                  },
+                  "is_firefox": {
+                    "type": "boolean",
+                    "description": "Firefox family, including Mobile Firefox."
+                  },
+                  "is_headless": {
+                    "type": "boolean",
+                    "description": "Automation-oriented build (Headless Chrome, PhantomJS, SlimerJS, HtmlUnit, Splash)."
+                  },
+                  "is_internet_explorer": {
+                    "type": "boolean",
+                    "description": "Internet Explorer family, desktop and mobile."
+                  },
+                  "is_opera": {
+                    "type": "boolean",
+                    "description": "Opera family, including Opera Mini, Mobile, and Touch."
+                  },
+                  "is_web_view": {
+                    "type": "boolean",
+                    "description": "An in-app browser (Instagram, Facebook, Android WebView) rather than a standalone one. Useful when webviews break OAuth flows or downloads."
+                  }
+                }
+              }
+            }
+          },
+          "operator": {
+            "$ref": "#/components/schemas/UserAgentOperator"
+          },
+          "os": {
+            "$ref": "#/components/schemas/UserAgentOS"
+          },
+          "device": {
+            "type": "object",
+            "description": "The hardware. Always an object, though every leaf but attributes is null for an agent that identifies no hardware.",
+            "properties": {
+              "label": {
+                "type": ["string", "null"],
+                "description": "Display-ready device summary, maker-first (e.g. \"Apple iPhone\", \"Samsung Galaxy S24 Ultra\")."
+              },
+              "name": {
+                "type": ["string", "null"],
+                "description": "The hardware model by marketing name where one is known (e.g. iPhone, Galaxy S24 Ultra, Pixel 8), falling back to the model code the string carried."
+              },
+              "type": {
+                "type": ["string", "null"],
+                "enum": [
+                  "appliance",
+                  "augmented_reality",
+                  "camera",
+                  "car",
+                  "cloud",
+                  "desktop",
+                  "e_reader",
+                  "game_console",
+                  "handheld",
+                  "media_player",
+                  "phone",
+                  "set_top_box",
+                  "smart_display",
+                  "smart_tv",
+                  "tablet",
+                  "virtual_reality",
+                  "voice",
+                  "watch",
+                  null
+                ],
+                "description": "Device class. Note phone rather than mobile, and game_console rather than console. desktop is derived: desktop strings don't announce themselves, so it's assigned only when a browser reports a desktop-class OS, which is why bots leave it null."
+              },
+              "maker": {
+                "$ref": "#/components/schemas/UserAgentMaker"
+              },
+              "attributes": {
+                "type": "object",
+                "description": "Form-factor flags, reconciled against the settled type so a record never claims two form factors at once. Always an object, and every leaf is a definite boolean: a flag nothing spoke to answers false, never null. is_mobile is the broadest, covering phones, tablets, cameras, and portable media players.",
+                "properties": {
+                  "is_camera": {
+                    "type": "boolean"
+                  },
+                  "is_desktop": {
+                    "type": "boolean"
+                  },
+                  "is_media_player": {
+                    "type": "boolean"
+                  },
+                  "is_mobile": {
+                    "type": "boolean"
+                  },
+                  "is_phone": {
+                    "type": "boolean"
+                  },
+                  "is_set_top_box": {
+                    "type": "boolean"
+                  },
+                  "is_smart_tv": {
+                    "type": "boolean"
+                  },
+                  "is_tablet": {
+                    "type": "boolean"
+                  },
+                  "is_watch": {
+                    "type": "boolean"
+                  },
+                  "is_wearable": {
+                    "type": "boolean",
+                    "description": "Set alongside is_watch; wearable is not itself a device type."
+                  }
+                }
+              }
+            }
+          },
+          "flags": {
+            "type": "object",
+            "description": "Agent classification. Always an object, and every leaf is a definite boolean: a flag nothing spoke to answers false, never null.",
+            "properties": {
+              "is_ai_assistant": {
+                "type": "boolean",
+                "description": "A known AI assistant fetching one page live on a user's behalf (e.g. ChatGPT-User, Perplexity-User). A person is behind the request, unlike a crawler."
+              },
+              "is_ai_crawler": {
+                "type": "boolean",
+                "description": "A known AI training or indexing crawler (e.g. GPTBot, ClaudeBot)."
+              },
+              "is_bot": {
+                "type": "boolean",
+                "description": "Broad non-human flag; crawlers, fetchers, CLIs, and HTTP libraries all count. The one flag to gate on when you mean \"not a person\"."
+              },
+              "is_crawler": {
+                "type": "boolean",
+                "description": "Crawls in bulk rather than fetching on demand, so a link previewer like Twitterbot is is_bot but not is_crawler."
+              }
+            }
+          }
+        }
+      },
+      "UserAgentParseResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/UserAgentRecord"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      },
+      "EmailRecord": {
+        "type": "object",
+        "description": "A single email analysis record. Every response carries the identical structure; a value the data can't name for a given address comes back null, so there are no optional keys to feature-detect. When attributes.is_valid_syntax is false, no lookups run and every other leaf ships at its default. See https://restcountries.com/docs/email-intelligence for the canonical field reference.",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The address the request resolved to: the email parameter, then the q alias. Echoed verbatim."
+          },
+          "did_you_mean": {
+            "type": ["string", "null"],
+            "description": "A corrected address when the domain looks like a typo of a well-known one (someone@gmial.com suggests someone@gmail.com); null otherwise, which is most of the time. Treat it as a prompt for your user, never an automatic correction."
+          },
+          "parts": {
+            "type": "object",
+            "description": "The address split on its last @. The domain half is lowercased; the local half is preserved exactly as sent.",
+            "properties": {
+              "local": {
+                "type": ["string", "null"],
+                "description": "Everything before the @, tag included."
+              },
+              "username": {
+                "type": ["string", "null"],
+                "description": "The local part with any plus-addressing tag removed: the mailbox the address delivers to."
+              },
+              "tag": {
+                "type": ["string", "null"],
+                "description": "Everything after the local part's first +, or null when there is no +."
+              },
+              "domain": {
+                "type": ["string", "null"],
+                "description": "Everything after the last @, lowercased. The value the MX lookup runs against."
+              }
+            }
+          },
+          "tld": {
+            "type": "object",
+            "description": "The domain's top-level label and the country that administers it. This is provenance, not location: many ccTLDs (io, ai, tv, me, co) are used worldwide with no connection to the country.",
+            "properties": {
+              "name": {
+                "type": ["string", "null"],
+                "description": "The DNS top-level label, lowercased (example.co.uk gives uk)."
+              },
+              "country": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"],
+                    "description": "The country holding the ccTLD, from the same dataset the Countries API serves; null for generic or supranational suffixes such as com or eu."
+                  },
+                  "emoji": {
+                    "type": ["string", "null"],
+                    "description": "That country's flag emoji, or null alongside a null name."
+                  }
+                }
+              }
+            }
+          },
+          "domain": {
+            "type": "object",
+            "description": "What's known about the domain half of the address.",
+            "properties": {
+              "provider": {
+                "type": "object",
+                "description": "The operator handling mail for the domain, read from its MX records and never from the domain name. Every key is null when the operator isn't recognized, which includes every self-hosted mail server.",
+                "properties": {
+                  "name": {
+                    "type": ["string", "null"],
+                    "description": "Operator name (e.g. Google, Microsoft, Proton)."
+                  },
+                  "type": {
+                    "type": ["string", "null"],
+                    "enum": [
+                      "mailbox",
+                      "gateway",
+                      "forwarding",
+                      "disposable",
+                      null
+                    ],
+                    "description": "mailbox runs the mailbox itself; gateway is a filtering layer in front of a mailbox host that DNS doesn't reveal; forwarding relays elsewhere; disposable hands out throwaway mailboxes."
+                  },
+                  "url": {
+                    "type": ["string", "null"],
+                    "description": "The operator's homepage."
+                  }
+                }
+              },
+              "category": {
+                "type": ["string", "null"],
+                "enum": [
+                  "disposable",
+                  "forwarding",
+                  "free",
+                  "education",
+                  "government",
+                  "custom",
+                  "no_mail",
+                  null
+                ],
+                "description": "One mutually exclusive bucket, first match wins in the order listed. custom means the domain accepts mail and matched none of the others (a company or a personal vanity domain); no_mail means it publishes no way to receive mail."
+              },
+              "mx": {
+                "type": "array",
+                "description": "The domain's mail exchangers, resolved live from DNS, lowest priority first with ties broken alphabetically. Empty when the domain publishes none, declares a null MX, doesn't resolve, or the lookup fails; those cases aren't distinguished.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "exchange": {
+                      "type": "string",
+                      "description": "Mail exchanger hostname, lowercased, without the trailing root dot."
+                    },
+                    "priority": {
+                      "type": "integer",
+                      "description": "The record's preference value. Lower is tried first."
+                    }
+                  }
+                }
+              },
+              "registration": {
+                "type": "object",
+                "description": "Registration dates read over RDAP, as YYYY-MM-DD. A null means not available (no RDAP, redacted, or the lookup timed out), never recently registered.",
+                "properties": {
+                  "registered_on": {
+                    "type": ["string", "null"],
+                    "format": "date",
+                    "description": "Date the domain was first registered."
+                  },
+                  "updated_on": {
+                    "type": ["string", "null"],
+                    "format": "date",
+                    "description": "Date the registry record last changed."
+                  },
+                  "transferred_on": {
+                    "type": ["string", "null"],
+                    "format": "date",
+                    "description": "Date the domain last changed hands, where the registry publishes it."
+                  },
+                  "expires_on": {
+                    "type": ["string", "null"],
+                    "format": "date",
+                    "description": "Date the current registration lapses if not renewed."
+                  },
+                  "age_days": {
+                    "type": ["integer", "null"],
+                    "description": "Whole days since registered_on; null whenever registered_on is."
+                  }
+                }
+              },
+              "authentication": {
+                "type": "object",
+                "description": "What the domain publishes about who may send mail as it. A present of false means the domain publishes nothing or the lookup couldn't complete. DKIM is not reported, because selectors can't be discovered.",
+                "properties": {
+                  "spf": {
+                    "type": "object",
+                    "properties": {
+                      "present": {
+                        "type": "boolean",
+                        "description": "Whether the domain publishes an SPF record."
+                      },
+                      "policy": {
+                        "type": ["string", "null"],
+                        "enum": [
+                          "strict",
+                          "softfail",
+                          "neutral",
+                          "allow_all",
+                          null
+                        ],
+                        "description": "What the record says to do with an unauthorized sender: strict (-all), softfail (~all), neutral (?all), or allow_all (+all). A redirect= is followed one hop."
+                      },
+                      "record": {
+                        "type": ["string", "null"],
+                        "description": "The raw SPF record."
+                      }
+                    }
+                  },
+                  "dmarc": {
+                    "type": "object",
+                    "properties": {
+                      "present": {
+                        "type": "boolean",
+                        "description": "Whether the domain publishes a DMARC record."
+                      },
+                      "policy": {
+                        "type": ["string", "null"],
+                        "enum": ["none", "quarantine", "reject", null],
+                        "description": "The record's p= tag."
+                      },
+                      "subdomain_policy": {
+                        "type": ["string", "null"],
+                        "enum": ["none", "quarantine", "reject", null],
+                        "description": "The record's sp= tag; null when unset, in which case subdomains inherit policy."
+                      },
+                      "percentage": {
+                        "type": ["integer", "null"],
+                        "description": "The record's pct= tag: the share of mail the policy applies to."
+                      },
+                      "record": {
+                        "type": ["string", "null"],
+                        "description": "The raw DMARC record."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "gravatar": {
+            "type": "object",
+            "description": "Whether the address has a Gravatar. The check sends a hash of the address to Gravatar; omit it with response_fields_omit=gravatar if that isn't acceptable.",
+            "properties": {
+              "exists": {
+                "type": "boolean",
+                "description": "Whether a Gravatar is registered for the address. A true is decent evidence the address is real and in use; a false means almost nothing."
+              },
+              "avatar_url": {
+                "type": ["string", "null"],
+                "description": "URL of the image, or null."
+              },
+              "profile_url": {
+                "type": ["string", "null"],
+                "description": "URL of the public Gravatar profile, or null."
+              }
+            }
+          },
+          "attributes": {
+            "type": "object",
+            "description": "Boolean flags about the address.",
+            "properties": {
+              "is_valid_syntax": {
+                "type": "boolean",
+                "description": "Whether the address is shaped like an email address. Gates everything else. It does not mean deliverable."
+              },
+              "is_free": {
+                "type": "boolean",
+                "description": "Whether the domain belongs to a free mailbox provider. Matched against the domain only, so a company on Google Workspace is not free."
+              },
+              "is_disposable": {
+                "type": "boolean",
+                "description": "Whether the address is a throwaway, judged by the domain and then by its mail exchangers. Every disposable address is also free."
+              },
+              "is_forwarder": {
+                "type": "boolean",
+                "description": "Whether the address relays to a mailbox elsewhere. A true is good evidence; a false is weak evidence."
+              },
+              "is_likely_role_based": {
+                "type": "boolean",
+                "description": "Whether the local part names a function rather than a person (support@, billing@), matched exactly and case-insensitively against parts.username."
+              },
+              "has_plus_addressing": {
+                "type": "boolean",
+                "description": "Whether the local part carries a + tag, i.e. whether parts.tag is non-null. Syntactic, not provider-aware."
+              }
+            }
+          }
+        }
+      },
+      "EmailProcessResponse": {
+        "type": "object",
+        "required": ["data"],
+        "properties": {
+          "data": {
+            "type": "object",
+            "required": ["objects"],
+            "properties": {
+              "objects": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EmailRecord"
+                }
+              },
+              "meta": {
+                "$ref": "#/components/schemas/ResultMeta"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

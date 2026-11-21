@@ -273,6 +273,132 @@ const SPECS: ApiSpec[] = [
     category: 'Media',
     endpoints: 67,
   },
+  {
+    file: 'api.nasa.gov.yaml',
+    name: 'NASA Open APIs',
+    tagline:
+      'Astronomy Picture of the Day, near-Earth asteroids, space weather and Earth imagery.',
+    category: 'Science',
+    endpoints: 11,
+  },
+  {
+    file: 'dummyjson.com.json',
+    name: 'DummyJSON',
+    tagline:
+      'Fake REST API with realistic data — products, carts, users, quotes and more.',
+    category: 'Developer',
+    endpoints: 68,
+  },
+  {
+    file: 'reqres.in.json',
+    name: 'ReqRes',
+    tagline:
+      'Hosted fake REST API for testing — users, posts, comments and delayed responses.',
+    category: 'Developer',
+    endpoints: 43,
+  },
+  {
+    file: 'openlibrary.org.json',
+    name: 'Open Library',
+    tagline:
+      'Internet Archive book catalog — search, works, authors, subjects and lists.',
+    category: 'Books',
+    endpoints: 50,
+  },
+  {
+    file: 'restcountries.com.json',
+    name: 'REST Countries',
+    tagline:
+      'Country data — capitals, currencies, languages, flags and regions.',
+    category: 'Geography',
+    endpoints: 13,
+  },
+  {
+    file: 'trello.com.yaml',
+    name: 'Trello',
+    tagline:
+      'Official spec — boards, lists, cards, checklists, labels and members.',
+    category: 'Productivity',
+    endpoints: 264,
+  },
+  {
+    file: 'api.rawg.io.yaml',
+    name: 'RAWG',
+    tagline:
+      'Video game database — games, genres, platforms, stores and developers.',
+    category: 'Gaming',
+    endpoints: 30,
+  },
+  {
+    file: 'api.spoonacular.com.yaml',
+    name: 'Spoonacular',
+    tagline:
+      'Food and recipe API — recipes, ingredients, meal plans and nutrition.',
+    category: 'Food',
+    endpoints: 97,
+  },
+  {
+    file: 'soundcloud.com.yaml',
+    name: 'SoundCloud',
+    tagline:
+      'Public API — tracks, playlists, users, likes, reposts and stream URLs.',
+    category: 'Media',
+    endpoints: 46,
+  },
+  {
+    file: 'tvmaze.com.yaml',
+    name: 'TVmaze',
+    tagline: 'TV shows — search, episodes, cast, schedules and user follows.',
+    category: 'Entertainment',
+    endpoints: 25,
+  },
+  {
+    file: 'worldtimeapi.org.yaml',
+    name: 'WorldTimeAPI',
+    tagline:
+      'Time zones — current time, offsets and daylight-saving transitions.',
+    category: 'Utilities',
+    endpoints: 12,
+  },
+  {
+    file: 'dnd5eapi.co.yaml',
+    name: 'D&D 5e API',
+    tagline:
+      'Dungeons & Dragons — monsters, spells, classes, equipment and conditions.',
+    category: 'Gaming',
+    endpoints: 47,
+  },
+  {
+    file: 'circleci.com.yaml',
+    name: 'CircleCI',
+    tagline: 'CI/CD REST API — projects, pipelines, workflows and artifacts.',
+    category: 'Developer',
+    endpoints: 17,
+  },
+  {
+    file: 'api.digitalocean.com.yaml',
+    name: 'DigitalOcean',
+    tagline:
+      'Cloud infrastructure — droplets, apps, databases, domains and billing.',
+    category: 'Cloud',
+    endpoints: 183,
+  },
+  {
+    file: 'api.sendgrid.com.yaml',
+    name: 'SendGrid',
+    tagline:
+      'Email API — send, templates, contacts, suppressions and email activity.',
+    category: 'Communication',
+    endpoints: 201,
+  },
+  {
+    file: 'httpbin.org.json',
+    name: 'HttpBin',
+    tagline:
+      'HTTP request testing service — headers, IPs, redirects, auth and more.',
+    category: 'Developer',
+    endpoints: 52,
+  },
 ];
 
 // Specs are served from /apis/{json,yaml}/<file>.
@@ -289,7 +415,7 @@ const ApisPage: FC = () => (
         Try the converter on real APIs.
       </h1>
       <p className="text-base-content/60 mx-auto mt-3 max-w-2xl text-lg">
-        Thirty-two OpenAPI 3.x specifications for popular public APIs. Download
+        Forty-eight OpenAPI 3.x specifications for popular public APIs. Download
         a spec, then feed it to the{' '}
         <Link href="/app/converter/" className="text-primary font-semibold">
           converter

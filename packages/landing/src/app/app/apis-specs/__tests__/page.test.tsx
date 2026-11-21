@@ -8,7 +8,7 @@ describe('ApisPage', () => {
     expect(metadata.description).toContain('OpenAPI');
   });
 
-  it('renders all thirty-two spec cards with spec, convert and preview links', () => {
+  it('renders all forty-eight spec cards with spec, convert and preview links', () => {
     render(<ApisPage />);
     expect(
       screen.getByRole('heading', { name: 'Try the converter on real APIs.' })
@@ -16,10 +16,10 @@ describe('ApisPage', () => {
     const specLinks = screen.getAllByRole('link', { name: /^spec$/i });
     const convertLinks = screen.getAllByRole('link', { name: /convert/i });
     const previewLinks = screen.getAllByRole('link', { name: /preview/i });
-    expect(specLinks).toHaveLength(32);
-    // 32 cards + intro paragraph link + CTA button
-    expect(convertLinks).toHaveLength(34);
-    expect(previewLinks).toHaveLength(34);
+    expect(specLinks).toHaveLength(48);
+    // 48 cards + intro paragraph link + CTA button
+    expect(convertLinks).toHaveLength(50);
+    expect(previewLinks).toHaveLength(50);
     expect(specLinks[0]).toHaveAttribute(
       'href',
       '/apis/yaml/api.chess.com.yaml'
@@ -35,5 +35,8 @@ describe('ApisPage', () => {
     expect(screen.getByText('388 endpoints')).toBeInTheDocument();
     expect(screen.getByText('Supabase')).toBeInTheDocument();
     expect(screen.getByText('Spotify')).toBeInTheDocument();
+    expect(screen.getByText('NASA Open APIs')).toBeInTheDocument();
+    expect(screen.getByText('Trello')).toBeInTheDocument();
+    expect(screen.getByText('SendGrid')).toBeInTheDocument();
   });
 });

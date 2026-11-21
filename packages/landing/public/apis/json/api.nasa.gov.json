@@ -1,0 +1,592 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NASA Open APIs",
+    "description": "NASA's open API portal at api.nasa.gov \u2014 Astronomy Picture of the Day (APOD), Near Earth Object Web Service (NeoWs), DONKI space weather data, and the Earth Polychromatic Imaging Camera (EPIC). An `api_key` is required for most endpoints; `DEMO_KEY` works for testing without signup.",
+    "version": "1.0",
+    "contact": {
+      "name": "NASA Open APIs",
+      "url": "https://api.nasa.gov/"
+    },
+    "license": {
+      "name": "None required for demo use"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.nasa.gov"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Astronomy"
+    },
+    {
+      "name": "Near Earth Objects"
+    },
+    {
+      "name": "Space Weather"
+    },
+    {
+      "name": "Earth Imagery"
+    }
+  ],
+  "paths": {
+    "/planetary/apod": {
+      "get": {
+        "tags": ["Astronomy"],
+        "summary": "Astronomy Picture of the Day",
+        "description": "The Astronomy Picture of the Day \u2014 image or video with explanation.",
+        "operationId": "getApod",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "description": "NASA API key (use DEMO_KEY for testing).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "description": "Date of APOD in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "description": "Start date (YYYY-MM-DD) for a date range.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "description": "End date (YYYY-MM-DD) for a date range.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "description": "Number of random APOD entries (cannot be combined with date range).",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "thumbs",
+            "in": "query",
+            "required": false,
+            "description": "Return video thumbnail URL.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "hd",
+            "in": "query",
+            "required": false,
+            "description": "Return HD image URL.",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "APOD metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/neo/rest/v1/feed": {
+      "get": {
+        "tags": ["Near Earth Objects"],
+        "summary": "Asteroids approaching Earth today",
+        "description": "Feed of asteroids whose closest approach is within the next 60 days.",
+        "operationId": "getNeoFeed",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "description": "Start date (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "description": "End date (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Near Earth Objects feed grouped by date.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/neo/rest/v1/lookup": {
+      "get": {
+        "tags": ["Near Earth Objects"],
+        "summary": "Lookup asteroid by ID",
+        "description": "Look up a specific near-Earth object by its NeoWs ID.",
+        "operationId": "lookupAsteroid",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "asteroid_id",
+            "in": "query",
+            "required": true,
+            "description": "NeoWs asteroid ID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Asteroid details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          },
+          "404": {
+            "description": "Asteroid not found"
+          }
+        }
+      }
+    },
+    "/neo/rest/v1/neo/browse": {
+      "get": {
+        "tags": ["Near Earth Objects"],
+        "summary": "Browse asteroids",
+        "description": "Browse all asteroids with close approach within a date range.",
+        "operationId": "browseAsteroids",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": false,
+            "description": "Start date (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": false,
+            "description": "End date (YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of near-Earth objects.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/DONKI/CME": {
+      "get": {
+        "tags": ["Space Weather"],
+        "summary": "Coronal Mass Ejections",
+        "description": "DONKI CME analysis data for a date range.",
+        "operationId": "getCme",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "description": "Start date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "description": "End date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CME events.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/DONKI/FLR": {
+      "get": {
+        "tags": ["Space Weather"],
+        "summary": "Solar Flares",
+        "description": "DONKI solar flare data for a date range.",
+        "operationId": "getFlr",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "description": "Start date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "description": "End date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Solar flare events.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/DONKI/SEP": {
+      "get": {
+        "tags": ["Space Weather"],
+        "summary": "Solar Energetic Particles",
+        "description": "DONKI solar energetic particle event data.",
+        "operationId": "getSep",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "description": "Start date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "description": "End date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SEP events.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/DONKI/RSP": {
+      "get": {
+        "tags": ["Space Weather"],
+        "summary": "Radio Blackouts",
+        "description": "DONKI radio blackout (RSP) event data.",
+        "operationId": "getRsp",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "description": "Start date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "description": "End date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Radio blackout events.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/DONKI/notifications": {
+      "get": {
+        "tags": ["Space Weather"],
+        "summary": "DONKI notifications",
+        "description": "DONKI notifications filtered by type and date range.",
+        "operationId": "getDonkiNotifications",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": false,
+            "description": "Start date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": false,
+            "description": "End date/time (ISO 8601 or YYYY-MM-DD).",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification messages.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid or missing API key"
+          }
+        }
+      }
+    },
+    "/EPIC/api/natural": {
+      "get": {
+        "tags": ["Earth Imagery"],
+        "summary": "Latest EPIC natural-color images",
+        "description": "Most recent EPIC Earth images (no API key required).",
+        "operationId": "getEpicNatural",
+        "responses": {
+          "200": {
+            "description": "EPIC image metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/EPIC/api/natural/available": {
+      "get": {
+        "tags": ["Earth Imagery"],
+        "summary": "EPIC available dates",
+        "description": "Dates on which EPIC imagery is available.",
+        "operationId": "getEpicAvailable",
+        "parameters": [
+          {
+            "name": "available",
+            "in": "query",
+            "required": false,
+            "description": "Date in YYYY-MM-DD format.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Available imagery dates.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
