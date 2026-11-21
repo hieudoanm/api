@@ -80,7 +80,16 @@ describe('fetchSpec', () => {
       )
     );
     await expect(fetchSpec('petstore.yaml')).resolves.toBe('openapi: 3.0.0');
-    expect(fetch).toHaveBeenCalledWith('/apis/petstore.yaml');
+    expect(fetch).toHaveBeenCalledWith('/apis/yaml/petstore.yaml');
+  });
+
+  it('fetches json specs from the json directory', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response('{}', { status: 200 })))
+    );
+    await expect(fetchSpec('api.github.com.json')).resolves.toBe('{}');
+    expect(fetch).toHaveBeenCalledWith('/apis/json/api.github.com.json');
   });
 
   it('throws on non-ok responses', async () => {

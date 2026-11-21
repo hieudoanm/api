@@ -1,0 +1,2458 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Claude API",
+    "version": "1.0.0",
+    "description": "Anthropic Claude API for creating and managing messages, batches, users, and invites.\nIncludes authentication, rate limits, and workspace-based organization.\n\nNote: third-party community spec (github.com/97saurabh/ClaudeApiOpenApiSpec); Anthropic does not publish an official OpenAPI document."
+  },
+  "servers": [
+    {
+      "url": "https://api.anthropic.com/v1",
+      "description": "Production API server"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": [],
+      "AnthropicVersion": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "API key for authentication"
+      },
+      "AnthropicVersion": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "anthropic-version",
+        "description": "API version (e.g., 2023-06-01)"
+      }
+    },
+    "parameters": {
+      "LimitParam": {
+        "name": "limit",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "default": 20
+        },
+        "description": "Number of items to return per page"
+      },
+      "AfterIdParam": {
+        "name": "after_id",
+        "in": "query",
+        "schema": {
+          "type": "string"
+        },
+        "description": "Return items after this ID (for pagination)"
+      }
+    },
+    "schemas": {
+      "CostReportGroupBy": {
+        "type": "string",
+        "enum": ["workspace_id", "description"]
+      },
+      "UsageReportServiceTier": {
+        "type": "string",
+        "enum": ["standard", "batch", "priority"],
+        "title": "UsageReportServiceTier"
+      },
+      "MessagesUsageReportContextWindow": {
+        "type": "string",
+        "enum": ["0-200k", "200k-1M"]
+      },
+      "UsageReportResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bucket_start": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "api_key_id": {
+                  "type": "string"
+                },
+                "workspace_id": {
+                  "type": "string"
+                },
+                "model": {
+                  "type": "string"
+                },
+                "service_tier": {
+                  "type": "string"
+                },
+                "context_window": {
+                  "type": "string"
+                },
+                "usage": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "next_page": {
+            "type": "string",
+            "example": "page_MjAyNS0wNS0xNFQwMDowMDowMFo="
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": ["type", "message"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of error",
+            "example": "invalid_request_error"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message",
+            "example": "Invalid API key provided"
+          }
+        }
+      },
+      "MessageRequest": {
+        "type": "object",
+        "required": ["model", "max_tokens", "messages"],
+        "properties": {
+          "model": {
+            "type": "string",
+            "example": "claude-sonnet-4-5",
+            "description": "The model to use for generation"
+          },
+          "max_tokens": {
+            "type": "integer",
+            "example": 1024,
+            "minimum": 1,
+            "description": "Maximum number of tokens to generate"
+          },
+          "messages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["role", "content"],
+              "properties": {
+                "role": {
+                  "type": "string",
+                  "enum": ["user", "assistant"],
+                  "example": "user"
+                },
+                "content": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    }
+                  ],
+                  "example": "Hello, world"
+                }
+              }
+            }
+          },
+          "system": {
+            "type": "string",
+            "description": "System prompt"
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Sampling temperature"
+          },
+          "top_p": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Nucleus sampling parameter"
+          },
+          "top_k": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Top-k sampling parameter"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "User-defined metadata"
+          },
+          "stop_sequences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Custom stop sequences"
+          },
+          "stream": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether to stream the response"
+          }
+        }
+      },
+      "MessagesUsageReportGroupBy": {
+        "type": "string",
+        "enum": [
+          "api_key_id",
+          "workspace_id",
+          "model",
+          "service_tier",
+          "context_window"
+        ],
+        "title": "MessagesUsageReportGroupBy"
+      },
+      "MessageResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "role",
+          "content",
+          "model",
+          "stop_reason",
+          "usage"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "msg_01Z8D"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["message"],
+            "example": "message"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["assistant"],
+            "example": "assistant"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["text"],
+                  "example": "text"
+                },
+                "text": {
+                  "type": "string",
+                  "example": "Hello! How can I help you today?"
+                }
+              }
+            }
+          },
+          "model": {
+            "type": "string",
+            "example": "claude-sonnet-4-5"
+          },
+          "stop_reason": {
+            "type": "string",
+            "enum": ["end_turn", "max_tokens", "stop_sequence"],
+            "nullable": true
+          },
+          "stop_sequence": {
+            "type": "string",
+            "nullable": true
+          },
+          "usage": {
+            "type": "object",
+            "required": ["input_tokens", "output_tokens"],
+            "properties": {
+              "input_tokens": {
+                "type": "integer"
+              },
+              "output_tokens": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "CostReportTimeBucket": {
+        "type": "object",
+        "properties": {
+          "starting_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ending_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CostReportItem"
+            }
+          }
+        },
+        "required": ["starting_at", "ending_at", "results"]
+      },
+      "CostReportItem": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "workspace_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ]
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string",
+                "nullable": true
+              }
+            ]
+          },
+          "cost_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CostType",
+                "nullable": true
+              }
+            ]
+          },
+          "context_window": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MessagesUsageReportContextWindow"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          },
+          "service_tier": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CostReportServiceTier"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          },
+          "token_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CostReportTokenType"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          }
+        },
+        "required": [
+          "currency",
+          "amount",
+          "workspace_id",
+          "description",
+          "cost_type",
+          "context_window",
+          "model",
+          "service_tier",
+          "token_type"
+        ]
+      },
+      "CostType": {
+        "type": "string",
+        "enum": ["tokens", "web_search", "code_execution"]
+      },
+      "CostReportServiceTier": {
+        "type": "string",
+        "enum": ["standard", "batch"]
+      },
+      "CostReportTokenType": {
+        "type": "string",
+        "enum": [
+          "uncached_input_tokens",
+          "output_tokens",
+          "cache_read_input_tokens",
+          "cache_creation.ephemeral_1h_input_tokens",
+          "cache_creation.ephemeral_5m_input_tokens"
+        ]
+      },
+      "BatchListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id", "created_at", "type", "processing_status"],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "msgbatch_01ABC"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "display_name": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["message_batch"]
+                },
+                "archived_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "cancel_initiated_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "ended_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                },
+                "expires_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "processing_status": {
+                  "type": "string",
+                  "enum": [
+                    "queued",
+                    "in_progress",
+                    "succeeded",
+                    "errored",
+                    "canceled",
+                    "expired"
+                  ]
+                },
+                "request_counts": {
+                  "type": "object",
+                  "required": [
+                    "processing",
+                    "succeeded",
+                    "errored",
+                    "canceled",
+                    "expired"
+                  ],
+                  "properties": {
+                    "processing": {
+                      "type": "integer"
+                    },
+                    "succeeded": {
+                      "type": "integer"
+                    },
+                    "errored": {
+                      "type": "integer"
+                    },
+                    "canceled": {
+                      "type": "integer"
+                    },
+                    "expired": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "results_url": {
+                  "type": "string",
+                  "format": "uri",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "FileListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "filename",
+                "mime_type",
+                "size_bytes",
+                "created_at",
+                "type"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "filename": {
+                  "type": "string"
+                },
+                "mime_type": {
+                  "type": "string"
+                },
+                "size_bytes": {
+                  "type": "integer"
+                },
+                "created_at": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "downloadable": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["file"]
+                }
+              }
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "required": ["id", "name", "type"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Unique organization ID",
+            "example": "12345678-1234-5678-1234-567812345678"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the organization",
+            "example": "Organization Name"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["organization"],
+            "example": "organization"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the organization was created"
+          }
+        }
+      },
+      "RoleSchema": {
+        "type": "string",
+        "enum": ["user", "developer", "billing", "admin", "claude_code_user"]
+      },
+      "User": {
+        "type": "object",
+        "required": ["id", "email", "name", "role", "type", "added_at"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the User",
+            "example": "user_01WCz1FkmYMm4gnmykNKUu3Q"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email of the User",
+            "example": "user@emaildomain.com"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the User",
+            "example": "Jane Doe"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleSchema"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["user"],
+            "description": "Object type. Always \"user\" for Users"
+          },
+          "added_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "RFC 3339 datetime string indicating when the User joined the Organization",
+            "example": "2024-10-30T23:58:27.427722Z"
+          }
+        }
+      },
+      "UserListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Invite": {
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "role",
+          "status",
+          "type",
+          "invited_at",
+          "expires_at"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "invite_01ABC"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleSchema"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "accepted", "revoked"]
+          },
+          "type": {
+            "type": "string",
+            "enum": ["invite"]
+          },
+          "invited_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "InviteListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Invite"
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Workspace": {
+        "type": "object",
+        "required": ["id", "name", "type", "created_at", "display_color"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "wrkspc_01ABC"
+          },
+          "name": {
+            "type": "string",
+            "example": "Engineering Team"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["workspace"]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "display_color": {
+            "type": "string",
+            "description": "Hex color code representing the Workspace",
+            "example": "#4A90E2",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "archived_at": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "RFC 3339 datetime string indicating when the Workspace was archived, or null"
+          }
+        }
+      },
+      "WorkspaceListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Workspace"
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "WorkspaceMember": {
+        "type": "object",
+        "required": ["type", "user_id", "workspace_id", "workspace_role"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["workspace_member"],
+            "example": "workspace_member"
+          },
+          "user_id": {
+            "type": "string",
+            "example": "user_01WCz1FkmYMm4gnmykNKUu3Q"
+          },
+          "workspace_id": {
+            "type": "string",
+            "example": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ"
+          },
+          "workspace_role": {
+            "type": "string",
+            "enum": ["workspace_user", "workspace_admin"],
+            "example": "workspace_user"
+          }
+        }
+      },
+      "WorkspaceMemberListResponse": {
+        "type": "object",
+        "required": ["data", "has_more"],
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WorkspaceMember"
+            }
+          },
+          "first_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "last_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ClaudeCodeUsageReportItem": {
+        "type": "object",
+        "required": [
+          "actor",
+          "core_metrics",
+          "customer_type",
+          "date",
+          "model_breakdown",
+          "organization_id",
+          "terminal_type",
+          "tool_actions"
+        ],
+        "properties": {
+          "actor": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserActor"
+              },
+              {
+                "$ref": "#/components/schemas/ApiActor"
+              }
+            ]
+          },
+          "core_metrics": {
+            "$ref": "#/components/schemas/CoreMetrics"
+          },
+          "customer_type": {
+            "type": "string",
+            "enum": ["api", "subscription"]
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "model_breakdown": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModelBreakdown"
+            }
+          },
+          "organization_id": {
+            "type": "string"
+          },
+          "subscription_type": {
+            "type": "string",
+            "enum": ["enterprise", "team"],
+            "nullable": true
+          },
+          "terminal_type": {
+            "type": "string"
+          },
+          "tool_actions": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ApprovalMetrics"
+            }
+          }
+        }
+      },
+      "CoreMetrics": {
+        "type": "object",
+        "required": [
+          "commits_by_claude_code",
+          "lines_of_code",
+          "num_sessions",
+          "pull_requests_by_claude_code"
+        ],
+        "properties": {
+          "commits_by_claude_code": {
+            "type": "integer"
+          },
+          "lines_of_code": {
+            "$ref": "#/components/schemas/LinesOfCode"
+          },
+          "num_sessions": {
+            "type": "integer"
+          },
+          "pull_requests_by_claude_code": {
+            "type": "integer"
+          }
+        }
+      },
+      "LinesOfCode": {
+        "type": "object",
+        "required": ["added", "removed"],
+        "properties": {
+          "added": {
+            "type": "integer"
+          },
+          "removed": {
+            "type": "integer"
+          }
+        }
+      },
+      "ModelBreakdown": {
+        "type": "object",
+        "required": ["estimated_cost", "model", "tokens"],
+        "properties": {
+          "estimated_cost": {
+            "$ref": "#/components/schemas/EstimatedCost"
+          },
+          "model": {
+            "type": "string"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/TokenUsage"
+          }
+        }
+      },
+      "EstimatedCost": {
+        "type": "object",
+        "required": ["amount", "currency"],
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          }
+        }
+      },
+      "TokenUsage": {
+        "type": "object",
+        "required": ["cache_creation", "cache_read", "input", "output"],
+        "properties": {
+          "cache_creation": {
+            "type": "integer"
+          },
+          "cache_read": {
+            "type": "integer"
+          },
+          "input": {
+            "type": "integer"
+          },
+          "output": {
+            "type": "integer"
+          }
+        }
+      },
+      "UserActor": {
+        "type": "object",
+        "required": ["email_address", "type"],
+        "properties": {
+          "email_address": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["user_actor"]
+          }
+        }
+      },
+      "ApiActor": {
+        "type": "object",
+        "required": ["api_key_name", "type"],
+        "properties": {
+          "api_key_name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["api_actor"]
+          }
+        }
+      },
+      "ApprovalMetrics": {
+        "type": "object",
+        "required": ["accepted", "rejected"],
+        "properties": {
+          "accepted": {
+            "type": "integer"
+          },
+          "rejected": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/messages": {
+      "post": {
+        "summary": "Create a message",
+        "description": "Send a structured list of messages to Claude and receive a response",
+        "operationId": "createMessage",
+        "tags": ["Messages"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with model output",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/messages/batches": {
+      "get": {
+        "summary": "List Message Batches",
+        "description": "Retrieve a paginated list of message batches",
+        "operationId": "listMessageBatches",
+        "tags": ["Message Batches"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of message batches",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files": {
+      "get": {
+        "summary": "List files",
+        "description": "Retrieve a paginated list of uploaded files",
+        "operationId": "listFiles",
+        "tags": ["Files"],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/me": {
+      "get": {
+        "summary": "Get Organization Info",
+        "description": "Retrieve information about the current organization",
+        "operationId": "getOrganizationInfo",
+        "tags": ["Organizations"],
+        "responses": {
+          "200": {
+            "description": "Organization info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/users": {
+      "get": {
+        "summary": "List Users",
+        "description": "Retrieve a paginated list of users in the organization",
+        "operationId": "listUsers",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Filter users by email address",
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/invites": {
+      "get": {
+        "summary": "List Invites",
+        "description": "Retrieve a paginated list of pending invites",
+        "operationId": "listInvites",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of invites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InviteListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/invites/{invite_id}": {
+      "get": {
+        "summary": "Get Invite",
+        "description": "Retrieve details of a specific invite",
+        "operationId": "getInvite",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "name": "invite_id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the invite",
+            "schema": {
+              "type": "string",
+              "example": "invite_01ABC"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Invite details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Invite"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Invite not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/workspaces": {
+      "get": {
+        "summary": "List Workspaces",
+        "description": "Retrieve a paginated list of workspaces in the organization",
+        "operationId": "listWorkspaces",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "name": "include_archived",
+            "in": "query",
+            "description": "Whether to include archived workspaces",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of workspaces",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/workspaces/{workspace_id}/members": {
+      "get": {
+        "summary": "List Workspace Members",
+        "description": "Retrieve a paginated list of members in a specific workspace",
+        "operationId": "listWorkspaceMembers",
+        "tags": ["Organizations"],
+        "parameters": [
+          {
+            "name": "workspace_id",
+            "in": "path",
+            "required": true,
+            "description": "The unique identifier of the workspace",
+            "schema": {
+              "type": "string",
+              "example": "wrkspc_01ABC"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of workspace members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkspaceMemberListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Workspace not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models": {
+      "get": {
+        "summary": "List Models",
+        "description": "List available models. The response can be used to determine which models are available for use in the API. More recently released models are listed first.\n",
+        "operationId": "listModels",
+        "tags": ["Models"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          },
+          {
+            "$ref": "#/components/parameters/AfterIdParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with available models",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["data", "first_id", "has_more", "last_id"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "display_name": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    },
+                    "first_id": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "last_id": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/usage_report/messages": {
+      "get": {
+        "tags": ["Usage Report"],
+        "summary": "Get Usage Report Messages",
+        "description": "Retrieve aggregated usage report data for messages.",
+        "operationId": "getUsageReportMessages",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of time buckets to return in the response.\nThe default and max limits depend on `bucket_width`:\n\u2022 \"1d\": Default 7 days, max 31 days\n\u2022 \"1h\": Default 24 hours, max 168 hours\n\u2022 \"1m\": Default 60 minutes, max 1440 minutes\n",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 7
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Optionally set to the `next_page` token from the previous response.\n",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "page_MjAyNS0wNS0xNFQwMDowMDowMFo="
+            }
+          },
+          {
+            "name": "starting_at",
+            "in": "query",
+            "description": "Time buckets that start on or after this RFC 3339 timestamp will be returned.\nEach bucket is snapped to the start of the minute/hour/day in UTC.\n",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-10-30T23:58:27.427722Z"
+            }
+          },
+          {
+            "name": "ending_at",
+            "in": "query",
+            "description": "Time buckets that end before this RFC 3339 timestamp will be returned.\n",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-10-30T23:58:27.427722Z"
+            }
+          },
+          {
+            "name": "api_key_ids[]",
+            "in": "query",
+            "description": "Restrict usage returned to the specified API key ID(s).",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "apikey_01Rj2N8SVvo6BePZj99NhmiT"
+            }
+          },
+          {
+            "name": "workspace_ids[]",
+            "in": "query",
+            "description": "Restrict usage returned to the specified workspace ID(s).",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ"
+            }
+          },
+          {
+            "name": "models[]",
+            "in": "query",
+            "description": "Restrict usage returned to the specified model(s).",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": "claude-sonnet-4-20250514"
+            }
+          },
+          {
+            "name": "service_tiers[]",
+            "in": "query",
+            "description": "Restrict usage returned to the specified service tier(s).",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/UsageReportServiceTier"
+              },
+              "example": "standard"
+            }
+          },
+          {
+            "name": "context_window[]",
+            "in": "query",
+            "description": "Restrict usage returned to the specified context window(s).",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MessagesUsageReportContextWindow"
+              },
+              "example": "0-200k"
+            }
+          },
+          {
+            "name": "group_by[]",
+            "in": "query",
+            "description": "Group by any subset of the available options.",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/MessagesUsageReportGroupBy"
+              },
+              "example": "api_key_id"
+            }
+          },
+          {
+            "name": "bucket_width",
+            "in": "query",
+            "description": "Time granularity of the response data.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["1d", "1h", "1m"],
+              "example": "1d"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response containing aggregated usage data.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsageReportResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid date range or parameters."
+          }
+        }
+      }
+    },
+    "/organizations/cost_report": {
+      "get": {
+        "tags": ["Usage Report"],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "maximum": 31,
+              "minimum": 1,
+              "default": 7
+            },
+            "description": "Maximum number of time buckets to return in the response."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                }
+              ]
+            },
+            "description": "Optionally set to the `next_page` token from the previous response."
+          },
+          {
+            "name": "starting_at",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "required": true,
+            "description": "Time buckets that start on or after this RFC 3339 timestamp will be returned."
+          },
+          {
+            "name": "ending_at",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "nullable": true
+                }
+              ]
+            },
+            "description": "Time buckets that end before this RFC 3339 timestamp will be returned."
+          },
+          {
+            "name": "group_by[]",
+            "in": "query",
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CostReportGroupBy"
+                  }
+                }
+              ]
+            },
+            "description": "Group by any subset of the available options."
+          },
+          {
+            "name": "bucket_width",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["1d"]
+            },
+            "description": "Time granularity of the response data."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "GetCostReportResponse",
+                  "required": ["data", "has_more", "next_page"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "title": "Data",
+                      "items": {
+                        "type": "object",
+                        "title": "CostReportTimeBucket",
+                        "required": ["starting_at", "ending_at", "results"],
+                        "properties": {
+                          "starting_at": {
+                            "type": "string",
+                            "title": "Starting At",
+                            "description": "Start of the time bucket (inclusive) in RFC 3339 format.",
+                            "example": "2025-08-01T00:00:00Z"
+                          },
+                          "ending_at": {
+                            "type": "string",
+                            "title": "Ending At",
+                            "description": "End of the time bucket (exclusive) in RFC 3339 format.",
+                            "example": "2025-08-02T00:00:00Z"
+                          },
+                          "results": {
+                            "type": "array",
+                            "title": "Results",
+                            "description": "List of cost items for this time bucket. There may be multiple items if one or more `group_by[]` parameters are specified.\n",
+                            "items": {
+                              "type": "object",
+                              "title": "CostReportItem",
+                              "required": [
+                                "currency",
+                                "amount",
+                                "workspace_id",
+                                "description",
+                                "cost_type",
+                                "context_window",
+                                "model",
+                                "service_tier",
+                                "token_type"
+                              ],
+                              "properties": {
+                                "currency": {
+                                  "type": "string",
+                                  "title": "Currency",
+                                  "description": "Currency code for the cost amount. Currently always \"USD\".",
+                                  "example": "USD"
+                                },
+                                "amount": {
+                                  "type": "string",
+                                  "title": "Amount",
+                                  "description": "Cost amount in lowest currency units (e.g. cents) as a decimal string. For example, \"123.45\" in \"USD\" represents \"$1.23\".\n",
+                                  "example": "123.78912"
+                                },
+                                "workspace_id": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Workspace Id",
+                                  "description": "ID of the Workspace this cost is associated with. Null if not grouping by workspace or for the default workspace.\n",
+                                  "example": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Description",
+                                  "description": "Description of the cost item. Null if not grouping by description.\n",
+                                  "example": "Claude Sonnet 4 Usage - Input Tokens"
+                                },
+                                "cost_type": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Cost Type",
+                                  "description": "Type of cost. Null if not grouping by description.",
+                                  "enum": [
+                                    "tokens",
+                                    "web_search",
+                                    "code_execution"
+                                  ],
+                                  "example": "tokens"
+                                },
+                                "context_window": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Context Window",
+                                  "description": "Input context window used. Null if not grouping by description or for non-token costs.\n",
+                                  "enum": ["0-200k", "200k-1M"],
+                                  "example": "0-200k"
+                                },
+                                "model": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Model",
+                                  "description": "Model name used. Null if not grouping by description or for non-token costs.\n",
+                                  "example": "claude-sonnet-4-20250514"
+                                },
+                                "service_tier": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Service Tier",
+                                  "description": "Service tier used. Null if not grouping by description or for non-token costs.\n",
+                                  "enum": ["standard", "batch"],
+                                  "example": "standard"
+                                },
+                                "token_type": {
+                                  "type": "string",
+                                  "nullable": true,
+                                  "title": "Token Type",
+                                  "description": "Type of token. Null if not grouping by description or for non-token costs.\n",
+                                  "enum": [
+                                    "uncached_input_tokens",
+                                    "output_tokens",
+                                    "cache_read_input_tokens",
+                                    "cache_creation.ephemeral_1h_input_tokens",
+                                    "cache_creation.ephemeral_5m_input_tokens"
+                                  ],
+                                  "example": "uncached_input_tokens"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "title": "Has More",
+                      "description": "Indicates if there are more results."
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "title": "Next Page",
+                      "description": "Token to provide as `page` in the subsequent request to retrieve the next page of data."
+                    }
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "data": [
+                        {
+                          "starting_at": "2025-08-01T00:00:00Z",
+                          "ending_at": "2025-08-02T00:00:00Z",
+                          "results": [
+                            {
+                              "currency": "USD",
+                              "amount": "123.78912",
+                              "workspace_id": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ",
+                              "description": "Claude Sonnet 4 Usage - Input Tokens",
+                              "cost_type": "tokens",
+                              "context_window": "0-200k",
+                              "model": "claude-sonnet-4-20250514",
+                              "service_tier": "standard",
+                              "token_type": "uncached_input_tokens"
+                            }
+                          ]
+                        }
+                      ],
+                      "has_more": true,
+                      "next_page": "page_MjAyNS0wNS0xNFQwMDowMDowMFo="
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Error response"
+          }
+        }
+      }
+    },
+    "/organizations/usage_report/claude_code": {
+      "get": {
+        "tags": ["Usage Report"],
+        "summary": "Retrieve daily aggregated usage metrics for Claude Code users",
+        "description": "Enables organizations to analyze developer productivity and build custom dashboards.",
+        "parameters": [
+          {
+            "name": "starting_at",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "UTC date in YYYY-MM-DD format. Returns metrics for this single day only."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "description": "Number of records per page."
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": "Opaque cursor token from previous response's `next_page`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClaudeCodeUsageReportItem"
+                      }
+                    },
+                    "has_more": {
+                      "type": "boolean"
+                    },
+                    "next_page": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/api_keys": {
+      "get": {
+        "tags": ["Usage Report"],
+        "summary": "List API Keys",
+        "description": "Retrieve a paginated list of API keys for your organization.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "before_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "ID of the object to use as a cursor for pagination (previous page)."
+          },
+          {
+            "in": "query",
+            "name": "after_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "ID of the object to use as a cursor for pagination (next page)."
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 20
+            },
+            "required": false,
+            "description": "Number of items per page. Defaults to 20."
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "type": "string",
+              "enum": ["active", "inactive", "archived"]
+            },
+            "required": false,
+            "description": "Filter by API key status."
+          },
+          {
+            "in": "query",
+            "name": "workspace_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Filter by Workspace ID."
+          },
+          {
+            "in": "query",
+            "name": "created_by_user_id",
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "description": "Filter by the ID of the User who created the object."
+          },
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Your unique Admin API key for authentication.\nGet your Admin API key through the Console.\n"
+          },
+          {
+            "in": "header",
+            "name": "anthropic-version",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "The version of the Claude API you want to use.\nSee https://docs.claude.com/en/api/versioning.\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "ListResponse[ApiKey]",
+                  "required": ["data", "first_id", "has_more", "last_id"],
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "title": "ApiKey",
+                        "required": [
+                          "created_at",
+                          "created_by",
+                          "id",
+                          "name",
+                          "partial_key_hint",
+                          "status",
+                          "type",
+                          "workspace_id"
+                        ],
+                        "properties": {
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "description": "RFC 3339 datetime when the API Key was created.",
+                            "example": "2024-10-30T23:58:27.427722Z"
+                          },
+                          "created_by": {
+                            "type": "object",
+                            "required": ["id", "type"],
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "description": "ID of the actor that created the object.",
+                                "example": "user_01WCz1FkmYMm4gnmykNKUu3Q"
+                              },
+                              "type": {
+                                "type": "string",
+                                "description": "Type of the actor that created the object.",
+                                "example": "user"
+                              }
+                            }
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "ID of the API key.",
+                            "example": "apikey_01Rj2N8SVvo6BePZj99NhmiT"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Name of the API key.",
+                            "example": "Developer Key"
+                          },
+                          "partial_key_hint": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "Partially redacted hint for the API key.",
+                            "example": "sk-ant-api03-R2D...igAA"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": ["active", "inactive", "archived"],
+                            "description": "Status of the API key.",
+                            "example": "active"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": ["api_key"],
+                            "description": "Object type, always `\"api_key\"`.",
+                            "example": "api_key"
+                          },
+                          "workspace_id": {
+                            "type": "string",
+                            "nullable": true,
+                            "description": "ID of the associated Workspace or null for default.",
+                            "example": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ"
+                          }
+                        }
+                      }
+                    },
+                    "first_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "First ID in the data list. Used as `before_id` for previous page.",
+                      "example": "apikey_01ABCDEF123"
+                    },
+                    "has_more": {
+                      "type": "boolean",
+                      "description": "Indicates if there are more results.",
+                      "example": true
+                    },
+                    "last_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Last ID in the data list. Used as `after_id` for next page.",
+                      "example": "apikey_01XYZ789"
+                    }
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "data": [
+                        {
+                          "created_at": "2024-10-30T23:58:27.427722Z",
+                          "created_by": {
+                            "id": "user_01WCz1FkmYMm4gnmykNKUu3Q",
+                            "type": "user"
+                          },
+                          "id": "apikey_01Rj2N8SVvo6BePZj99NhmiT",
+                          "name": "Developer Key",
+                          "partial_key_hint": "sk-ant-api03-R2D...igAA",
+                          "status": "active",
+                          "type": "api_key",
+                          "workspace_id": "wrkspc_01JwQvzr7rXLA5AGx3HKfFUJ"
+                        }
+                      ],
+                      "first_id": "<string>",
+                      "has_more": true,
+                      "last_id": "<string>"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "4XX": {
+            "description": "Error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "ErrorResponse",
+                  "required": ["error", "request_id", "type"],
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "title": "InvalidRequestError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Invalid request"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["invalid_request_error"],
+                              "example": "invalid_request_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "AuthenticationError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Authentication error"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["authentication_error"],
+                              "example": "authentication_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "BillingError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Billing error"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["billing_error"],
+                              "example": "billing_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "PermissionError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Permission denied"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["permission_error"],
+                              "example": "permission_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "NotFoundError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Not found"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["not_found_error"],
+                              "example": "not_found_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "RateLimitError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Rate limited"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["rate_limit_error"],
+                              "example": "rate_limit_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "GatewayTimeoutError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Request timeout"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["timeout_error"],
+                              "example": "timeout_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "APIError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Internal server error"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["api_error"],
+                              "example": "api_error"
+                            }
+                          }
+                        },
+                        {
+                          "type": "object",
+                          "title": "OverloadedError",
+                          "required": ["message", "type"],
+                          "properties": {
+                            "message": {
+                              "type": "string",
+                              "default": "Overloaded"
+                            },
+                            "type": {
+                              "type": "string",
+                              "enum": ["overloaded_error"],
+                              "example": "overloaded_error"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "request_id": {
+                      "type": "string",
+                      "nullable": true,
+                      "description": "Unique request identifier.",
+                      "example": "req_123"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["error"],
+                      "description": "Always `\"error\"`.",
+                      "example": "error"
+                    }
+                  }
+                },
+                "examples": {
+                  "example": {
+                    "value": {
+                      "error": {
+                        "message": "Invalid request",
+                        "type": "invalid_request_error"
+                      },
+                      "request_id": "<string>",
+                      "type": "error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Messages",
+      "description": "Operations for creating and managing messages"
+    },
+    {
+      "name": "Message Batches",
+      "description": "Operations for batch message processing"
+    },
+    {
+      "name": "Files",
+      "description": "Operations for file management"
+    },
+    {
+      "name": "Organizations",
+      "description": "Operations for organization, user, and workspace management"
+    },
+    {
+      "name": "Usage Report",
+      "description": "Usage and Cost"
+    }
+  ]
+}

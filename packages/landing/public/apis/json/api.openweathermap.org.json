@@ -1,0 +1,723 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "OpenWeatherMap API",
+    "description": "OpenWeather \u2014 global weather data: current conditions, forecasts,\nair pollution, and weather station data.\n\nAuthentication: pass your API key as the `appid` query parameter\n(legacy name; `api_key` is also accepted). Get a free key at\nhttps://home.openweathermap.org/api_keys.\n\nNote: this spec covers the classic `data/2.5` API. One Call API\n(`data/3.0` / `data/4.0`) is subscription-gated and documented\nseparately at https://openweathermap.org/api/one-call-3.\n\nSource: https://openweathermap.org/api\n",
+    "version": "2.5",
+    "contact": {
+      "name": "OpenWeather",
+      "url": "https://openweathermap.org"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.openweathermap.org/data/2.5",
+      "description": "OpenWeatherMap 2.5 API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Current Weather",
+      "description": "Current weather conditions for a location."
+    },
+    {
+      "name": "Forecast",
+      "description": "Short- and long-range forecasts."
+    },
+    {
+      "name": "Air Pollution",
+      "description": "Air quality index data."
+    },
+    {
+      "name": "Stations",
+      "description": "Weather station discovery and measurements."
+    }
+  ],
+  "paths": {
+    "/weather": {
+      "get": {
+        "tags": ["Current Weather"],
+        "summary": "Current weather",
+        "description": "Current weather for one location. Returns JSON, XML, or HTML depending on `mode`.",
+        "operationId": "getCurrentWeather",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude.",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Longitude.",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "City name, optionally with country code (e.g. `London,uk`). Cannot combine with `id`/`zip`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zip",
+            "in": "query",
+            "description": "Zip code, optionally with country code (e.g. `95050,us`). Cannot combine with `id`/`q`.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "City ID (from the cities bulk file). Cannot combine with `zip`/`q`.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Units"
+          },
+          {
+            "$ref": "#/components/parameters/Lang"
+          },
+          {
+            "$ref": "#/components/parameters/Mode"
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current weather",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentWeather"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/forecast": {
+      "get": {
+        "tags": ["Forecast"],
+        "summary": "5 day / 3 hour forecast",
+        "description": "5-day forecast with data every 3 hours (40 timestamps), up to 5 days ahead.",
+        "operationId": "getForecast5Day",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "City name with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zip",
+            "in": "query",
+            "description": "Zip code with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "City ID.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cnt",
+            "in": "query",
+            "description": "Number of timestamps to return (max 40).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 40
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Units"
+          },
+          {
+            "$ref": "#/components/parameters/Lang"
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forecast list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/forecast/daily": {
+      "get": {
+        "tags": ["Forecast"],
+        "summary": "16 day daily forecast",
+        "description": "Daily weather forecast for 16 days.",
+        "operationId": "getForecastDaily16",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "City name with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zip",
+            "in": "query",
+            "description": "Zip code with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "City ID.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cnt",
+            "in": "query",
+            "description": "Number of days to return (max 16).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 16
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Units"
+          },
+          {
+            "$ref": "#/components/parameters/Lang"
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Daily forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/forecast/hourly": {
+      "get": {
+        "tags": ["Forecast"],
+        "summary": "Hourly forecast",
+        "description": "Hourly forecast for the next 4 days (96 timestamps).",
+        "operationId": "getForecastHourly",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "City name with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "zip",
+            "in": "query",
+            "description": "Zip code with optional country code.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "description": "City ID.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/Units"
+          },
+          {
+            "$ref": "#/components/parameters/Lang"
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Hourly forecast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForecastResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/air_pollution": {
+      "get": {
+        "tags": ["Air Pollution"],
+        "summary": "Current air pollution",
+        "description": "Current air quality index (AQI) and pollutant concentrations for a location.",
+        "operationId": "getAirPollution",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Air pollution data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/stations": {
+      "get": {
+        "tags": ["Stations"],
+        "summary": "List stations",
+        "description": "List weather stations \u2014 all stations, stations near a coordinate, or stations within a bounding box.",
+        "operationId": "listStations",
+        "parameters": [
+          {
+            "name": "lat",
+            "in": "query",
+            "description": "Latitude of the location to search around (use with `lon`).",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "lon",
+            "in": "query",
+            "description": "Longitude of the location to search around (use with `lat`).",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "description": "Bounding box `lon1,lat1,lon2,lat2` to limit the station search.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Station list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/stations/{station_id}": {
+      "get": {
+        "tags": ["Stations"],
+        "summary": "Station data",
+        "description": "Weather data from a single station, by station ID.",
+        "operationId": "getStationData",
+        "parameters": [
+          {
+            "name": "station_id",
+            "in": "path",
+            "required": true,
+            "description": "Station ID (from the list endpoint).",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AppId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Station measurement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "404": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "AppId": {
+        "name": "appid",
+        "in": "query",
+        "required": true,
+        "description": "Your OpenWeatherMap API key.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "Units": {
+        "name": "units",
+        "in": "query",
+        "description": "Temperature unit. `standard` (Kelvin), `metric` (Celsius), `imperial` (Fahrenheit).",
+        "schema": {
+          "type": "string",
+          "enum": ["standard", "metric", "imperial"],
+          "default": "standard"
+        }
+      },
+      "Lang": {
+        "name": "lang",
+        "in": "query",
+        "description": "Language of the textual weather description (e.g. `en`, `de`, `fr`).",
+        "schema": {
+          "type": "string",
+          "default": "en"
+        }
+      },
+      "Mode": {
+        "name": "mode",
+        "in": "query",
+        "description": "Response format \u2014 `json` (default), `xml`, or `html`.",
+        "schema": {
+          "type": "string",
+          "enum": ["json", "xml", "html"],
+          "default": "json"
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Error response (`cod`/`message` fields).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cod": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "CurrentWeather": {
+        "type": "object",
+        "properties": {
+          "coord": {
+            "type": "object"
+          },
+          "weather": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "main": {
+            "type": "object",
+            "properties": {
+              "temp": {
+                "type": "number"
+              },
+              "feels_like": {
+                "type": "number"
+              },
+              "pressure": {
+                "type": "integer"
+              },
+              "humidity": {
+                "type": "integer"
+              }
+            }
+          },
+          "visibility": {
+            "type": "integer",
+            "description": "Meters"
+          },
+          "wind": {
+            "type": "object",
+            "properties": {
+              "speed": {
+                "type": "number"
+              },
+              "deg": {
+                "type": "integer"
+              }
+            }
+          },
+          "clouds": {
+            "type": "object",
+            "properties": {
+              "all": {
+                "type": "integer"
+              }
+            }
+          },
+          "sys": {
+            "type": "object"
+          },
+          "dt": {
+            "type": "integer",
+            "description": "Time of data calculation, unix UTC"
+          },
+          "timezone": {
+            "type": "integer",
+            "description": "Shift in seconds from UTC"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "description": "City name"
+          },
+          "cod": {
+            "type": "integer"
+          }
+        }
+      },
+      "ForecastResponse": {
+        "type": "object",
+        "properties": {
+          "cod": {
+            "type": "string"
+          },
+          "message": {
+            "type": "number"
+          },
+          "cnt": {
+            "type": "integer"
+          },
+          "list": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "dt": {
+                  "type": "integer"
+                },
+                "main": {
+                  "type": "object"
+                },
+                "weather": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                },
+                "clouds": {
+                  "type": "object"
+                },
+                "wind": {
+                  "type": "object"
+                },
+                "visibility": {
+                  "type": "integer"
+                },
+                "pop": {
+                  "type": "number"
+                },
+                "sys": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "city": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

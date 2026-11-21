@@ -1,0 +1,512 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "NewsAPI",
+    "description": "News API is a simple HTTP REST API for searching and retrieving live\narticles from all over the web. Search by keyword, date, source domain,\nor language; get curated breaking-news headlines; or list the news\nsources available on the API.\n\nAuthentication: pass `apiKey` as a query parameter or the `X-Api-Key`\nheader. Get a key at https://newsapi.org/register (free for development).\n\nSource: https://newsapi.org/docs\n",
+    "version": "2.0",
+    "contact": {
+      "name": "NewsAPI",
+      "url": "https://newsapi.org"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://newsapi.org/v2",
+      "description": "NewsAPI v2"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Articles",
+      "description": "Search and retrieve live news articles."
+    },
+    {
+      "name": "Sources",
+      "description": "Discover the news sources available on the API."
+    }
+  ],
+  "paths": {
+    "/everything": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Everything",
+        "description": "Search through millions of articles from over 5,000 large and small news sources and blogs. Suits article discovery and analysis.\n",
+        "operationId": "getEverything",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Keywords or phrases to search for in the article title and body. Advanced search supported: phrases in quotes for exact match, `+` must appear, `-` must not appear, `AND`/`OR`/`NOT` with optional parentheses. Must be URL-encoded. Max 500 chars.\n",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "searchIn",
+            "in": "query",
+            "description": "Fields to restrict the `q` search to. Comma-separate for multiple.",
+            "schema": {
+              "type": "string",
+              "enum": ["title", "description", "content"]
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Comma-separated identifiers (max 20) of news sources, from /top-headlines/sources.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "domains",
+            "in": "query",
+            "description": "Comma-separated domains to restrict the search to (e.g. bbc.co.uk,techcrunch.com).",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "excludeDomains",
+            "in": "query",
+            "description": "Comma-separated domains to remove from the results.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Oldest article allowed, ISO 8601 date or datetime (e.g. 2026-11-21 or 2026-11-21T17:23:43).",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "description": "Newest article allowed, ISO 8601 date or datetime.",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "2-letter ISO-639-1 language code of the articles.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ar",
+                "de",
+                "en",
+                "es",
+                "fr",
+                "he",
+                "it",
+                "nl",
+                false,
+                "pt",
+                "ru",
+                "sv",
+                "ud",
+                "zh"
+              ]
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "description": "Order of the articles. `relevancy` ranks closer `q` matches first, `popularity` ranks popular sources first, `publishedAt` is newest first.",
+            "schema": {
+              "type": "string",
+              "enum": ["relevancy", "popularity", "publishedAt"],
+              "default": "publishedAt"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of results per page (default 100, max 100).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 100
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for paging through results (default 1).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ApiKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/top-headlines": {
+      "get": {
+        "tags": ["Articles"],
+        "summary": "Top headlines",
+        "description": "Live top and breaking headlines for a country, a category in a country, one source, or multiple sources. Articles are sorted by the earliest date published first. Great for news tickers.\n",
+        "operationId": "getTopHeadlines",
+        "parameters": [
+          {
+            "name": "country",
+            "in": "query",
+            "description": "2-letter ISO 3166-1 country code (e.g. `us`). Cannot be mixed with `sources`.",
+            "schema": {
+              "type": "string",
+              "example": "us"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "News category. Cannot be mixed with `sources`.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "business",
+                "entertainment",
+                "general",
+                "health",
+                "science",
+                "sports",
+                "technology"
+              ]
+            }
+          },
+          {
+            "name": "sources",
+            "in": "query",
+            "description": "Comma-separated source identifiers. Cannot be mixed with `country` or `category`.",
+            "schema": {
+              "type": "string",
+              "example": "bbc-news"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Keywords or a phrase to search for.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Number of results per page (default 20, max 100).",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for paging through results.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ApiKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Top headlines",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArticleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    },
+    "/top-headlines/sources": {
+      "get": {
+        "tags": ["Sources"],
+        "summary": "Sources",
+        "description": "Returns the subset of news publishers that top headlines are available from. A convenience endpoint for tracking the publishers on the API.\n",
+        "operationId": "getSources",
+        "parameters": [
+          {
+            "name": "category",
+            "in": "query",
+            "description": "Find sources that display news of this category.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "business",
+                "entertainment",
+                "general",
+                "health",
+                "science",
+                "sports",
+                "technology"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Find sources that write in this language.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ar",
+                "de",
+                "en",
+                "es",
+                "fr",
+                "he",
+                "it",
+                "nl",
+                false,
+                "pt",
+                "ru",
+                "sv",
+                "ud",
+                "zh"
+              ]
+            }
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Find sources based in this country (ISO 3166-1 alpha-2).",
+            "schema": {
+              "type": "string",
+              "example": "us"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/ApiKey"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "News sources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourcesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/Error"
+          },
+          "401": {
+            "$ref": "#/components/responses/Error"
+          },
+          "429": {
+            "$ref": "#/components/responses/Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "ApiKey": {
+        "name": "apiKey",
+        "in": "query",
+        "required": true,
+        "description": "Your API key. Alternatively provide it via the `X-Api-Key` HTTP header.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "Error response with a `code` and `message` property.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Article": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "example": "bbc-news"
+              },
+              "name": {
+                "type": "string",
+                "example": "BBC News"
+              }
+            }
+          },
+          "author": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "urlToImage": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC (+000)"
+          },
+          "content": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unformatted content, truncated to 200 chars."
+          }
+        }
+      },
+      "ArticleResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok", "error"]
+          },
+          "totalResults": {
+            "type": "integer"
+          },
+          "articles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Article"
+            }
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "category": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
+          }
+        }
+      },
+      "SourcesResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok", "error"]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Source"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["error"]
+          },
+          "code": {
+            "type": "string",
+            "description": "Error code (e.g. invalid-api-key, rate-limited-by-api, requests-from-your-ip-have-been-blocked)."
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

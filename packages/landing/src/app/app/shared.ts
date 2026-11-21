@@ -65,8 +65,12 @@ export const specParam = (): string | null => {
   return new URLSearchParams(window.location.search).get('spec');
 };
 
+// Specs live under /apis/{json,yaml}/<file>.
+const specDir = (file: string): string =>
+  file.endsWith('.json') ? 'json' : 'yaml';
+
 export const fetchSpec = async (file: string): Promise<string> => {
-  const response = await fetch(`${BASE_PATH}/apis/${file}`);
+  const response = await fetch(`${BASE_PATH}/apis/${specDir(file)}/${file}`);
   if (!response.ok) {
     throw new Error(`failed to load spec ${file} (HTTP ${response.status})`);
   }

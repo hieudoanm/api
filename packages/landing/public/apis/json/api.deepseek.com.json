@@ -1,0 +1,479 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DeepSeek API",
+    "description": "DeepSeek API \u2014 OpenAI-compatible chat completions and legacy text\ncompletions, served at `https://api.deepseek.com`.\n\nAuthentication: `Authorization: Bearer <DEEPSEEK_API_KEY>` header.\nGet a key at https://platform.deepseek.com/api_keys.\n\nDeepSeek also exposes an Anthropic-compatible endpoint at\n`https://api.deepseek.com/anthropic` (not covered here).\n\nSource: https://api-docs.deepseek.com/\n",
+    "version": "1.0",
+    "contact": {
+      "name": "DeepSeek",
+      "url": "https://api-docs.deepseek.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.deepseek.com/v1",
+      "description": "DeepSeek API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Chat",
+      "description": "Chat completions (deepseek-chat, deepseek-reasoner)."
+    },
+    {
+      "name": "Completions",
+      "description": "Legacy text completions."
+    },
+    {
+      "name": "Models",
+      "description": "Model discovery."
+    }
+  ],
+  "paths": {
+    "/chat/completions": {
+      "post": {
+        "tags": ["Chat"],
+        "summary": "Create chat completion",
+        "description": "Creates a model response for the given chat conversation. Supports streaming via `\"stream\": true` (SSE).\n",
+        "operationId": "createChatCompletion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["model", "messages"],
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "description": "Model ID (`deepseek-chat` or `deepseek-reasoner`).",
+                    "example": "deepseek-chat"
+                  },
+                  "messages": {
+                    "type": "array",
+                    "description": "Conversation history.",
+                    "items": {
+                      "type": "object",
+                      "required": ["role", "content"],
+                      "properties": {
+                        "role": {
+                          "type": "string",
+                          "enum": ["system", "user", "assistant"]
+                        },
+                        "content": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "frequency_penalty": {
+                    "type": "number",
+                    "description": "-2.0 to 2.0. Positive values penalize new tokens based on frequency."
+                  },
+                  "max_tokens": {
+                    "type": "integer",
+                    "description": "Maximum tokens to generate."
+                  },
+                  "presence_penalty": {
+                    "type": "number",
+                    "description": "-2.0 to 2.0. Positive values penalize new tokens based on presence."
+                  },
+                  "response_format": {
+                    "type": "object",
+                    "description": "Output format, e.g. `{\"type\": \"json_object\"}` for JSON mode."
+                  },
+                  "stop": {
+                    "description": "Up to 16 sequences where generation stops.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ]
+                  },
+                  "stream": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Stream tokens via SSE when true."
+                  },
+                  "stream_options": {
+                    "type": "object",
+                    "description": "Options for streaming, e.g. `{\"include_usage\": true}`."
+                  },
+                  "temperature": {
+                    "type": "number",
+                    "description": "Sampling temperature 0-2. Higher = more random."
+                  },
+                  "tool_choice": {
+                    "description": "Controls which tool is called."
+                  },
+                  "tools": {
+                    "type": "array",
+                    "description": "Function/tool definitions.",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "top_logprobs": {
+                    "type": "integer",
+                    "description": "0-20. Number of most likely tokens to return."
+                  },
+                  "top_p": {
+                    "type": "number",
+                    "description": "Nucleus sampling threshold 0-1."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Chat completion (JSON or SSE stream)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Server overloaded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/completions": {
+      "post": {
+        "tags": ["Completions"],
+        "summary": "Create completion",
+        "description": "Legacy text completion (code/FIM-style prompts). Prefer chat completions for new work.",
+        "operationId": "createCompletion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["model", "prompt"],
+                "properties": {
+                  "model": {
+                    "type": "string",
+                    "description": "Model ID.",
+                    "example": "deepseek-chat"
+                  },
+                  "prompt": {
+                    "description": "Text prompt or array of prompts.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ]
+                  },
+                  "best_of": {
+                    "type": "integer",
+                    "description": "Generate `best_of` completions server-side and return the best."
+                  },
+                  "echo": {
+                    "type": "boolean",
+                    "description": "Echo the prompt in the response."
+                  },
+                  "frequency_penalty": {
+                    "type": "number"
+                  },
+                  "logprobs": {
+                    "type": "integer",
+                    "description": "0-20."
+                  },
+                  "max_tokens": {
+                    "type": "integer"
+                  },
+                  "n": {
+                    "type": "integer",
+                    "description": "Number of completions to generate."
+                  },
+                  "presence_penalty": {
+                    "type": "number"
+                  },
+                  "stop": {
+                    "description": "Stop sequences.",
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    ]
+                  },
+                  "stream": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "stream_options": {
+                    "type": "object"
+                  },
+                  "suffix": {
+                    "type": "string",
+                    "description": "Suffix for fill-in-the-middle (FIM) mode."
+                  },
+                  "temperature": {
+                    "type": "number"
+                  },
+                  "top_logprobs": {
+                    "type": "integer"
+                  },
+                  "top_p": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Completion(s)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "List models",
+        "description": "Lists the models available to the account.",
+        "operationId": "listModels",
+        "responses": {
+          "200": {
+            "description": "Model list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "object": {
+                      "type": "string",
+                      "example": "list"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Model"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/models/{model}": {
+      "get": {
+        "tags": ["Models"],
+        "summary": "Get model",
+        "description": "Retrieves a single model by ID.",
+        "operationId": "getModel",
+        "parameters": [
+          {
+            "name": "model",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "deepseek-chat"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Model object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Model"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Model not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Model": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "object": {
+            "type": "string",
+            "example": "model"
+          },
+          "owned_by": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "param": {
+                "type": "string",
+                "nullable": true
+              },
+              "code": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

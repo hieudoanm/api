@@ -310,7 +310,7 @@ describe('ConverterApp interactions', () => {
       ).toHaveValue(SPEC);
     });
     expect(await screen.findByText('Petstore')).toBeInTheDocument();
-    expect(fetch).toHaveBeenCalledWith('/apis/petstore.yaml');
+    expect(fetch).toHaveBeenCalledWith('/apis/yaml/petstore.yaml');
     window.history.pushState({}, '', '/');
     vi.unstubAllGlobals();
   });

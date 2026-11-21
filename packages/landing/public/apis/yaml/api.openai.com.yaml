@@ -1480,8 +1480,7 @@ paths:
                 {
                     ResponseFormat = AudioTranscriptionFormat.Verbose,
                     TimestampGranularities =
-                AudioTimestampGranularities.Segment,
-                };
+                AudioTimestampGranularities.Segment, };
 
 
                 AudioTranscription transcription =
@@ -1670,8 +1669,7 @@ paths:
           response: >
             {
               "text": "Hello, my name is Wolfgang and I come from Germany. Where
-            are you heading today?"
-            }
+            are you heading today?" }
   /audio/voice_consents:
     post:
       operationId: createVoiceConsent
@@ -3313,8 +3311,7 @@ paths:
 
                 [
                     new UserChatMessage("What's the weather like in Boston
-                today?"),
-                ];
+                today?"), ];
 
 
                 ChatCompletionOptions options = new()
@@ -7801,9 +7798,8 @@ paths:
           [chat](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data)
         or
           [completions](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data)
-        models.
-        - The Batch API only supports `.jsonl` files up to 200 MB in size. The
-        input
+        models. - The Batch API only supports `.jsonl` files up to 200 MB in
+        size. The input
           also has a specific required
           [format](https://developers.openai.com/api/docs/guides/batch#1-prepare-your-batch-file).
         - For Retrieval or `file_search` ingestion, upload files here first. If
@@ -10140,8 +10136,7 @@ paths:
                     model: "gpt-image-2.6-flare",
                     image: images,
                     prompt: "Create a lovely gift basket with these four items
-                in it",
-                });
+                in it", });
 
 
                 // Save the image to a file
@@ -12200,8 +12195,7 @@ paths:
               -d '{
                 "name": "My Example Certificate",
                 "certificate": "-----BEGIN
-              CERTIFICATE-----\\nMIIDeT...\\n-----END CERTIFICATE-----"
-              }'
+              CERTIFICATE-----\\nMIIDeT...\\n-----END CERTIFICATE-----" }'
           response: |
             {
               "object": "certificate",
@@ -22678,8 +22672,7 @@ paths:
                 const response = await openai.responses.create({
                     model: "gpt-6.2-astra",
                     input: "Tell me a three sentence bedtime story about a
-                unicorn."
-                });
+                unicorn." });
 
 
                 console.log(response);
@@ -22693,8 +22686,7 @@ paths:
                 response = client.responses.create(
                   model="gpt-6.2-astra",
                   input="Tell me a three sentence bedtime story about a
-                unicorn."
-                )
+                unicorn." )
 
 
                 print(response)
@@ -23341,8 +23333,7 @@ paths:
                       max_num_results: 20
                     }],
                     input: "What are the attributes of an ancient brown
-                dragon?",
-                });
+                dragon?", });
 
 
                 console.log(response);
@@ -32819,8 +32810,7 @@ paths:
               video = client.videos.remix(
                   video_id="video_123",
                   prompt="Extend the scene with the cat taking a bow to the
-              cheering audience",
-              )
+              cheering audience", )
 
               print(video.id)
             go: >
@@ -40195,8 +40185,7 @@ paths:
                 const response = await openai.responses.create({
                     model: "gpt-6.2-astra",
                     input: "Tell me a three sentence bedtime story about a
-                unicorn."
-                });
+                unicorn." });
 
 
                 console.log(response);
@@ -40210,8 +40199,7 @@ paths:
                 response = client.responses.create(
                   model="gpt-6.2-astra",
                   input="Tell me a three sentence bedtime story about a
-                unicorn."
-                )
+                unicorn." )
 
 
                 print(response)
@@ -40858,8 +40846,7 @@ paths:
                       max_num_results: 20
                     }],
                     input: "What are the attributes of an ancient brown
-                dragon?",
-                });
+                dragon?", });
 
 
                 console.log(response);
@@ -49714,9 +49701,9 @@ components:
                 search](https://developers.openai.com/api/docs/guides/tools-file-search).
                 Learn more about
                   [built-in
-                tools](https://developers.openai.com/api/docs/guides/tools).
-                - **Function calls (custom tools)**: Functions that are defined
-                by you,
+                tools](https://developers.openai.com/api/docs/guides/tools). -
+                **Function calls (custom tools)**: Functions that are defined by
+                you,
                   enabling the model to call your own code. Learn more about
                   [function
                 calling](https://developers.openai.com/api/docs/guides/function-calling).
@@ -51369,9 +51356,8 @@ components:
                       On some models, trimming can begin earlier because the API
                     subtracts the model's
                       maximum output allowance from its input limit, even if you
-                    set a lower `max_output_tokens`.
-                    - `disabled` (default): If the input size will exceed the
-                    context window
+                    set a lower `max_output_tokens`. - `disabled` (default): If
+                    the input size will exceed the context window
                       size for a model, the request will fail with a 400 error.
                   enum:
                     - auto
@@ -56527,8 +56513,7 @@ components:
               }
             },
             "calculate_output": "0.5 * text_similarity_score + 0.5 *
-          string_check_score"
-          }
+          string_check_score" }
     GraderPython:
       type: object
       title: PythonGrader
@@ -56566,8 +56551,7 @@ components:
           float:\n    \"\"\"\n    Returns 1.0 if `output_text` equals `label`,
           otherwise 0.0.\n    \"\"\"\n    output =
           sample.get(\"output_text\")\n    label =
-          item.get(\"label\")\n    return 1.0 if output == label else 0.0\n"
-          }
+          item.get(\"label\")\n    return 1.0 if output == label else 0.0\n" }
     GraderScoreModel:
       type: object
       title: ScoreModelGrader
@@ -74446,9 +74430,8 @@ components:
                       On some models, trimming can begin earlier because the API
                     subtracts the model's
                       maximum output allowance from its input limit, even if you
-                    set a lower `max_output_tokens`.
-                    - `disabled` (default): If the input size will exceed the
-                    context window
+                    set a lower `max_output_tokens`. - `disabled` (default): If
+                    the input size will exceed the context window
                       size for a model, the request will fail with a 400 error.
                   enum:
                     - auto
@@ -84981,8 +84964,7 @@ components:
             "created_at": 1719168000,
             "type": "agent.session.action_required",
             "data": {"id": "sess_123", "required_action": {"type":
-          "function_call"}}
-          }
+          "function_call"}} }
     WebhookAgentSessionCreated:
       type: object
       title: agent.session.created
@@ -85012,8 +84994,7 @@ components:
             "type": "agent.session.created",
             "data": {"id": "sess_123", "environment_id": "ccarenv_123",
           "environment_type": "self_hosted", "connect": {"remote_url":
-          "https://api.openai.com/v1/agents/api/connect/example"}}
-          }
+          "https://api.openai.com/v1/agents/api/connect/example"}} }
     WebhookAgentSessionEnvelope:
       type: object
       required:
@@ -85119,8 +85100,7 @@ components:
             "created_at": 1719168000,
             "type": "agent.session.in_progress",
             "data": {"id": "sess_123", "environment_id": "ccarenv_123",
-          "environment_type": "openai_hosted"}
-          }
+          "environment_type": "openai_hosted"} }
     WebhookBatchCancelled:
       type: object
       title: batch.cancelled
@@ -123053,9 +123033,8 @@ components:
                       On some models, trimming can begin earlier because the API
                     subtracts the model's
                       maximum output allowance from its input limit, even if you
-                    set a lower `max_output_tokens`.
-                    - `disabled` (default): If the input size will exceed the
-                    context window
+                    set a lower `max_output_tokens`. - `disabled` (default): If
+                    the input size will exceed the context window
                       size for a model, the request will fail with a 400 error.
                   enum:
                     - auto
@@ -129145,9 +129124,8 @@ components:
                       On some models, trimming can begin earlier because the API
                     subtracts the model's
                       maximum output allowance from its input limit, even if you
-                    set a lower `max_output_tokens`.
-                    - `disabled` (default): If the input size will exceed the
-                    context window
+                    set a lower `max_output_tokens`. - `disabled` (default): If
+                    the input size will exceed the context window
                       size for a model, the request will fail with a 400 error.
                   enum:
                     - auto

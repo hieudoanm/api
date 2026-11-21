@@ -151,7 +151,70 @@ const SPECS: ApiSpec[] = [
     category: 'Research',
     endpoints: 18,
   },
+  {
+    file: 'api.github.com.json',
+    name: 'GitHub',
+    tagline:
+      'Official REST API — repos, issues, pull requests, actions and more.',
+    category: 'Developer',
+    endpoints: 1281,
+  },
+  {
+    file: 'api.stripe.com.json',
+    name: 'Stripe',
+    tagline:
+      'Official spec — payments, subscriptions, invoices, checkout and more.',
+    category: 'Payments',
+    endpoints: 612,
+  },
+  {
+    file: 'api.paypal.com.json',
+    name: 'PayPal',
+    tagline: 'Payments v2 — orders, captures, refunds and disputes.',
+    category: 'Payments',
+    endpoints: 8,
+  },
+  {
+    file: 'api.twilio.com.json',
+    name: 'Twilio',
+    tagline: 'Communications APIs — messaging, voice, video, verify and more.',
+    category: 'Communication',
+    endpoints: 197,
+  },
+  {
+    file: 'api.bitbucket.org.json',
+    name: 'Bitbucket',
+    tagline:
+      'Official spec — repositories, pull requests, pipelines and workspaces.',
+    category: 'Developer',
+    endpoints: 300,
+  },
+  {
+    file: 'api.atlassian.net.jira.json',
+    name: 'Jira',
+    tagline: 'Jira Cloud REST API — issues, boards, sprints, users and search.',
+    category: 'Productivity',
+    endpoints: 619,
+  },
+  {
+    file: 'api.atlassian.net.confluence.json',
+    name: 'Confluence',
+    tagline: 'Confluence Cloud REST API — pages, spaces, comments and search.',
+    category: 'Productivity',
+    endpoints: 130,
+  },
+  {
+    file: 'api.asana.com.yaml',
+    name: 'Asana',
+    tagline: 'Official spec — tasks, projects, portfolios, goals and webhooks.',
+    category: 'Productivity',
+    endpoints: 271,
+  },
 ];
+
+// Specs are served from /apis/{json,yaml}/<file>.
+const specHref = (file: string): string =>
+  `${BASE_PATH}/apis/${file.endsWith('.json') ? 'json' : 'yaml'}/${file}`;
 
 const ApisPage: FC = () => (
   <main className="mx-auto w-full max-w-6xl px-5 py-16">
@@ -163,8 +226,8 @@ const ApisPage: FC = () => (
         Try the converter on real APIs.
       </h1>
       <p className="text-base-content/60 mx-auto mt-3 max-w-2xl text-lg">
-        Sixteen OpenAPI 3.x specifications for popular public APIs. Download a
-        spec, then feed it to the{' '}
+        Twenty-four OpenAPI 3.x specifications for popular public APIs. Download
+        a spec, then feed it to the{' '}
         <Link href="/app/converter/" className="text-primary font-semibold">
           converter
         </Link>{' '}
@@ -197,14 +260,14 @@ const ApisPage: FC = () => (
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-semibold">
             <Link
-              href={`${BASE_PATH}/apis/${spec.file}`}
+              href={specHref(spec.file)}
               prefetch={false}
               className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">
               <LuFileText className="h-4 w-4" />
               Spec
             </Link>
             <Link
-              href={`${BASE_PATH}/apis/${spec.file}`}
+              href={specHref(spec.file)}
               prefetch={false}
               download={spec.file}
               className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">

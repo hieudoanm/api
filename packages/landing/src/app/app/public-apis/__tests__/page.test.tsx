@@ -21,7 +21,7 @@ describe('PublicApisPage', () => {
     );
     const specLink = screen
       .getAllByRole('link', { name: /openapi/i })
-      .find((l) => l.getAttribute('href')?.includes('api.chess.com.yaml'));
-    expect(specLink).toHaveAttribute('href', '/apis/api.chess.com.yaml');
+      .find((l) => l.getAttribute('href')?.includes('yaml/api.chess.com.yaml'));
+    expect(specLink).toHaveAttribute('href', '/apis/yaml/api.chess.com.yaml');
   });
 });
