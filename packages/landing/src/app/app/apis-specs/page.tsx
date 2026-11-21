@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: 'API Specs',
   description:
     'OpenAPI 3.x specifications for popular public APIs — ready to convert into API client collections or preview as documentation.',
-  alternates: { canonical: '/app/apis/' },
+  alternates: { canonical: '/app/apis-specs/' },
 };
 
 // Must match basePath in next.config.ts (GitHub Pages project site).

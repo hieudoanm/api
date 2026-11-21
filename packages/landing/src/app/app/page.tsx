@@ -2,7 +2,13 @@ import type { Metadata } from 'next';
 import type { FC } from 'react';
 import Link from 'next/link';
 import type { IconType } from 'react-icons';
-import { LuArrowRight, LuEye, LuFileJson, LuLibrary } from 'react-icons/lu';
+import {
+  LuArrowRight,
+  LuEye,
+  LuFileJson,
+  LuGlobe,
+  LuLibrary,
+} from 'react-icons/lu';
 
 export const metadata: Metadata = {
   title: 'Apps',
@@ -37,12 +43,20 @@ const APPS: AppCard[] = [
     icon: LuEye,
   },
   {
-    href: '/app/apis/',
+    href: '/app/apis-specs/',
     title: 'API specs',
     description:
       'Browse sixteen ready-made OpenAPI specs — OpenAI, Gemini, Claude, Telegram, Chess.com, Lichess and more — and feed them straight into the converter or previewer.',
     cta: 'Browse specs',
     icon: LuLibrary,
+  },
+  {
+    href: '/app/public-apis/',
+    title: 'Public APIs',
+    description:
+      'A curated directory of free public APIs — AI, weather, finance, gaming and more — many with ready-made OpenAPI specs.',
+    cta: 'Browse APIs',
+    icon: LuGlobe,
   },
 ];
 
