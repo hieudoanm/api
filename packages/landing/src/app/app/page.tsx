@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import type { FC } from 'react';
 import Link from 'next/link';
-import { LuArrowRight, LuFileJson, LuEye } from 'react-icons/lu';
+import type { IconType } from 'react-icons';
+import { LuArrowRight, LuEye, LuFileJson, LuLibrary } from 'react-icons/lu';
 
 export const metadata: Metadata = {
   title: 'Apps',
@@ -9,6 +10,41 @@ export const metadata: Metadata = {
     'Convert OpenAPI 3.x specs into API client collections or preview API documentation — all in your browser.',
   alternates: { canonical: '/app/' },
 };
+
+interface AppCard {
+  href: string;
+  title: string;
+  description: string;
+  cta: string;
+  icon: IconType;
+}
+
+const APPS: AppCard[] = [
+  {
+    href: '/app/converter/',
+    title: 'Converter',
+    description:
+      'Turn an OpenAPI spec into ready-to-import collections for Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl.',
+    cta: 'Open converter',
+    icon: LuFileJson,
+  },
+  {
+    href: '/app/previewer/',
+    title: 'Previewer',
+    description:
+      'Render your spec with Swagger UI, ReDoc, Scalar, Stoplight Elements or RapiDoc and download the standalone HTML page.',
+    cta: 'Open previewer',
+    icon: LuEye,
+  },
+  {
+    href: '/app/apis/',
+    title: 'API specs',
+    description:
+      'Browse sixteen ready-made OpenAPI specs — OpenAI, Gemini, Claude, Telegram, Chess.com, Lichess and more — and feed them straight into the converter or previewer.',
+    cta: 'Browse specs',
+    icon: LuLibrary,
+  },
+];
 
 const AppPage: FC = () => (
   <main className="mx-auto w-full max-w-5xl px-5 py-16">
@@ -26,40 +62,29 @@ const AppPage: FC = () => (
     </div>
 
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <Link
-        href="/app/converter/"
-        className="border-base-content/10 bg-base-100 hover:border-primary/50 group rounded-2xl border p-6 transition-colors">
-        <div className="bg-primary/10 text-primary mb-4 inline-flex rounded-xl p-3">
-          <LuFileJson className="h-6 w-6" />
-        </div>
-        <h2 className="text-base-content m-0 text-xl font-bold">Converter</h2>
-        <p className="text-base-content/60 mt-2 text-sm">
-          Turn an OpenAPI spec into ready-to-import collections for Postman,
-          Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl,
-          Kreya and curl.
-        </p>
-        <span className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold">
-          Open converter
-          <LuArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </span>
-      </Link>
-
-      <Link
-        href="/app/previewer/"
-        className="border-base-content/10 bg-base-100 hover:border-primary/50 group rounded-2xl border p-6 transition-colors">
-        <div className="bg-primary/10 text-primary mb-4 inline-flex rounded-xl p-3">
-          <LuEye className="h-6 w-6" />
-        </div>
-        <h2 className="text-base-content m-0 text-xl font-bold">Previewer</h2>
-        <p className="text-base-content/60 mt-2 text-sm">
-          Render your spec with Swagger UI, ReDoc, Scalar, Stoplight Elements or
-          RapiDoc and download the standalone HTML page.
-        </p>
-        <span className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold">
-          Open previewer
-          <LuArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </span>
-      </Link>
+      {APPS.map((app) => {
+        const Icon = app.icon;
+        return (
+          <Link
+            key={app.href}
+            href={app.href}
+            className="border-base-content/10 bg-base-100 hover:border-primary/50 group rounded-2xl border p-6 transition-colors">
+            <div className="bg-primary/10 text-primary mb-4 inline-flex rounded-xl p-3">
+              <Icon className="h-6 w-6" />
+            </div>
+            <h2 className="text-base-content m-0 text-xl font-bold">
+              {app.title}
+            </h2>
+            <p className="text-base-content/60 mt-2 text-sm">
+              {app.description}
+            </p>
+            <span className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold">
+              {app.cta}
+              <LuArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </span>
+          </Link>
+        );
+      })}
     </div>
   </main>
 );

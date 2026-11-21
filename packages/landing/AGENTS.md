@@ -57,10 +57,15 @@ pnpm --filter @api/wasm run build:wasm
 
 - **Keep `output: "export"`** — the site must build to static HTML; no server
   features, no API routes, no `next/image` optimization.
-- **`basePath`/`assetPrefix` are `/api`.** `next/link` and metadata get it
-  automatically; raw `<a href>` and generated HTML links must include it (see
-  `BASE_PATH` in `src/lib/docs.ts`, and the `INDEX_URL` in
-  `src/components/molecules/DocsSearch.tsx` → `/api/api/search-index`).
+- **`basePath`/`assetPrefix` are `/api` in production only** (`''` in dev — see
+  `next.config.ts`). `next/link` and metadata get it automatically; raw
+  `<a href>` and generated HTML links must include it via the
+  `process.env.NODE_ENV === 'production' ? '/api' : ''` pattern (see `BASE_PATH`
+  in `src/lib/docs.ts`, `INDEX_URL` in `src/components/molecules/DocsSearch.tsx`
+  → `/api/api/search-index`).
+- **Always use `next/link` `Link` for internal navigation**, never raw `<a>` —
+  raw `<a>` skips basePath handling and client-side routing. `<a>` is only for
+  external links (`target="_blank" rel="noreferrer"`).
 - **DaisyUI + Tailwind v4** — `globals.css` has only `@import 'tailwindcss'`
   plus official plugins; the `api` theme (set via `data-theme` on `<html>`) maps
   `primary` to blue (`#2563eb`). Use DaisyUI components (`btn`, `badge`, `card`)

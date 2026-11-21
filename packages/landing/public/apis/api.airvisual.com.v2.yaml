@@ -1,0 +1,368 @@
+openapi: 3.0.3
+info:
+  title: AirVisual API
+  description: |
+    AirVisual by IQAir — air quality data API. Community, Startup and
+    Enterprise endpoint groups for countries, states, cities, stations,
+    nearest-location lookup, city rankings, and air quality measurements.
+
+    Authentication: pass your API `key` as a query parameter. Get a key at
+    https://www.iqair.com/dashboard/api.
+
+    Source: https://api-docs.iqair.com/
+  version: '2.0'
+  contact:
+    name: IQAir
+    url: https://www.iqair.com
+servers:
+  - url: https://api.airvisual.com/v2
+    description: AirVisual API v2
+tags:
+  - name: Community
+    description: Free-tier geographic lookups and city air quality.
+  - name: Startup
+    description: Paid-tier station lookups and measurements.
+  - name: Enterprise
+    description: City ranking endpoint.
+paths:
+  /countries:
+    get:
+      tags: [Community]
+      summary: Countries
+      description: List all countries with air quality monitoring stations.
+      operationId: getCountries
+      parameters:
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          $ref: '#/components/responses/Countries'
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /states:
+    get:
+      tags: [Community]
+      summary: States
+      description: List states/regions within a country.
+      operationId: getStates
+      parameters:
+        - name: country
+          in: query
+          required: true
+          description: Country name (e.g. `USA`, `United States`).
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: List of states
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /cities:
+    get:
+      tags: [Community]
+      summary: Cities
+      description: List cities within a state of a country.
+      operationId: getCities
+      parameters:
+        - name: country
+          in: query
+          required: true
+          description: Country name.
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State/region name.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: List of cities
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /nearest_city:
+    get:
+      tags: [Community]
+      summary: Nearest city
+      description: >
+        Air quality for the nearest city — by IP location when `lat`/`lon` are
+        omitted, or by explicit coordinates.
+      operationId: getNearestCity
+      parameters:
+        - name: lat
+          in: query
+          description: Latitude of the location.
+          schema:
+            type: number
+            format: double
+        - name: lon
+          in: query
+          description: Longitude of the location.
+          schema:
+            type: number
+            format: double
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: Nearest city air quality
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /city:
+    get:
+      tags: [Community]
+      summary: City air quality
+      description: >
+        Real-time and historical air quality for a city. `state` is optional for
+        cities that share a name across regions.
+      operationId: getCity
+      parameters:
+        - name: city
+          in: query
+          required: true
+          description: City name (e.g. `Los Angeles`).
+          schema:
+            type: string
+        - name: state
+          in: query
+          description:
+            State/region name, to disambiguate cities with the same name.
+          schema:
+            type: string
+        - name: country
+          in: query
+          required: true
+          description: Country name.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: City air quality data
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /stations:
+    get:
+      tags: [Startup]
+      summary: Stations
+      description: List air quality monitoring stations for a city.
+      operationId: getStations
+      parameters:
+        - name: country
+          in: query
+          required: true
+          description: Country name.
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State/region name.
+          schema:
+            type: string
+        - name: city
+          in: query
+          description: City name. Omit to list all stations in the state.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: List of stations
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /nearest_station:
+    get:
+      tags: [Startup]
+      summary: Nearest station
+      description:
+        Nearest monitoring station — by IP location, or by `lat`/`lon`.
+      operationId: getNearestStation
+      parameters:
+        - name: lat
+          in: query
+          description: Latitude of the location.
+          schema:
+            type: number
+            format: double
+        - name: lon
+          in: query
+          description: Longitude of the location.
+          schema:
+            type: number
+            format: double
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: Nearest station data
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /station:
+    get:
+      tags: [Startup]
+      summary: Station measurements
+      description:
+        Real-time and historical measurements for a monitoring station.
+      operationId: getStation
+      parameters:
+        - name: country
+          in: query
+          required: true
+          description: Country name.
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          description: State/region name.
+          schema:
+            type: string
+        - name: city
+          in: query
+          required: true
+          description: City name.
+          schema:
+            type: string
+        - name: station
+          in: query
+          required: true
+          description: Station name.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: Station measurements
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+  /city_ranking:
+    get:
+      tags: [Enterprise]
+      summary: City ranking
+      description:
+        Ranked list of cities by air quality (US AQI), optionally filtered by
+        country.
+      operationId: getCityRanking
+      parameters:
+        - name: sort
+          in: query
+          description: Sort order for results.
+          schema:
+            type: string
+        - name: country
+          in: query
+          description: Limit ranking to a single country.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/ApiKey'
+      responses:
+        '200':
+          description: Ranked cities
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          $ref: '#/components/responses/Error'
+        '401':
+          $ref: '#/components/responses/Error'
+        '403':
+          $ref: '#/components/responses/Error'
+components:
+  parameters:
+    ApiKey:
+      name: key
+      in: query
+      required: true
+      description: Your AirVisual API key.
+      schema:
+        type: string
+  responses:
+    Countries:
+      description: List of countries
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: array
+                items:
+                  type: object
+    Error:
+      description: 'Error response (`success: false` with a `message`).'
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              data:
+                type: object
+                properties:
+                  message:
+                    type: string

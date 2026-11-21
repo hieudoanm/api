@@ -297,6 +297,38 @@ describe('ConverterApp interactions', () => {
     expect(screen.getByText('#!/usr/bin/env bash')).toBeInTheDocument();
   });
 
+  it('loads a spec from the ?spec= query param', async () => {
+    window.history.pushState({}, '', '/app/converter/?spec=petstore.yaml');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response(SPEC, { status: 200 })))
+    );
+    render(<ConverterApp />);
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Paste an OpenAPI document/)
+      ).toHaveValue(SPEC);
+    });
+    expect(await screen.findByText('Petstore')).toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledWith('/apis/petstore.yaml');
+    window.history.pushState({}, '', '/');
+    vi.unstubAllGlobals();
+  });
+
+  it('ignores an invalid ?spec= param', async () => {
+    window.history.pushState({}, '', '/app/converter/?spec=../secret.yaml');
+    const fetchSpy = vi.fn();
+    vi.stubGlobal('fetch', fetchSpy);
+    render(<ConverterApp />);
+    await screen.findByText('WASM ready');
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(
+      screen.getByPlaceholderText(/Paste an OpenAPI document/)
+    ).toHaveValue('');
+    window.history.pushState({}, '', '/');
+    vi.unstubAllGlobals();
+  });
+
   it('shows an error for a spec that fails inspection', async () => {
     openapiInfoMock.mockImplementationOnce(() => {
       throw new Error('bad spec');

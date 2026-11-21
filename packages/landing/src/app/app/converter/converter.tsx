@@ -19,8 +19,11 @@ import {
   downloadBlob,
   ensureWasm,
   errorMessage,
+  fetchSpec,
   formatBytes,
+  isSpecFile,
   slugify,
+  specParam,
 } from '../shared';
 
 type OutputFormat =
@@ -93,6 +96,31 @@ const ConverterApp: FC = () => {
         setWasmState('error');
         setWasmError(errorMessage(err));
       });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const file = specParam();
+    if (!isSpecFile(file)) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const text = await fetchSpec(file);
+        if (cancelled) return;
+        setSource(text);
+        setInfo(null);
+        setFiles(null);
+        setSelected(0);
+        setError('');
+        await ensureWasm();
+        if (cancelled) return;
+        setInfo(JSON.parse(openapi_info(text)) as SpecInfo);
+      } catch (err) {
+        if (!cancelled) setError(errorMessage(err));
+      }
+    })();
     return () => {
       cancelled = true;
     };

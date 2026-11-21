@@ -257,6 +257,24 @@ describe('PreviewerApp', () => {
     });
   });
 
+  it('loads a spec from the ?spec= query param', async () => {
+    window.history.pushState({}, '', '/app/previewer/?spec=petstore.yaml');
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve(new Response(SPEC, { status: 200 })))
+    );
+    render(<PreviewerApp />);
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Paste an OpenAPI document/)
+      ).toHaveValue(SPEC);
+    });
+    expect(await screen.findByText('Petstore')).toBeInTheDocument();
+    expect(fetch).toHaveBeenCalledWith('/apis/petstore.yaml');
+    window.history.pushState({}, '', '/');
+    vi.unstubAllGlobals();
+  });
+
   it('downloads a generated file', async () => {
     render(<PreviewerApp />);
     await screen.findByText('WASM ready');

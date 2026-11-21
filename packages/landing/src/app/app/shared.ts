@@ -51,3 +51,24 @@ export const downloadBlob = (blob: Blob, filename: string): void => {
   anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 };
+
+// Must match basePath in next.config.ts (GitHub Pages project site).
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/api' : '';
+
+const SPEC_FILE_PATTERN = /^[\w.-]+\.(yaml|yml|json)$/;
+
+export const isSpecFile = (value: string | null): value is string =>
+  value !== null && SPEC_FILE_PATTERN.test(value);
+
+export const specParam = (): string | null => {
+  if (typeof window === 'undefined') return null;
+  return new URLSearchParams(window.location.search).get('spec');
+};
+
+export const fetchSpec = async (file: string): Promise<string> => {
+  const response = await fetch(`${BASE_PATH}/apis/${file}`);
+  if (!response.ok) {
+    throw new Error(`failed to load spec ${file} (HTTP ${response.status})`);
+  }
+  return response.text();
+};

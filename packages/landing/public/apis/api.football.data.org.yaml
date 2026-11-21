@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: football-data.org v4
+  version: 1.0.0
+servers:
+  - url: https://api.football-data.org
+components:
+  securitySchemes:
+    XAuthToken:
+      type: apiKey
+      in: header
+      name: X-Auth-Token
+      description: API token from football-data.org
+security:
+  - XAuthToken: []
+paths:
+  /v4/competitions/PL/:
+    get:
+      tags:
+        - default
+      summary: Competition
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/areas/:
+    get:
+      tags:
+        - default
+      summary: Area List
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/competitions:
+    get:
+      tags:
+        - default
+      summary: Competition List
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/competitions/PL/standings:
+    get:
+      tags:
+        - default
+      summary: Competition / Standings
+      parameters:
+        - name: season
+          in: query
+          schema:
+            type: integer
+          example: '2010'
+        - name: matchday
+          in: query
+          schema:
+            type: integer
+          example: '3'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/competitions/BL1/matches:
+    get:
+      tags:
+        - default
+      summary: Competition / Matches
+      parameters:
+        - name: matchday
+          in: query
+          schema:
+            type: integer
+          example: '23'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/competitions/MLS/teams:
+    get:
+      tags:
+        - default
+      summary: Competition / Teams
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/competitions/PL/scorers:
+    get:
+      tags:
+        - default
+      summary: Competition / Scorer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/teams/90/:
+    get:
+      tags:
+        - default
+      summary: Team
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/teams:
+    get:
+      tags:
+        - default
+      summary: Team List
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '100'
+        - name: offset
+          in: query
+          schema:
+            type: integer
+          example: '100'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/teams/19/matches:
+    get:
+      tags:
+        - default
+      summary: Team / Matches
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/persons/16275:
+    get:
+      tags:
+        - default
+      summary: Person
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/persons/16275/matches:
+    get:
+      tags:
+        - default
+      summary: Person / Matches
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '40'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/matches/327117:
+    get:
+      tags:
+        - default
+      summary: Match
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/matches/:
+    get:
+      tags:
+        - default
+      summary: Match List
+      parameters:
+        - name: X-Unfold-Lineups
+          in: header
+          schema:
+            type: boolean
+          example: 'true'
+        - name: X-Unfold-Bookings
+          in: header
+          schema:
+            type: boolean
+          example: 'false'
+        - name: X-Unfold-Subs
+          in: header
+          schema:
+            type: boolean
+          example: 'false'
+        - name: X-Unfold-Goals
+          in: header
+          schema:
+            type: boolean
+          example: 'true'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}
+  /v4/matches/327125/head2head:
+    get:
+      tags:
+        - default
+      summary: Match / Head2Head
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+          example: '15'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json: {}

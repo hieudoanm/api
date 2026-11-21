@@ -15,7 +15,15 @@ import {
   LuTrash2,
   LuUpload,
 } from 'react-icons/lu';
-import { downloadBlob, ensureWasm, errorMessage, formatBytes } from '../shared';
+import {
+  downloadBlob,
+  ensureWasm,
+  errorMessage,
+  fetchSpec,
+  formatBytes,
+  isSpecFile,
+  specParam,
+} from '../shared';
 import type { SpecInfo, WasmFile } from '../shared';
 
 type PreviewFormat =
@@ -102,6 +110,34 @@ const PreviewerApp: FC = () => {
         setWasmError(errorMessage(err));
         log.error('[previewer] wasm init failed', err);
       });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const file = specParam();
+    if (!isSpecFile(file)) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const text = await fetchSpec(file);
+        if (cancelled) return;
+        setSource(text);
+        setInfo(null);
+        setFiles(null);
+        setSelected(0);
+        setError('');
+        await ensureWasm();
+        if (cancelled) return;
+        setInfo(JSON.parse(openapi_info(text)) as SpecInfo);
+      } catch (err) {
+        if (!cancelled) {
+          setError(errorMessage(err));
+          log.error('[previewer] spec param load failed', err);
+        }
+      }
+    })();
     return () => {
       cancelled = true;
     };
