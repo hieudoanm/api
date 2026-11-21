@@ -210,6 +210,69 @@ const SPECS: ApiSpec[] = [
     category: 'Productivity',
     endpoints: 271,
   },
+  {
+    file: 'api.supabase.com.json',
+    name: 'Supabase',
+    tagline:
+      'Backend platform — projects, auth, database, edge functions and storage.',
+    category: 'Developer',
+    endpoints: 116,
+  },
+  {
+    file: 'api.meilisearch.com.yaml',
+    name: 'Meilisearch',
+    tagline:
+      'Lightning-fast search engine — indexes, documents, keys and dumps.',
+    category: 'Search',
+    endpoints: 36,
+  },
+  {
+    file: 'api.qdrant.io.json',
+    name: 'Qdrant',
+    tagline:
+      'Vector database — collections, points, search, snapshots and aliases.',
+    category: 'AI',
+    endpoints: 53,
+  },
+  {
+    file: 'api.replicate.com.json',
+    name: 'Replicate',
+    tagline:
+      'Run machine learning models in the cloud — predictions, deployments and hardware.',
+    category: 'AI',
+    endpoints: 26,
+  },
+  {
+    file: 'api.todoist.com.json',
+    name: 'Todoist',
+    tagline: 'Task manager — tasks, projects, sections, comments and activity.',
+    category: 'Productivity',
+    endpoints: 94,
+  },
+  {
+    file: 'coda.io.json',
+    name: 'Coda',
+    tagline:
+      'Docs and apps platform — docs, pages, tables, formulas and automations.',
+    category: 'Productivity',
+    endpoints: 90,
+  },
+  {
+    file: 'api.weather.gov.json',
+    name: 'National Weather Service',
+    tagline:
+      'U.S. weather.gov API — forecasts, alerts, observations and radar.',
+    category: 'Weather',
+    endpoints: 69,
+  },
+  {
+    file: 'api.spotify.com.yaml',
+    name: 'Spotify',
+    tagline:
+      'Spotify Web API — search, playback, playlists, library and recommendations.',
+    category: 'Media',
+    endpoints: 67,
+  },
 ];
 
 // Specs are served from /apis/{json,yaml}/<file>.
@@ -226,7 +289,7 @@ const ApisPage: FC = () => (
         Try the converter on real APIs.
       </h1>
       <p className="text-base-content/60 mx-auto mt-3 max-w-2xl text-lg">
-        Twenty-four OpenAPI 3.x specifications for popular public APIs. Download
+        Thirty-two OpenAPI 3.x specifications for popular public APIs. Download
         a spec, then feed it to the{' '}
         <Link href="/app/converter/" className="text-primary font-semibold">
           converter

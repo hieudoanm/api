@@ -46,7 +46,7 @@ const APPS: AppCard[] = [
     href: '/app/apis-specs/',
     title: 'API specs',
     description:
-      'Browse sixteen ready-made OpenAPI specs — OpenAI, Gemini, Claude, Telegram, Chess.com, Lichess and more — and feed them straight into the converter or previewer.',
+      'Browse thirty-two ready-made OpenAPI specs — OpenAI, Gemini, Claude, Telegram, Chess.com, Lichess and more — and feed them straight into the converter or previewer.',
     cta: 'Browse specs',
     icon: LuLibrary,
   },
