@@ -9,6 +9,8 @@ minimumReleaseAge: 0
 allowBuilds:
   '@scarf/scarf': false
   '@tree-sitter-grammars/tree-sitter-yaml': true
+  '@vscode/vsce-sign': true
   core-js-pure: false
+  esbuild: true
   tree-sitter: true
   tree-sitter-json: true

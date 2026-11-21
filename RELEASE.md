@@ -10,16 +10,21 @@ cloud, no accounts.
 
 ### Download
 
-| Platform            | Asset                            |
-| ------------------- | -------------------------------- |
-| Linux x86_64        | `api-x86_64-unknown-linux-gnu`   |
-| macOS Apple Silicon | `api-aarch64-apple-darwin`       |
-| Windows x86_64      | `api-x86_64-pc-windows-msvc.exe` |
+| Platform            | Asset                                |
+| ------------------- | ------------------------------------ |
+| Linux x86_64        | `cli-api-x86_64-unknown-linux-gnu`   |
+| macOS Apple Silicon | `cli-api-aarch64-apple-darwin`       |
+| Windows x86_64      | `cli-api-x86_64-pc-windows-msvc.exe` |
+| VS Code extension   | `extension-vscode-api.vsix`          |
+| Zed extension       | `extension-zed-api.tar.gz`           |
 
 Or install from source:
 
 ```sh
-./scripts/install.sh            # release binary, cargo fallback
+./scripts/install.sh --cli      # release binary
+./scripts/install.sh --vscode   # VS Code extension (.vsix)
+./scripts/install.sh --zed      # Zed extension (repo checkout)
+./scripts/install-local.sh      # build everything from this checkout
 cargo install api-cli           # once published
 ```
 

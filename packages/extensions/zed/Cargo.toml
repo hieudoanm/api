@@ -1,0 +1,18 @@
+[package]
+name = "api-zed"
+version = "0.0.1"
+edition = "2021"
+description = "Zed extension: convert OpenAPI specs to API client collections via api-core"
+license = "MIT"
+repository = "https://github.com/hieudoanm/api"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+api-core = { path = "../../../crates/api-core" }
+zed_extension_api = "=0.7.0"
+
+[profile.release]
+opt-level = "z"
+lto = true

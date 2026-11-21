@@ -1,85 +1,167 @@
 #!/usr/bin/env bash
-#
-# install-local.sh — Build (if needed) and install api from this checkout.
-#
-# Unlike install.sh (which downloads a prebuilt release), this script always
-# installs the binary produced by the local working tree, making it suitable
-# for development and testing local changes.
-#
-# Usage:
-#   ./scripts/install-local.sh
-#   INSTALL_DIR=/usr/local/bin ./scripts/install-local.sh
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$REPO_ROOT"
+VSCODE_DIR="$REPO_ROOT/packages/extensions/vscode"
+ZED_DIR="$REPO_ROOT/packages/extensions/zed"
 
-BINARY="$REPO_ROOT/target/release/api"
-INSTALL_DIR="${INSTALL_DIR:-$HOME/.local/bin}"
+ts() { date '+%Y-%m-%dT%H:%M:%S%z'; }
 
-# --- Detect platform ---------------------------------------------------------
-OS="$(uname -s)"
-ARCH="$(uname -m)"
-case "$ARCH" in
-    x86_64 | amd64) ARCH="x86_64" ;;
-    arm64 | aarch64) ARCH="aarch64" ;;
+log()   { printf '[%s] [INFO ] %s\n' "$(ts)" "$*"; }
+warn()  { printf '[%s] [WARN ] %s\n' "$(ts)" "$*" >&2; }
+error() { printf '[%s] [ERROR] %s\n' "$(ts)" "$*" >&2; }
+die()   { error "$*"; exit 1; }
+
+usage() {
+  cat <<'EOF'
+Usage: install-local.sh [--cli|--vscode|--zed] [DEST]
+
+  --cli       Build the api CLI from source and install it (default)
+  --vscode    Build the VS Code extension and install extension-vscode-api.vsix
+  --zed       Build the Zed extension and point you at the source dir
+              (Install Dev Extension — api-core is a path dependency)
+
+DEST is the install path for --cli, the download directory for --vscode,
+or ignored for --zed.
+
+Environment:
+  INSTALL_DIR  fallback install dir for --cli (default ~/.local/bin)
+EOF
+  exit "${1:-0}"
+}
+
+# --- Parse arguments -------------------------------------------------------
+MODE=cli
+DEST="${INSTALL_DIR:-}"
+for arg in "$@"; do
+  case "$arg" in
+    --cli)     MODE=cli ;;
+    --vscode)  MODE=vscode ;;
+    --zed)     MODE=zed ;;
+    -h|--help) usage 0 ;;
+    --*)       die "Unknown flag: $arg" ;;
+    *)         [ -z "$DEST" ] && DEST="$arg" || die "Unexpected argument: $arg" ;;
+  esac
+done
+
+# --- Detect the OS ---------------------------------------------------------
+case "$(uname -s)" in
+  Linux*)               OS=linux ;;
+  Darwin*)              OS=macos ;;
+  MINGW*|MSYS*|CYGWIN*) OS=windows ;;
+  *)                    die "Unsupported OS: $(uname -s)" ;;
 esac
-OS_LOWER="$(echo "$OS" | tr '[:upper:]' '[:lower:]')"
-echo "Detected platform: ${OS_LOWER}-${ARCH}"
+log "Detected OS: $OS, mode: $MODE"
 
-case "$OS_LOWER" in
-    darwin | linux) ;;
-    *)
-        echo "warning: untested platform '${OS}'; continuing anyway" >&2
-        ;;
+# --- CLI -------------------------------------------------------------------
+install_cli() {
+  command -v cargo >/dev/null 2>&1 || die "cargo not found; install Rust from https://rustup.rs"
+  log "cargo $(cargo --version | awk '{print $2}')"
+
+  # Pick a writable install destination.
+  local dest="$DEST"
+  if [ -z "$dest" ]; then
+    dest="$(command -v api 2>/dev/null || true)"
+    if [ -n "$dest" ]; then
+      log "Found existing install at $dest; will overwrite"
+    elif [ "$OS" = "macos" ] && [ -d "/opt/homebrew/bin" ] && [ -w "/opt/homebrew/bin" ]; then
+      dest="/opt/homebrew/bin/api"
+    elif [ "$OS" = "macos" ] && [ -d "/usr/local/bin" ] && [ -w "/usr/local/bin" ]; then
+      dest="/usr/local/bin/api"
+    elif [ -d "$HOME/.local/bin" ]; then
+      mkdir -p "$HOME/.local/bin"
+      dest="$HOME/.local/bin/api"
+    elif [ "$OS" = "windows" ]; then
+      dest="$HOME/bin/api.exe"
+      mkdir -p "$HOME/bin"
+    else
+      die "Could not find a writable install directory; pass one explicitly."
+    fi
+  fi
+
+  local dest_dir
+  dest_dir="$(dirname "$dest")"
+  mkdir -p "$dest_dir"
+  [ -w "$dest_dir" ] || die "$dest_dir is not writable"
+
+  log "Building release binary from $REPO_ROOT"
+  (cd "$REPO_ROOT" && cargo build --release -p api-cli)
+
+  local bin="$REPO_ROOT/target/release/api"
+  [ "$OS" = "windows" ] && bin="$bin.exe"
+  [ -x "$bin" ] || die "Build finished but $bin not found"
+  log "Built $(wc -c < "$bin" | tr -d ' ') bytes at $bin"
+
+  log "Installing to $dest"
+  cp "$bin" "$dest"
+  chmod +x "$dest"
+  log "Installed api to $dest"
+
+  if command -v "$dest" >/dev/null 2>&1; then
+    log "Verifying install: $dest --version"
+    "$dest" --version || true
+  else
+    log "Note: $dest is not on PATH yet. Add $dest_dir to your shell's PATH."
+  fi
+}
+
+# --- VS Code (.vsix) --------------------------------------------------------
+install_vscode() {
+  command -v pnpm >/dev/null 2>&1 || die "pnpm not found; install pnpm 12+"
+  log "Building VS Code extension (wasm + vsix)"
+  (cd "$VSCODE_DIR" && pnpm build:wasm && pnpm package)
+  local vsix="$VSCODE_DIR/build/extension-vscode-api.vsix"
+  [ -f "$vsix" ] || die "Expected $vsix after pnpm package"
+
+  local dir="$DEST"
+  [ -z "$dir" ] && dir="$HOME/Downloads"
+  mkdir -p "$dir"
+
+  if command -v code >/dev/null 2>&1; then
+    log "Installing extension: code --install-extension $vsix"
+    if code --install-extension "$vsix"; then
+      log "Installed api-vscode"
+    else
+      warn "code --install-extension failed; install $vsix manually"
+      cp "$vsix" "$dir/extension-vscode-api.vsix"
+      log "Copied $dir/extension-vscode-api.vsix"
+    fi
+  else
+    cp "$vsix" "$dir/extension-vscode-api.vsix"
+    log "Copied $dir/extension-vscode-api.vsix"
+    cat <<EOF
+
+Next steps (VS Code):
+  The 'code' CLI was not found. Install the extension manually:
+  1. Open VS Code → Extensions view (Cmd+Shift+X)
+  2. Click "…" → "Install from VSIX…"
+  3. Pick: $dir/extension-vscode-api.vsix
+EOF
+  fi
+}
+
+# --- Zed (source dir — api-core is a path dependency) ------------------------
+install_zed() {
+  command -v cargo >/dev/null 2>&1 || die "cargo not found; install Rust from https://rustup.rs"
+  command -v make >/dev/null 2>&1 || die "make not found"
+  rustup target list --installed | grep -q wasm32-wasip2 \
+    || die "wasm32-wasip2 target missing; run: rustup target add wasm32-wasip2"
+  log "Building Zed extension (wasm32-wasip2)"
+  (cd "$ZED_DIR" && make build)
+  [ -f "$ZED_DIR/extension.toml" ] || die "Expected $ZED_DIR/extension.toml"
+  cat <<EOF
+
+Next steps (Zed):
+  1. Open the command palette → "zed: install extension"
+  2. Choose "Install Dev Extension"
+  3. Select: $ZED_DIR
+  The extension links api-core by path, so it must build from this checkout.
+  Then use /api <spec.yaml|json> [format] or /api-formats in the assistant panel.
+EOF
+}
+
+case "$MODE" in
+  cli)     install_cli ;;
+  vscode)  install_vscode ;;
+  zed)     install_zed ;;
 esac
-
-# --- Ensure a fresh release build exists -------------------------------------
-needs_build=0
-if [[ ! -x "$BINARY" ]]; then
-    needs_build=1
-    echo "No release build found at target/release/api"
-elif [[ Cargo.toml -nt "$BINARY" || Cargo.lock -nt "$BINARY" ]] \
-    || [[ -n "$(find crates -type f -name '*.rs' -newer "$BINARY" -print -quit 2>/dev/null)" ]]; then
-    needs_build=1
-    echo "Release build is stale (sources changed since last build)"
-fi
-
-if [[ "$needs_build" -eq 1 ]]; then
-    if ! command -v cargo >/dev/null 2>&1; then
-        echo "error: cargo not found; install the Rust toolchain from https://rustup.rs" >&2
-        exit 1
-    fi
-    echo "Building release binary (this may take a while)..."
-    cargo build --release -p api-cli
-fi
-
-if [[ ! -x "$BINARY" ]]; then
-    echo "error: build finished but $BINARY is missing" >&2
-    exit 1
-fi
-
-# --- Install (always overwrite: force fresh install) --------------------------
-mkdir -p "$INSTALL_DIR"
-install -m 0755 "$BINARY" "$INSTALL_DIR/api"
-echo "Installed api to $INSTALL_DIR/api"
-
-# A different `api` earlier on PATH would shadow this install. Warn
-# instead of silently installing a binary the user cannot reach.
-if command -v api >/dev/null 2>&1; then
-    resolved="$(command -v api)"
-    if [[ "$resolved" != "$INSTALL_DIR/api" ]]; then
-        echo "warning: \`api\` currently resolves to $resolved, not $INSTALL_DIR/api" >&2
-        echo "         reinstall with a directory earlier on PATH, e.g.:" >&2
-        echo "           INSTALL_DIR=\$HOME/bin ./scripts/install-local.sh" >&2
-    fi
-else
-    case ":$PATH:" in
-        *":$INSTALL_DIR:"*) ;;
-        *)
-            echo "warning: $INSTALL_DIR is not on PATH; add it or invoke $INSTALL_DIR/api directly" >&2
-            ;;
-    esac
-fi
-
-"$INSTALL_DIR/api" --help >/dev/null

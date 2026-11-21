@@ -1,0 +1,16 @@
+id = "api"
+name = "api"
+description = "Convert OpenAPI 3.x specs to API client collections (Postman, Bruno, Insomnia, and more)"
+version = "0.0.1"
+schema_version = 1
+authors = ["Hieu Doan <hieu.doan.professional@gmail.com>"]
+repository = "https://github.com/hieudoanm/api"
+license = "MIT"
+
+[slash_commands.api]
+description = "Convert an OpenAPI spec (json/yaml) to a client format: /api <spec> [format|all]"
+requires_argument = true
+
+[slash_commands.api-formats]
+description = "List the API client formats api can convert to"
+requires_argument = false

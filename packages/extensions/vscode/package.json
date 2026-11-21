@@ -1,0 +1,102 @@
+{
+  "name": "api-vscode",
+  "displayName": "api",
+  "description": "Convert OpenAPI 3.x specs into API client collections (Postman, Bruno, Insomnia, and more)",
+  "version": "0.0.1",
+  "private": true,
+  "publisher": "hieudoanm",
+  "license": "MIT",
+  "author": {
+    "name": "Hieu Doan",
+    "email": "hieu.doan.professional@gmail.com",
+    "url": "https://hieudoanm.github.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hieudoanm/api.git"
+  },
+  "homepage": "https://github.com/hieudoanm/api",
+  "bugs": {
+    "url": "https://github.com/hieudoanm/api/issues"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "openapi",
+    "swagger",
+    "postman",
+    "bruno",
+    "insomnia",
+    "api",
+    "rest"
+  ],
+  "packageManager": "pnpm@12.21.0",
+  "engines": {
+    "node": "26.13.1",
+    "vscode": "1.147.0"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCommand:api.convertSpec"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "api.convertSpec",
+        "title": "Convert OpenAPI Spec",
+        "category": "api"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "api.convertSpec",
+          "when": "resourceExtname =~ /\\.(yaml|yml|json)$/",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "api.convertSpec",
+          "when": "resourceExtname =~ /\\.(yaml|yml|json)$/",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "api.convertSpec",
+          "when": "resourceExtname =~ /\\.(yaml|yml|json)$/",
+          "group": "1_modification"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "build:wasm": "make -C ../../../crates/api-wasm build-wasm",
+    "build": "node scripts/build.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --cache --write .",
+    "format:check": "prettier --cache --check .",
+    "package": "pnpm build && rimraf build && mkdir -p build && vsce package --no-dependencies --out build/extension-vscode-api.vsix",
+    "clean": "rimraf dist build"
+  },
+  "dependencies": {
+    "@api/wasm": "workspace:*"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.6.6",
+    "@types/vscode": "1.146.0",
+    "@vscode/vsce": "4.1.1",
+    "esbuild": "0.28.2",
+    "eslint": "10.15.0",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "rimraf": "6.1.4",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.73.0"
+  }
+}

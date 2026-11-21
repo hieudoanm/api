@@ -6,6 +6,9 @@ members = [
   "crates/api-mcp",
   "crates/api-wasm",
 ]
+exclude = [
+  "packages/extensions/zed",
+]
 
 [workspace.package]
 version = "0.0.1"

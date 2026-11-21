@@ -12,15 +12,17 @@ hand-rolled Postman imports; see
 
 ## Repository layout
 
-| Path                        | What it is                                                                                                                                    |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `crates/api-core`           | Conversion engine: `openapi.rs` (parser), `model.rs` (wire types), `formats/` (one emitter per client), `convert.rs`.                         |
-| `crates/api-cli`            | Thin binary: `api` — clap CLI over `api-core`.                                                                                                |
-| `crates/api-mcp`            | MCP stdio server exposing the converter tools.                                                                                                |
-| `crates/api-wasm`           | `#[wasm_bindgen]` exports over `api-core`; also a pnpm workspace package (`@api/wasm`) whose generated `pkg/` is consumed by the landing app. |
-| `packages/landing`          | Next.js + Tailwind/DaisyUI landing page **and** docs site (`/docs/*`) → GitHub Pages. See `packages/landing/AGENTS.md`.                       |
-| `scripts/`                  | `install.sh` (prebuilt release or cargo fallback) + `install-local.sh` (build from this checkout).                                            |
-| `.github/workflows/ci.yaml` | Rust check + CLI release binaries + Pages deploy.                                                                                             |
+| Path                         | What it is                                                                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `crates/api-core`            | Conversion engine: `openapi.rs` (parser), `model.rs` (wire types), `formats/` (one emitter per client), `convert.rs`.                            |
+| `crates/api-cli`             | Thin binary: `api` — clap CLI over `api-core`.                                                                                                   |
+| `crates/api-mcp`             | MCP stdio server exposing the converter tools.                                                                                                   |
+| `crates/api-wasm`            | `#[wasm_bindgen]` exports over `api-core`; also a pnpm workspace package (`@api/wasm`) whose generated `pkg/` is consumed by the landing app.    |
+| `packages/landing`           | Next.js + Tailwind/DaisyUI landing page **and** docs site (`/docs/*`) → GitHub Pages. See `packages/landing/AGENTS.md`.                          |
+| `packages/extensions/vscode` | VS Code extension (`api-vscode`) over `@api/wasm`. See its `AGENTS.md`.                                                                          |
+| `packages/extensions/zed`    | Zed extension (`api-zed`) embedding `api-core` directly; standalone crate (workspace `exclude`), built for `wasm32-wasip2`. See its `AGENTS.md`. |
+| `scripts/`                   | `install.sh` (prebuilt release or cargo fallback) + `install-local.sh` (build from this checkout).                                               |
+| `.github/workflows/ci.yaml`  | Rust check + CLI release binaries + Pages deploy.                                                                                                |
 
 ## Commands
 

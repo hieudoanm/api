@@ -73,22 +73,98 @@ jobs:
       - name: Build release binary
         run: cargo build --release -p api-cli
 
-      # Rename to the Rust target triple so the three OS artifacts don't
+      # Rename to cli-api-<target-triple> so the three OS artifacts don't
       # collide when merged into the release assets.
       - name: Rename binary for release
         shell: bash
         run: |
           case "${{ matrix.os }}" in
-            ubuntu-latest) mv target/release/api api-x86_64-unknown-linux-gnu ;;
-            macos-latest) mv target/release/api api-aarch64-apple-darwin ;;
-            windows-latest) mv target/release/api.exe api-x86_64-pc-windows-msvc.exe ;;
+            ubuntu-latest) mv target/release/api cli-api-x86_64-unknown-linux-gnu ;;
+            macos-latest) mv target/release/api cli-api-aarch64-apple-darwin ;;
+            windows-latest) mv target/release/api.exe cli-api-x86_64-pc-windows-msvc.exe ;;
           esac
 
       - name: Upload CLI binary
         uses: actions/upload-artifact@v7.0.2
         with:
-          name: api-cli-${{ matrix.os }}
-          path: api-*
+          name: cli-api-${{ matrix.os }}
+          path: cli-api-*
+          if-no-files-found: error
+          retention-days: 7
+
+  extension-vscode:
+    name: Extension - VS Code
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6.1.1
+        with:
+          version: 12.21.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2.9.3
+
+      - name: Build api-wasm package
+        working-directory: crates/api-wasm
+        run: make build-wasm
+
+      - name: Install workspace dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Package VS Code extension
+        run: pnpm --filter api-vscode run package
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: extension-vscode-api
+          path: packages/extensions/vscode/build/*.vsix
+          if-no-files-found: error
+          retention-days: 7
+
+  extension-zed:
+    name: Extension - Zed
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip2
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2.9.3
+        with:
+          workspaces: packages/extensions/zed
+
+      - name: Package Zed extension
+        working-directory: packages/extensions/zed
+        run: make package
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: extension-zed-api
+          path: packages/extensions/zed/download/*
           if-no-files-found: error
           retention-days: 7
 
@@ -96,6 +172,8 @@ jobs:
     name: Release
     needs:
       - cli-build
+      - extension-vscode
+      - extension-zed
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
@@ -109,7 +187,7 @@ jobs:
         uses: actions/download-artifact@v8.0.2
         with:
           path: dist
-          pattern: api-cli-*
+          pattern: '*api*'
           merge-multiple: true
 
       - name: Delete existing latest release
