@@ -588,11 +588,18 @@
   ],
   "frameworks": [
     {
+      "name": "anyhow",
+      "displayName": "anyhow",
+      "family": "rust",
+      "version": null,
+      "confidence": "high"
+    },
+    {
       "name": "clap.rs",
       "displayName": "clap.rs",
       "family": "rust",
       "version": null,
-      "confidence": "medium"
+      "confidence": "high"
     },
     {
       "name": "nextjs",
@@ -606,6 +613,41 @@
       "displayName": "React",
       "family": "ecmascript",
       "version": "tailwindcss",
+      "confidence": "high"
+    },
+    {
+      "name": "serde",
+      "displayName": "Serde",
+      "family": "rust",
+      "version": null,
+      "confidence": "high"
+    },
+    {
+      "name": "tailwindcss",
+      "displayName": "Tailwind CSS",
+      "family": "ecmascript",
+      "version": "tailwindcss",
+      "confidence": "medium"
+    },
+    {
+      "name": "thiserror",
+      "displayName": "thiserror",
+      "family": "rust",
+      "version": null,
+      "confidence": "high"
+    },
+    {
+      "name": "turborepo",
+      "displayName": "Turborepo",
+      "family": "ecmascript",
+      "version": "commitlint",
+      "confidence": "medium"
+    },
+    {
+      "name": "vitest",
+      "displayName": "Vitest",
+      "family": "ecmascript",
+      "version": "api",
       "confidence": "high"
     }
   ],
@@ -21644,11 +21686,21 @@
       "language": "bash"
     },
     {
+      "id": "framework:anyhow",
+      "kind": "framework",
+      "name": "anyhow",
+      "metadata": {
+        "confidence": "high",
+        "family": "rust",
+        "framework": "anyhow"
+      }
+    },
+    {
       "id": "framework:clap.rs",
       "kind": "framework",
       "name": "clap.rs",
       "metadata": {
-        "confidence": "medium",
+        "confidence": "high",
         "family": "rust",
         "framework": "clap.rs"
       }
@@ -21671,6 +21723,56 @@
         "confidence": "high",
         "family": "ecmascript",
         "framework": "react"
+      }
+    },
+    {
+      "id": "framework:serde",
+      "kind": "framework",
+      "name": "Serde",
+      "metadata": {
+        "confidence": "high",
+        "family": "rust",
+        "framework": "serde"
+      }
+    },
+    {
+      "id": "framework:tailwindcss:tailwindcss",
+      "kind": "framework",
+      "name": "Tailwind CSS",
+      "metadata": {
+        "confidence": "medium",
+        "family": "ecmascript",
+        "framework": "tailwindcss"
+      }
+    },
+    {
+      "id": "framework:thiserror",
+      "kind": "framework",
+      "name": "thiserror",
+      "metadata": {
+        "confidence": "high",
+        "family": "rust",
+        "framework": "thiserror"
+      }
+    },
+    {
+      "id": "framework:turborepo:commitlint",
+      "kind": "framework",
+      "name": "Turborepo",
+      "metadata": {
+        "confidence": "medium",
+        "family": "ecmascript",
+        "framework": "turborepo"
+      }
+    },
+    {
+      "id": "framework:vitest:api",
+      "kind": "framework",
+      "name": "Vitest",
+      "metadata": {
+        "confidence": "high",
+        "family": "ecmascript",
+        "framework": "vitest"
       }
     },
     {
@@ -229852,6 +229954,13 @@
     },
     {
       "source": "repository:.",
+      "target": "framework:anyhow",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
       "target": "framework:clap.rs",
       "kind": "uses_framework",
       "status": "resolved_internal",
@@ -229867,6 +229976,41 @@
     {
       "source": "repository:.",
       "target": "framework:react:tailwindcss",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
+      "target": "framework:serde",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
+      "target": "framework:tailwindcss:tailwindcss",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
+      "target": "framework:thiserror",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
+      "target": "framework:turborepo:commitlint",
+      "kind": "uses_framework",
+      "status": "resolved_internal",
+      "origin": "syntax"
+    },
+    {
+      "source": "repository:.",
+      "target": "framework:vitest:api",
       "kind": "uses_framework",
       "status": "resolved_internal",
       "origin": "syntax"
@@ -234295,8 +234439,8 @@
   "statistics": {
     "files": 135,
     "packages": 3,
-    "nodes": 4555,
-    "edges": 9381,
+    "nodes": 4561,
+    "edges": 9387,
     "symbols": 1562,
     "unresolvedEdges": 2394,
     "diagnostics": 218,
@@ -234307,7 +234451,7 @@
       "enum": 6,
       "external_symbol": 2259,
       "file": 135,
-      "framework": 3,
+      "framework": 9,
       "function": 384,
       "interface": 27,
       "method": 17,
@@ -234327,7 +234471,7 @@
       "exports": 252,
       "implements": 3,
       "imports": 2399,
-      "uses_framework": 3,
+      "uses_framework": 9,
       "uses_type": 374
     },
     "byLanguage": {
@@ -234341,13 +234485,19 @@
     "byStatus": {
       "ambiguous": 2,
       "resolved_external": 2497,
-      "resolved_internal": 4490,
+      "resolved_internal": 4496,
       "unresolved": 2392
     },
     "byFramework": {
+      "anyhow": 1,
       "clap.rs": 1,
       "nextjs": 1,
-      "react": 1
+      "react": 1,
+      "serde": 1,
+      "tailwindcss": 1,
+      "thiserror": 1,
+      "turborepo": 1,
+      "vitest": 1
     }
   }
 };</script>
