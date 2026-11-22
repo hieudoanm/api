@@ -10094,6 +10094,30 @@
       "language": "typescript"
     },
     {
+      "id": "external:typescript:node:fs.readFileSync",
+      "kind": "external_symbol",
+      "name": "readFileSync",
+      "language": "typescript"
+    },
+    {
+      "id": "external:typescript:node:path.basename",
+      "kind": "external_symbol",
+      "name": "basename",
+      "language": "typescript"
+    },
+    {
+      "id": "external:typescript:node:path.dirname",
+      "kind": "external_symbol",
+      "name": "dirname",
+      "language": "typescript"
+    },
+    {
+      "id": "external:typescript:node:path.join",
+      "kind": "external_symbol",
+      "name": "join",
+      "language": "typescript"
+    },
+    {
       "id": "external:typescript:process.cwd",
       "kind": "external_symbol",
       "name": "cwd",
@@ -26018,12 +26042,6 @@
       "language": "typescript"
     },
     {
-      "id": "unresolved:typescript:basename",
-      "kind": "unknown",
-      "name": "basename",
-      "language": "typescript"
-    },
-    {
       "id": "unresolved:typescript:callback",
       "kind": "unknown",
       "name": "callback",
@@ -26057,12 +26075,6 @@
       "id": "unresolved:typescript:decode",
       "kind": "unknown",
       "name": "decode",
-      "language": "typescript"
-    },
-    {
-      "id": "unresolved:typescript:dirname",
-      "kind": "unknown",
-      "name": "dirname",
       "language": "typescript"
     },
     {
@@ -26135,12 +26147,6 @@
       "id": "unresolved:typescript:readFile",
       "kind": "unknown",
       "name": "readFile",
-      "language": "typescript"
-    },
-    {
-      "id": "unresolved:typescript:readFileSync",
-      "kind": "unknown",
-      "name": "readFileSync",
       "language": "typescript"
     },
     {
@@ -125963,6 +125969,48 @@
     },
     {
       "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
+      "target": "external:typescript:node:path.basename",
+      "kind": "calls",
+      "status": "resolved_external",
+      "origin": "lexical",
+      "sites": [
+        {
+          "start": {
+            "line": 100,
+            "column": 64,
+            "byte": 2591
+          },
+          "end": {
+            "line": 100,
+            "column": 90,
+            "byte": 2617
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
+      "target": "external:typescript:node:path.dirname",
+      "kind": "calls",
+      "status": "resolved_external",
+      "origin": "lexical",
+      "sites": [
+        {
+          "start": {
+            "line": 97,
+            "column": 34,
+            "byte": 2452
+          },
+          "end": {
+            "line": 97,
+            "column": 59,
+            "byte": 2477
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
       "target": "external:unresolved:@api/wasm.convert",
       "kind": "calls",
       "status": "resolved_internal",
@@ -126089,27 +126137,6 @@
     },
     {
       "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
-      "target": "unresolved:typescript:basename",
-      "kind": "calls",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 100,
-            "column": 64,
-            "byte": 2591
-          },
-          "end": {
-            "line": 100,
-            "column": 90,
-            "byte": 2617
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
       "target": "unresolved:typescript:decode",
       "kind": "calls",
       "status": "unresolved",
@@ -126125,27 +126152,6 @@
             "line": 86,
             "column": 4,
             "byte": 2192
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:packages/extensions/vscode/src/extension.ts::convertSpec",
-      "target": "unresolved:typescript:dirname",
-      "kind": "calls",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 97,
-            "column": 34,
-            "byte": 2452
-          },
-          "end": {
-            "line": 97,
-            "column": 59,
-            "byte": 2477
           }
         }
       ]
@@ -126194,6 +126200,27 @@
     },
     {
       "source": "function:packages/extensions/vscode/src/extension.ts::ensureWasm",
+      "target": "external:typescript:node:fs.readFileSync",
+      "kind": "calls",
+      "status": "resolved_external",
+      "origin": "lexical",
+      "sites": [
+        {
+          "start": {
+            "line": 12,
+            "column": 14,
+            "byte": 350
+          },
+          "end": {
+            "line": 12,
+            "column": 39,
+            "byte": 375
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:packages/extensions/vscode/src/extension.ts::ensureWasm",
       "target": "external:unresolved:@api/wasm.initSync",
       "kind": "calls",
       "status": "resolved_internal",
@@ -126209,27 +126236,6 @@
             "line": 12,
             "column": 40,
             "byte": 376
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:packages/extensions/vscode/src/extension.ts::ensureWasm",
-      "target": "unresolved:typescript:readFileSync",
-      "kind": "calls",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 12,
-            "column": 14,
-            "byte": 350
-          },
-          "end": {
-            "line": 12,
-            "column": 39,
-            "byte": 375
           }
         }
       ]
@@ -126425,7 +126431,28 @@
     },
     {
       "source": "function:packages/extensions/vscode/src/extension.ts::writeFiles",
-      "target": "external:typescript:lib::join",
+      "target": "external:typescript:node:path.dirname",
+      "kind": "calls",
+      "status": "resolved_external",
+      "origin": "lexical",
+      "sites": [
+        {
+          "start": {
+            "line": 72,
+            "column": 23,
+            "byte": 1843
+          },
+          "end": {
+            "line": 72,
+            "column": 43,
+            "byte": 1863
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:packages/extensions/vscode/src/extension.ts::writeFiles",
+      "target": "external:typescript:node:path.join",
       "kind": "calls",
       "status": "resolved_external",
       "origin": "lexical",
@@ -126461,27 +126488,6 @@
             "line": 73,
             "column": 6,
             "byte": 1870
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:packages/extensions/vscode/src/extension.ts::writeFiles",
-      "target": "unresolved:typescript:dirname",
-      "kind": "calls",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 72,
-            "column": 23,
-            "byte": 1843
-          },
-          "end": {
-            "line": 72,
-            "column": 43,
-            "byte": 1863
           }
         }
       ]
@@ -146776,7 +146782,7 @@
     },
     {
       "source": "module:packages/extensions/vscode/src/extension.ts",
-      "target": "external:typescript:lib::join",
+      "target": "external:typescript:node:path.join",
       "kind": "calls",
       "status": "resolved_external",
       "origin": "lexical",
@@ -174450,17 +174456,17 @@
   "statistics": {
     "files": 135,
     "packages": 3,
-    "nodes": 2415,
+    "nodes": 2416,
     "edges": 7430,
     "symbols": 1630,
-    "unresolvedEdges": 319,
+    "unresolvedEdges": 315,
     "diagnostics": 9,
     "byNodeKind": {
       "class": 1,
       "constant": 357,
       "constructor": 1,
       "enum": 6,
-      "external_symbol": 362,
+      "external_symbol": 366,
       "file": 135,
       "framework": 9,
       "function": 384,
@@ -174472,7 +174478,7 @@
       "repository": 1,
       "struct": 9,
       "type": 4,
-      "unknown": 120,
+      "unknown": 117,
       "variable": 690
     },
     "byEdgeKind": {
@@ -174491,13 +174497,13 @@
       "markdown": 66,
       "rust": 1384,
       "tsx": 587,
-      "typescript": 327
+      "typescript": 328
     },
     "byStatus": {
       "ambiguous": 2,
-      "resolved_external": 2105,
+      "resolved_external": 2109,
       "resolved_internal": 5006,
-      "unresolved": 317
+      "unresolved": 313
     },
     "byFramework": {
       "anyhow": 1,
