@@ -3,8 +3,8 @@
   "tracersVersion": "0.0.1",
   "repository": {
     "id": "repository:.",
-    "name": "repository",
-    "root": ".",
+    "name": "api",
+    "root": "/Users/hieudoan/git/github.com/hieudoanm/api",
     "fileCount": 135,
     "languageCount": 23
   },
@@ -8351,24 +8351,6 @@
       "id": "external:rust:Vec.new",
       "kind": "external_symbol",
       "name": "new",
-      "language": "rust"
-    },
-    {
-      "id": "external:rust:crate::ApiConvertError.Invalid",
-      "kind": "external_symbol",
-      "name": "Invalid",
-      "language": "rust"
-    },
-    {
-      "id": "external:rust:crate::ApiConvertError.Parse",
-      "kind": "external_symbol",
-      "name": "Parse",
-      "language": "rust"
-    },
-    {
-      "id": "external:rust:crate::ApiConvertError.UnsupportedVersion",
-      "kind": "external_symbol",
-      "name": "UnsupportedVersion",
       "language": "rust"
     },
     {
@@ -25643,30 +25625,6 @@
       "id": "unresolved:rust:convert_collection",
       "kind": "unknown",
       "name": "convert_collection",
-      "language": "rust"
-    },
-    {
-      "id": "unresolved:rust:crate::ApiAuth",
-      "kind": "unknown",
-      "name": "crate::ApiAuth",
-      "language": "rust"
-    },
-    {
-      "id": "unresolved:rust:crate::ApiParameter",
-      "kind": "unknown",
-      "name": "crate::ApiParameter",
-      "language": "rust"
-    },
-    {
-      "id": "unresolved:rust:crate::ApiRequest",
-      "kind": "unknown",
-      "name": "crate::ApiRequest",
-      "language": "rust"
-    },
-    {
-      "id": "unresolved:rust:crate::ConversionFile",
-      "kind": "unknown",
-      "name": "crate::ConversionFile",
       "language": "rust"
     },
     {
@@ -63137,9 +63095,9 @@
     },
     {
       "source": "function:crates/api-cli/src/main.rs::write_files",
-      "target": "unresolved:rust:api_core::ConversionFile",
+      "target": "struct:crates/api-core/src/model.rs::ConversionFile",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -74246,9 +74204,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/curl.rs::curl_command",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -74879,9 +74837,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/curl.rs::headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -75233,9 +75191,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/curl.rs::request_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -75818,6 +75776,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hoppscotch.rs::effective_server",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 63,
+            "column": 15,
+            "byte": 1970
+          },
+          "end": {
+            "line": 63,
+            "column": 32,
+            "byte": 1987
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/hoppscotch.rs::effective_server",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -75833,27 +75812,6 @@
             "line": 65,
             "column": 29,
             "byte": 2049
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/hoppscotch.rs::effective_server",
-      "target": "unresolved:rust:crate::ApiRequest",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 63,
-            "column": 15,
-            "byte": 1970
-          },
-          "end": {
-            "line": 63,
-            "column": 32,
-            "byte": 1987
           }
         }
       ]
@@ -75968,9 +75926,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hoppscotch.rs::endpoint_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -76517,9 +76475,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hoppscotch.rs::hopp_headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -76643,6 +76601,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hoppscotch.rs::hopp_request",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 38,
+            "column": 15,
+            "byte": 1187
+          },
+          "end": {
+            "line": 38,
+            "column": 32,
+            "byte": 1204
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/hoppscotch.rs::hopp_request",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -76658,27 +76637,6 @@
             "line": 40,
             "column": 29,
             "byte": 1266
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/hoppscotch.rs::hopp_request",
-      "target": "unresolved:rust:crate::ApiRequest",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 38,
-            "column": 15,
-            "byte": 1187
-          },
-          "end": {
-            "line": 38,
-            "column": 32,
-            "byte": 1204
           }
         }
       ]
@@ -77597,9 +77555,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hurl.rs::headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -77900,9 +77858,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hurl.rs::request_file",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -78050,9 +78008,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hurl.rs::request_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -78464,9 +78422,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hurl.rs::write_query_params",
-      "target": "unresolved:rust:crate::ApiParameter",
+      "target": "struct:crates/api-core/src/model.rs::ApiParameter",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -78485,9 +78443,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/hurl.rs::write_query_params",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -79223,6 +79181,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/insomnia.rs::effective_base",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 83,
+            "column": 14,
+            "byte": 2564
+          },
+          "end": {
+            "line": 83,
+            "column": 31,
+            "byte": 2581
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/insomnia.rs::effective_base",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -79238,27 +79217,6 @@
             "line": 73,
             "column": 71,
             "byte": 2332
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/insomnia.rs::effective_base",
-      "target": "unresolved:rust:crate::ApiRequest",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 83,
-            "column": 14,
-            "byte": 2564
-          },
-          "end": {
-            "line": 83,
-            "column": 31,
-            "byte": 2581
           }
         }
       ]
@@ -79886,9 +79844,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/insomnia.rs::insomnia_request",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -80720,6 +80678,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/kreya.rs::operation_files",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 96,
+            "column": 15,
+            "byte": 3079
+          },
+          "end": {
+            "line": 96,
+            "column": 32,
+            "byte": 3096
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/kreya.rs::operation_files",
       "target": "struct:crates/api-core/src/model.rs::ConversionFile",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -80747,27 +80726,6 @@
             "line": 111,
             "column": 34,
             "byte": 3630
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/kreya.rs::operation_files",
-      "target": "unresolved:rust:crate::ApiRequest",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 96,
-            "column": 15,
-            "byte": 3079
-          },
-          "end": {
-            "line": 96,
-            "column": 32,
-            "byte": 3096
           }
         }
       ]
@@ -81329,9 +81287,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/kreya.rs::operation_json",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -81575,9 +81533,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/kreya.rs::request_body_file",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -81809,9 +81767,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/kreya.rs::request_body_spec",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -82904,9 +82862,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/postman.rs::postman_headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -83375,9 +83333,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/postman.rs::postman_item",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -83690,9 +83648,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/postman.rs::postman_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -84143,9 +84101,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/postman.rs::unique_request_name",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -86147,9 +86105,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/rest_client.rs::headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -86531,6 +86489,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/rest_client.rs::request_block",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 95,
+            "column": 15,
+            "byte": 3226
+          },
+          "end": {
+            "line": 95,
+            "column": 32,
+            "byte": 3243
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/rest_client.rs::request_block",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -86546,27 +86525,6 @@
             "line": 97,
             "column": 29,
             "byte": 3305
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/rest_client.rs::request_block",
-      "target": "unresolved:rust:crate::ApiRequest",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 95,
-            "column": 15,
-            "byte": 3226
-          },
-          "end": {
-            "line": 95,
-            "column": 32,
-            "byte": 3243
           }
         }
       ]
@@ -86867,9 +86825,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/rest_client.rs::request_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -88289,9 +88247,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/thunder_client.rs::request_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -88814,9 +88772,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/thunder_client.rs::thunder_headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -89051,9 +89009,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/thunder_client.rs::thunder_params",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -89885,9 +89843,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/thunder_client.rs::thunder_request",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -89927,6 +89885,27 @@
     },
     {
       "source": "function:crates/api-core/src/formats/util.rs::auth_for_request",
+      "target": "enum:crates/api-core/src/model.rs::ApiAuth",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 78,
+            "column": 58,
+            "byte": 2172
+          },
+          "end": {
+            "line": 78,
+            "column": 72,
+            "byte": 2186
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/formats/util.rs::auth_for_request",
       "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -89942,27 +89921,6 @@
             "line": 78,
             "column": 45,
             "byte": 2159
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/formats/util.rs::auth_for_request",
-      "target": "unresolved:rust:crate::ApiAuth",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 78,
-            "column": 58,
-            "byte": 2172
-          },
-          "end": {
-            "line": 78,
-            "column": 72,
-            "byte": 2186
           }
         }
       ]
@@ -92735,9 +92693,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/yaak.rs::request_yaml",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -93161,9 +93119,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/yaak.rs::yaak_headers",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -93257,9 +93215,9 @@
     },
     {
       "source": "function:crates/api-core/src/formats/yaak.rs::yaak_url",
-      "target": "unresolved:rust:crate::ApiRequest",
+      "target": "struct:crates/api-core/src/model.rs::ApiRequest",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -95078,6 +95036,27 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::convert_openapi",
+      "target": "struct:crates/api-core/src/model.rs::ConversionFile",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 39,
+            "column": 17,
+            "byte": 1232
+          },
+          "end": {
+            "line": 39,
+            "column": 38,
+            "byte": 1253
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/openapi.rs::convert_openapi",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -95093,27 +95072,6 @@
             "line": 38,
             "column": 29,
             "byte": 1214
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/openapi.rs::convert_openapi",
-      "target": "unresolved:rust:crate::ConversionFile",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 39,
-            "column": 17,
-            "byte": 1232
-          },
-          "end": {
-            "line": 39,
-            "column": 38,
-            "byte": 1253
           }
         }
       ]
@@ -95225,6 +95183,27 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::convert_openapi_all",
+      "target": "struct:crates/api-core/src/model.rs::ConversionFile",
+      "kind": "uses_type",
+      "status": "resolved_internal",
+      "origin": "syntax",
+      "sites": [
+        {
+          "start": {
+            "line": 47,
+            "column": 17,
+            "byte": 1458
+          },
+          "end": {
+            "line": 47,
+            "column": 38,
+            "byte": 1479
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/openapi.rs::convert_openapi_all",
       "target": "struct:crates/api-core/src/model.rs::ConvertOptions",
       "kind": "uses_type",
       "status": "resolved_internal",
@@ -95240,27 +95219,6 @@
             "line": 46,
             "column": 29,
             "byte": 1440
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/openapi.rs::convert_openapi_all",
-      "target": "unresolved:rust:crate::ConversionFile",
-      "kind": "uses_type",
-      "status": "unresolved",
-      "origin": "syntax",
-      "sites": [
-        {
-          "start": {
-            "line": 47,
-            "column": 17,
-            "byte": 1458
-          },
-          "end": {
-            "line": 47,
-            "column": 38,
-            "byte": 1479
           }
         }
       ]
@@ -96932,6 +96890,27 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::normalize",
+      "target": "constant:crates/api-core/src/lib.rs::ApiConvertError.Invalid",
+      "kind": "calls",
+      "status": "resolved_internal",
+      "origin": "lexical",
+      "sites": [
+        {
+          "start": {
+            "line": 91,
+            "column": 24,
+            "byte": 2885
+          },
+          "end": {
+            "line": 91,
+            "column": 86,
+            "byte": 2947
+          }
+        }
+      ]
+    },
+    {
+      "source": "function:crates/api-core/src/openapi.rs::normalize",
       "target": "external:rust:Vec.new",
       "kind": "calls",
       "status": "resolved_external",
@@ -96947,27 +96926,6 @@
             "line": 87,
             "column": 49,
             "byte": 2781
-          }
-        }
-      ]
-    },
-    {
-      "source": "function:crates/api-core/src/openapi.rs::normalize",
-      "target": "external:rust:crate::ApiConvertError.Invalid",
-      "kind": "calls",
-      "status": "resolved_external",
-      "origin": "lexical",
-      "sites": [
-        {
-          "start": {
-            "line": 91,
-            "column": 24,
-            "byte": 2885
-          },
-          "end": {
-            "line": 91,
-            "column": 86,
-            "byte": 2947
           }
         }
       ]
@@ -99695,9 +99653,9 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::parse_openapi",
-      "target": "external:rust:crate::ApiConvertError.Invalid",
+      "target": "constant:crates/api-core/src/lib.rs::ApiConvertError.Invalid",
       "kind": "calls",
-      "status": "resolved_external",
+      "status": "resolved_internal",
       "origin": "lexical",
       "sites": [
         {
@@ -99716,9 +99674,9 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::parse_openapi",
-      "target": "external:rust:crate::ApiConvertError.Parse",
+      "target": "constant:crates/api-core/src/lib.rs::ApiConvertError.Parse",
       "kind": "calls",
-      "status": "resolved_external",
+      "status": "resolved_internal",
       "origin": "lexical",
       "sites": [
         {
@@ -99749,9 +99707,9 @@
     },
     {
       "source": "function:crates/api-core/src/openapi.rs::parse_openapi",
-      "target": "external:rust:crate::ApiConvertError.UnsupportedVersion",
+      "target": "constant:crates/api-core/src/lib.rs::ApiConvertError.UnsupportedVersion",
       "kind": "calls",
-      "status": "resolved_external",
+      "status": "resolved_internal",
       "origin": "lexical",
       "sites": [
         {
@@ -123734,9 +123692,9 @@
     },
     {
       "source": "function:crates/api-wasm/src/lib.rs::files_value",
-      "target": "unresolved:rust:api_core::ConversionFile",
+      "target": "struct:crates/api-core/src/model.rs::ConversionFile",
       "kind": "uses_type",
-      "status": "unresolved",
+      "status": "resolved_internal",
       "origin": "syntax",
       "sites": [
         {
@@ -174492,17 +174450,17 @@
   "statistics": {
     "files": 135,
     "packages": 3,
-    "nodes": 2422,
+    "nodes": 2415,
     "edges": 7430,
     "symbols": 1630,
-    "unresolvedEdges": 356,
+    "unresolvedEdges": 319,
     "diagnostics": 9,
     "byNodeKind": {
       "class": 1,
       "constant": 357,
       "constructor": 1,
       "enum": 6,
-      "external_symbol": 365,
+      "external_symbol": 362,
       "file": 135,
       "framework": 9,
       "function": 384,
@@ -174514,7 +174472,7 @@
       "repository": 1,
       "struct": 9,
       "type": 4,
-      "unknown": 124,
+      "unknown": 120,
       "variable": 690
     },
     "byEdgeKind": {
@@ -174531,15 +174489,15 @@
       "bash": 10,
       "javascript": 28,
       "markdown": 66,
-      "rust": 1391,
+      "rust": 1384,
       "tsx": 587,
       "typescript": 327
     },
     "byStatus": {
       "ambiguous": 2,
-      "resolved_external": 2109,
-      "resolved_internal": 4965,
-      "unresolved": 354
+      "resolved_external": 2105,
+      "resolved_internal": 5006,
+      "unresolved": 317
     },
     "byFramework": {
       "anyhow": 1,
