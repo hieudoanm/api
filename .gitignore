@@ -12,3 +12,4 @@ packages/landing/.next/
 packages/landing/out/
 .turbo/
 examples/output/
+.tracers-cache/
