@@ -438,8 +438,8 @@ const Home: NextPage = () => (
       <CTA
         title="Stop hand-building collections."
         description="Point api at your OpenAPI spec and let your team import the result into whichever client they already use."
-        primary={{ label: 'Star on GitHub', href: GITHUB, external: true }}
-        secondary={{ label: 'Read the docs', href: '/docs/' }}
+        primary={{ label: 'Download', href: '/downloads/' }}
+        secondary={{ label: 'View Docs', href: '/docs/' }}
       />
     </main>
   </>

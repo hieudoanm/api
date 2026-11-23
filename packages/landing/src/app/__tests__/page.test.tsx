@@ -9,8 +9,13 @@ describe('Home', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
     expect(screen.getByText('Postman')).toBeInTheDocument();
     expect(screen.getByText('acme.sh')).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /Star on GitHub/ })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Download' })).toHaveAttribute(
+      'href',
+      '/downloads'
+    );
+    expect(screen.getByRole('link', { name: 'View Docs' })).toHaveAttribute(
+      'href',
+      '/docs'
+    );
   });
 });
