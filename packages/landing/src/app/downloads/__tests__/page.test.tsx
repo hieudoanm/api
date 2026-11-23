@@ -28,6 +28,7 @@ describe('downloads page', () => {
   });
 
   it('links every release asset', () => {
+    expect(html).toContain(`${RELEASES}/extension-jetbrains-api.zip`);
     expect(html).toContain(`${RELEASES}/cli-api-aarch64-apple-darwin`);
     expect(html).toContain(`${RELEASES}/cli-api-x86_64-apple-darwin`);
     expect(html).toContain(`${RELEASES}/cli-api-x86_64-pc-windows-msvc.exe`);

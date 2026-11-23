@@ -11,6 +11,7 @@ import {
   FaTerminal,
   FaWindows,
 } from 'react-icons/fa';
+import { SiJetbrains } from 'react-icons/si';
 
 export const metadata: Metadata = {
   title: 'Downloads',
@@ -92,6 +93,17 @@ const EDITOR_EXT: Cell[] = [
     desc: 'Zed editor extension.',
     assets: [
       { label: 'Zed (.tar.gz)', href: `${RELEASES}/extension-zed-api.tar.gz` },
+    ],
+  },
+  {
+    name: 'JetBrains',
+    icon: SiJetbrains,
+    desc: 'IntelliJ Platform plugin for JetBrains IDEs.',
+    assets: [
+      {
+        label: 'JetBrains (.zip)',
+        href: `${RELEASES}/extension-jetbrains-api.zip`,
+      },
     ],
   },
 ];
