@@ -64,6 +64,7 @@ install_cli() {
   local asset
   case "$OS/$ARCH" in
     macos/arm64)   asset=cli-api-aarch64-apple-darwin ;;
+    macos/x86_64)  asset=cli-api-x86_64-apple-darwin ;;
     linux/x86_64)  asset=cli-api-x86_64-unknown-linux-gnu ;;
     windows/*)     asset=cli-api-x86_64-pc-windows-msvc.exe ;;
     *)             die "No release asset for $OS/$ARCH; build from source with scripts/install-local.sh" ;;
