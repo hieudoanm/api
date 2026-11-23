@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { label: 'Quickstart', href: '/#quickstart' },
   { label: 'Apps', href: '/app/' },
   { label: 'Docs', href: '/docs/' },
+  { label: 'Downloads', href: '/downloads/' },
 ];
 
 export const metadata: Metadata = {
