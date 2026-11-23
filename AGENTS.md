@@ -62,6 +62,6 @@ Run locally: `cargo run -p api-cli -- convert openapi.yaml --format all`.
   `formats/mod.rs` and `convert.rs`, extend `ClientFormat` in `model.rs`.
 - Docs live in `packages/landing/docs/` as Markdown — update them when the
   CLI surface or formats change.
-- Release binaries are named `api-<target-triple>` (see `ci.yaml`
+- Release binaries are named `cli-api-<target-triple>` (see `ci.yaml`
   `cli-build`); `scripts/install.sh` and `RELEASE.md` depend on that naming.
 - Do not commit secrets or `target/`.
