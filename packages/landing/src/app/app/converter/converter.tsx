@@ -5,15 +5,16 @@ import { strToU8, zipSync } from 'fflate';
 import type { ChangeEvent, DragEvent, FC } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  LuCheck,
-  LuCopy,
-  LuDownload,
-  LuFileJson,
-  LuPlay,
-  LuSearch,
-  LuTrash2,
-  LuUpload,
-} from 'react-icons/lu';
+  PiCheck,
+  PiCopy,
+  PiDownloadSimple,
+  PiFileJs,
+  PiPlay,
+  PiMagnifyingGlass,
+  PiTrash,
+  PiUploadSimple,
+} from 'react-icons/pi';
+
 import type { SpecInfo, WasmFile } from '../shared';
 import {
   downloadBlob,
@@ -290,7 +291,7 @@ const ConverterApp: FC = () => {
                 type="button"
                 className="btn btn-outline btn-sm"
                 onClick={() => fileInputRef.current?.click()}>
-                <LuUpload className="h-4 w-4" />
+                <PiUploadSimple className="h-4 w-4" />
                 Drop or choose file
               </button>
               <input
@@ -305,7 +306,7 @@ const ConverterApp: FC = () => {
                 className="btn btn-ghost btn-sm"
                 onClick={clear}
                 disabled={!source && !files}>
-                <LuTrash2 className="h-4 w-4" />
+                <PiTrash className="h-4 w-4" />
                 Clear
               </button>
               <span className="text-base-content/50 ml-auto text-xs">
@@ -375,7 +376,7 @@ const ConverterApp: FC = () => {
                 className="btn btn-outline"
                 onClick={() => void inspect()}
                 disabled={!ready || !source.trim()}>
-                <LuSearch className="h-4 w-4" />
+                <PiMagnifyingGlass className="h-4 w-4" />
                 {busy === 'inspect' ? 'Inspecting…' : 'Inspect spec'}
               </button>
               <button
@@ -383,7 +384,7 @@ const ConverterApp: FC = () => {
                 className="btn btn-primary"
                 onClick={() => void runConvert()}
                 disabled={!ready || !source.trim()}>
-                <LuPlay className="h-4 w-4" />
+                <PiPlay className="h-4 w-4" />
                 {busy === 'convert' ? 'Converting…' : 'Convert'}
               </button>
               {wasmState === 'loading' && (
@@ -393,7 +394,7 @@ const ConverterApp: FC = () => {
               )}
               {wasmState === 'ready' && (
                 <span className="text-success inline-flex items-center gap-1 text-sm font-semibold">
-                  <LuCheck className="h-4 w-4" /> WASM ready
+                  <PiCheck className="h-4 w-4" /> WASM ready
                 </span>
               )}
             </div>
@@ -454,7 +455,7 @@ const ConverterApp: FC = () => {
                 className="btn btn-primary btn-sm"
                 onClick={downloadAll}
                 disabled={!files || files.length === 0}>
-                <LuDownload className="h-4 w-4" />
+                <PiDownloadSimple className="h-4 w-4" />
                 Download {files && files.length > 1 ? 'ZIP' : ''}
               </button>
             </div>
@@ -478,7 +479,7 @@ const ConverterApp: FC = () => {
                       className="w-full text-left"
                       onClick={() => setSelected(index)}>
                       <div className="flex items-center gap-2">
-                        <LuFileJson className="text-primary h-4 w-4 shrink-0" />
+                        <PiFileJs className="text-primary h-4 w-4 shrink-0" />
                         <span className="text-base-content truncate font-mono text-xs font-semibold">
                           {file.path}
                         </span>
@@ -495,13 +496,13 @@ const ConverterApp: FC = () => {
                         type="button"
                         className="btn btn-ghost btn-xs"
                         onClick={() => downloadFile(file)}>
-                        <LuDownload className="h-3.5 w-3.5" /> File
+                        <PiDownloadSimple className="h-3.5 w-3.5" /> File
                       </button>
                       <button
                         type="button"
                         className="btn btn-ghost btn-xs"
                         onClick={() => void copyContent(file.content)}>
-                        <LuCopy className="h-3.5 w-3.5" />{' '}
+                        <PiCopy className="h-3.5 w-3.5" />{' '}
                         {copied && index === selected ? 'Copied' : 'Copy'}
                       </button>
                     </div>
@@ -521,7 +522,7 @@ const ConverterApp: FC = () => {
                   type="button"
                   className="btn btn-ghost btn-xs"
                   onClick={() => void copySelected()}>
-                  <LuCopy className="h-3.5 w-3.5" />
+                  <PiCopy className="h-3.5 w-3.5" />
                   {copied ? 'Copied' : 'Copy content'}
                 </button>
               </div>

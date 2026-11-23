@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import type { FC } from 'react';
 import Link from 'next/link';
-import { LuDownload, LuTerminal } from 'react-icons/lu';
+import { PiDownloadSimple, PiTerminal } from 'react-icons/pi';
+
 import SpecsBrowser from './specs-browser';
 import { SPECS } from './specs';
 
@@ -39,7 +40,7 @@ const ApisPage: FC = () => (
 
     <div className="border-base-content/10 bg-base-100/60 mt-10 flex flex-col items-center gap-3 rounded-2xl border p-6 text-center sm:flex-row sm:text-left">
       <div className="bg-primary/10 text-primary shrink-0 rounded-xl p-3">
-        <LuTerminal className="h-6 w-6" />
+        <PiTerminal className="h-6 w-6" />
       </div>
       <div className="flex-1">
         <h2 className="text-base-content m-0 text-lg font-bold">
@@ -53,7 +54,7 @@ const ApisPage: FC = () => (
       </div>
       <div className="flex gap-2">
         <Link href="/app/converter/" className="btn btn-primary btn-sm">
-          <LuDownload className="h-4 w-4" />
+          <PiDownloadSimple className="h-4 w-4" />
           Open converter
         </Link>
         <Link href="/app/previewer/" className="btn btn-outline btn-sm">

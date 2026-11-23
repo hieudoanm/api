@@ -5,16 +5,17 @@ import type { ChangeEvent, DragEvent, FC } from 'react';
 import { convert, convert_all, openapi_info } from '@api/wasm';
 import { log } from '@/lib/log';
 import {
-  LuCheck,
-  LuCopy,
-  LuDownload,
-  LuExternalLink,
-  LuFileJson,
-  LuPlay,
-  LuSearch,
-  LuTrash2,
-  LuUpload,
-} from 'react-icons/lu';
+  PiCheck,
+  PiCopy,
+  PiDownloadSimple,
+  PiFileJs,
+  PiPlay,
+  PiMagnifyingGlass,
+  PiTrash,
+  PiUploadSimple,
+  PiArrowSquareOut,
+} from 'react-icons/pi';
+
 import {
   downloadBlob,
   ensureWasm,
@@ -290,7 +291,7 @@ const PreviewerApp: FC = () => {
                 type="button"
                 className="btn btn-outline btn-sm"
                 onClick={() => fileInputRef.current?.click()}>
-                <LuUpload className="h-4 w-4" />
+                <PiUploadSimple className="h-4 w-4" />
                 Drop or choose file
               </button>
               <input
@@ -305,7 +306,7 @@ const PreviewerApp: FC = () => {
                 className="btn btn-ghost btn-sm"
                 onClick={clear}
                 disabled={!source && !files}>
-                <LuTrash2 className="h-4 w-4" />
+                <PiTrash className="h-4 w-4" />
                 Clear
               </button>
               <span className="text-base-content/50 ml-auto text-xs">
@@ -364,7 +365,7 @@ const PreviewerApp: FC = () => {
                 className="btn btn-outline"
                 onClick={() => void inspect()}
                 disabled={!ready || !source.trim()}>
-                <LuSearch className="h-4 w-4" />
+                <PiMagnifyingGlass className="h-4 w-4" />
                 {busy === 'inspect' ? 'Inspecting…' : 'Inspect spec'}
               </button>
               <button
@@ -372,7 +373,7 @@ const PreviewerApp: FC = () => {
                 className="btn btn-primary"
                 onClick={() => void runConvert()}
                 disabled={!ready || !source.trim()}>
-                <LuPlay className="h-4 w-4" />
+                <PiPlay className="h-4 w-4" />
                 {busy === 'convert' ? 'Generating…' : 'Generate preview'}
               </button>
               {wasmState === 'loading' && (
@@ -382,7 +383,7 @@ const PreviewerApp: FC = () => {
               )}
               {wasmState === 'ready' && (
                 <span className="text-success inline-flex items-center gap-1 text-sm font-semibold">
-                  <LuCheck className="h-4 w-4" /> WASM ready
+                  <PiCheck className="h-4 w-4" /> WASM ready
                 </span>
               )}
             </div>
@@ -434,13 +435,13 @@ const PreviewerApp: FC = () => {
                     target="_blank"
                     rel="noreferrer"
                     className="btn btn-ghost btn-xs">
-                    <LuExternalLink className="h-3.5 w-3.5" /> Open
+                    <PiArrowSquareOut className="h-3.5 w-3.5" /> Open
                   </a>
                   <button
                     type="button"
                     className="btn btn-ghost btn-xs"
                     onClick={() => downloadFile(selectedFile)}>
-                    <LuDownload className="h-3.5 w-3.5" /> Download
+                    <PiDownloadSimple className="h-3.5 w-3.5" /> Download
                   </button>
                 </div>
               </div>
@@ -480,7 +481,7 @@ const PreviewerApp: FC = () => {
                       className="w-full text-left"
                       onClick={() => setSelected(index)}>
                       <div className="flex items-center gap-2">
-                        <LuFileJson className="text-primary h-4 w-4 shrink-0" />
+                        <PiFileJs className="text-primary h-4 w-4 shrink-0" />
                         <span className="text-base-content truncate font-mono text-xs font-semibold">
                           {file.path}
                         </span>
@@ -497,13 +498,13 @@ const PreviewerApp: FC = () => {
                         type="button"
                         className="btn btn-ghost btn-xs"
                         onClick={() => downloadFile(file)}>
-                        <LuDownload className="h-3.5 w-3.5" /> File
+                        <PiDownloadSimple className="h-3.5 w-3.5" /> File
                       </button>
                       <button
                         type="button"
                         className="btn btn-ghost btn-xs"
                         onClick={() => void copyContent(file.content)}>
-                        <LuCopy className="h-3.5 w-3.5" />{' '}
+                        <PiCopy className="h-3.5 w-3.5" />{' '}
                         {copied && index === selected ? 'Copied' : 'Copy'}
                       </button>
                     </div>

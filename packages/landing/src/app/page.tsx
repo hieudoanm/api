@@ -6,19 +6,19 @@ import Features, { type Feature } from '@/components/molecules/Features';
 import Hero from '@/components/molecules/Hero';
 import CTA from '@/components/molecules/CTA';
 import {
-  LuArrowLeftRight,
-  LuBraces,
-  LuCheck,
-  LuCloudOff,
-  LuFileCode,
-  LuFileJson,
-  LuFolderTree,
-  LuKeyRound,
-  LuLayers,
-  LuPackage,
-  LuRepeat,
-  LuTerminal,
-} from 'react-icons/lu';
+  PiArrowsLeftRight,
+  PiBracketsCurly,
+  PiCheck,
+  PiCloudSlash,
+  PiFileCode,
+  PiFileJs,
+  PiTreeStructure,
+  PiKey,
+  PiStack,
+  PiPackage,
+  PiRepeat,
+  PiTerminal,
+} from 'react-icons/pi';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
@@ -73,47 +73,47 @@ const FEATURES: Feature[] = [
   {
     title: 'OpenAPI 3.x in, collections out',
     body: 'JSON or YAML specs are normalized into one intermediate model, then emitted in the target client’s native format. No spec rewriting, no SaaS.',
-    icon: LuArrowLeftRight,
+    icon: PiArrowsLeftRight,
   },
   {
     title: 'Ten client formats',
     body: 'Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl — or all of them in a single run with --format all.',
-    icon: LuLayers,
+    icon: PiStack,
   },
   {
     title: 'Auth schemes mapped',
     body: 'Bearer, Basic, API key, OAuth2 and OpenID Connect security schemes become each client’s native auth — with {{placeholders}} for secrets.',
-    icon: LuKeyRound,
+    icon: PiKey,
   },
   {
     title: 'Tags become folders',
     body: 'OpenAPI tags organize requests into folders exactly like the spec author intended — no flat walls of endpoints.',
-    icon: LuFolderTree,
+    icon: PiTreeStructure,
   },
   {
     title: 'Bodies & parameters',
     body: 'Path, query and header parameters plus JSON, form, multipart and raw bodies — content types preserved per media type.',
-    icon: LuBraces,
+    icon: PiBracketsCurly,
   },
   {
     title: 'One Rust binary',
     body: 'api-core does the conversion, api-cli is a thin clap binary on top. Small, fast, auditable — cargo install and go.',
-    icon: LuPackage,
+    icon: PiPackage,
   },
   {
     title: 'CI-friendly',
     body: 'Regenerate collections on every spec change and commit the diff — REST Client and Bruno output are plain text that reviews cleanly.',
-    icon: LuRepeat,
+    icon: PiRepeat,
   },
   {
     title: 'Offline by design',
     body: 'Your spec never leaves the machine. No accounts, no telemetry, no cloud conversion service — just a file in, files out.',
-    icon: LuCloudOff,
+    icon: PiCloudSlash,
   },
   {
     title: 'Library + CLI',
     body: 'api-core is a normal Rust crate — embed conversion in your own tooling, generators or doc pipelines, not just the CLI.',
-    icon: LuTerminal,
+    icon: PiTerminal,
   },
 ];
 
@@ -129,61 +129,61 @@ const FORMATS: FormatCard[] = [
     name: 'Postman',
     file: 'acme.postman_collection.json',
     body: 'Collection v2.1 — import via Postman → Import → File.',
-    icon: LuFileJson,
+    icon: PiFileJs,
   },
   {
     name: 'Bruno',
     file: 'bruno/  (bruno.json + *.bru)',
     body: 'Plain-text .bru files — git-friendly, offline-first.',
-    icon: LuFolderTree,
+    icon: PiTreeStructure,
   },
   {
     name: 'Insomnia',
     file: 'acme.insomnia.json',
     body: 'Insomnia v4 export — workspace, groups and requests.',
-    icon: LuFileJson,
+    icon: PiFileJs,
   },
   {
     name: 'Hoppscotch',
     file: 'acme.hoppscotch.json',
     body: 'Hoppscotch collection JSON — import from the app.',
-    icon: LuFileJson,
+    icon: PiFileJs,
   },
   {
     name: 'REST Client',
     file: 'acme.http',
     body: '.http blocks for the REST Client VS Code / JetBrains extension.',
-    icon: LuFileCode,
+    icon: PiFileCode,
   },
   {
     name: 'Thunder Client',
     file: 'thunder-collection_acme.json',
     body: 'Thunder Client export JSON — import into the VS Code extension.',
-    icon: LuFileJson,
+    icon: PiFileJs,
   },
   {
     name: 'Yaak',
     file: 'yaak/  (workspace.yaml + *.yaml)',
     body: 'YAML files in Yaak’s directory-sync format — open as a workspace.',
-    icon: LuFolderTree,
+    icon: PiTreeStructure,
   },
   {
     name: 'Hurl',
     file: 'hurl/  (*.hurl per request)',
     body: 'One .hurl file per request — run with hurl --test or commit to git.',
-    icon: LuFileCode,
+    icon: PiFileCode,
   },
   {
     name: 'Kreya',
     file: 'acme/  (*.krproj project)',
     body: 'Kreya project directory — .krop operations plus body files.',
-    icon: LuFolderTree,
+    icon: PiTreeStructure,
   },
   {
     name: 'curl',
     file: 'acme.sh',
     body: 'Executable bash script of curl commands — zero dependencies.',
-    icon: LuTerminal,
+    icon: PiTerminal,
   },
 ];
 
@@ -315,7 +315,7 @@ const Home: NextPage = () => (
               </div>
             ))}
             <div className="border-primary/30 bg-primary/5 flex flex-col justify-center rounded-2xl border border-dashed p-6 text-center">
-              <LuCheck className="text-primary mx-auto mb-2 h-6 w-6" />
+              <PiCheck className="text-primary mx-auto mb-2 h-6 w-6" />
               <p className="text-base-content m-0 text-sm font-semibold">
                 --format all
               </p>

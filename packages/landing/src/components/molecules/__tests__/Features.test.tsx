@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import Features from '../Features';
-import { LuTerminal } from 'react-icons/lu';
+import { PiTerminal } from 'react-icons/pi';
 
 const features = [
-  { title: 'Fast', body: 'Written in Rust.', icon: LuTerminal },
-  { title: 'Local', body: 'No cloud.', icon: LuTerminal },
+  { title: 'Fast', body: 'Written in Rust.', icon: PiTerminal },
+  { title: 'Local', body: 'No cloud.', icon: PiTerminal },
 ];
 
 describe('Features', () => {

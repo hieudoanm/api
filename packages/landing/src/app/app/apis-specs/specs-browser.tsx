@@ -4,15 +4,16 @@ import { useMemo, useState } from 'react';
 import type { FC } from 'react';
 import Link from 'next/link';
 import {
-  LuChevronLeft,
-  LuChevronRight,
-  LuDownload,
-  LuEye,
-  LuFileText,
-  LuPlay,
-  LuSearch,
-  LuX,
-} from 'react-icons/lu';
+  PiCaretLeft,
+  PiCaretRight,
+  PiDownloadSimple,
+  PiEye,
+  PiFileText,
+  PiPlay,
+  PiMagnifyingGlass,
+  PiX,
+} from 'react-icons/pi';
+
 import { specHref } from './specs';
 import type { ApiSpec } from './specs';
 
@@ -55,7 +56,7 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
     <>
       <div className="mb-6 flex flex-col gap-3">
         <div className="relative">
-          <LuSearch className="text-base-content/40 pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
+          <PiMagnifyingGlass className="text-base-content/40 pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
           <input
             type="search"
             value={query}
@@ -73,7 +74,7 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
               onClick={() => setQuery('')}
               aria-label="Clear search"
               className="text-base-content/40 hover:text-base-content absolute top-1/2 right-3 -translate-y-1/2">
-              <LuX className="h-4 w-4" />
+              <PiX className="h-4 w-4" />
             </button>
           )}
         </div>
@@ -147,7 +148,7 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
                     href={specHref(spec.file)}
                     prefetch={false}
                     className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">
-                    <LuFileText className="h-4 w-4" />
+                    <PiFileText className="h-4 w-4" />
                     Spec
                   </Link>
                   <Link
@@ -155,19 +156,19 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
                     prefetch={false}
                     download={spec.file}
                     className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">
-                    <LuDownload className="h-4 w-4" />
+                    <PiDownloadSimple className="h-4 w-4" />
                     Download
                   </Link>
                   <Link
                     href={`/app/converter/?spec=${spec.file}`}
                     className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">
-                    <LuPlay className="h-4 w-4" />
+                    <PiPlay className="h-4 w-4" />
                     Convert
                   </Link>
                   <Link
                     href={`/app/previewer/?spec=${spec.file}`}
                     className="text-primary inline-flex items-center gap-1.5 whitespace-nowrap">
-                    <LuEye className="h-4 w-4" />
+                    <PiEye className="h-4 w-4" />
                     Preview
                   </Link>
                 </div>
@@ -183,7 +184,7 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
                 className="btn btn-outline btn-sm border-base-content/20 hover:border-primary/60"
                 disabled={currentPage === 1}
                 onClick={() => setPage(currentPage - 1)}>
-                <LuChevronLeft className="h-4 w-4" />
+                <PiCaretLeft className="h-4 w-4" />
                 Prev
               </button>
               <div className="join">
@@ -211,7 +212,7 @@ const SpecsBrowser: FC<SpecsBrowserProps> = ({ specs }) => {
                 disabled={currentPage === totalPages}
                 onClick={() => setPage(currentPage + 1)}>
                 Next
-                <LuChevronRight className="h-4 w-4" />
+                <PiCaretRight className="h-4 w-4" />
               </button>
             </nav>
           )}

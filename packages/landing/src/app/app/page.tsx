@@ -3,12 +3,12 @@ import type { FC } from 'react';
 import Link from 'next/link';
 import type { IconType } from 'react-icons';
 import {
-  LuArrowRight,
-  LuEye,
-  LuFileJson,
-  LuGlobe,
-  LuLibrary,
-} from 'react-icons/lu';
+  PiArrowRight,
+  PiEye,
+  PiFileJs,
+  PiGlobe,
+  PiBooks,
+} from 'react-icons/pi';
 
 export const metadata: Metadata = {
   title: 'Apps',
@@ -32,7 +32,7 @@ const APPS: AppCard[] = [
     description:
       'Turn an OpenAPI spec into ready-to-import collections for Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client, Yaak, Hurl, Kreya and curl.',
     cta: 'Open converter',
-    icon: LuFileJson,
+    icon: PiFileJs,
   },
   {
     href: '/app/previewer/',
@@ -40,7 +40,7 @@ const APPS: AppCard[] = [
     description:
       'Render your spec with Swagger UI, ReDoc, Scalar, Stoplight Elements or RapiDoc and download the standalone HTML page.',
     cta: 'Open previewer',
-    icon: LuEye,
+    icon: PiEye,
   },
   {
     href: '/app/apis-specs/',
@@ -48,7 +48,7 @@ const APPS: AppCard[] = [
     description:
       'Browse sixty-four ready-made OpenAPI specs — OpenAI, Gemini, Claude, Telegram, Chess.com, Lichess and more — and feed them straight into the converter or previewer.',
     cta: 'Browse specs',
-    icon: LuLibrary,
+    icon: PiBooks,
   },
   {
     href: '/app/public-apis/',
@@ -56,7 +56,7 @@ const APPS: AppCard[] = [
     description:
       'A curated directory of free public APIs — AI, weather, finance, gaming and more — many with ready-made OpenAPI specs.',
     cta: 'Browse APIs',
-    icon: LuGlobe,
+    icon: PiGlobe,
   },
 ];
 
@@ -94,7 +94,7 @@ const AppPage: FC = () => (
             </p>
             <span className="text-primary mt-4 inline-flex items-center gap-1 text-sm font-semibold">
               {app.cta}
-              <LuArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              <PiArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </span>
           </Link>
         );
