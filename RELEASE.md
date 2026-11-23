@@ -17,14 +17,16 @@ cloud, no accounts.
 | Windows x86_64      | `cli-api-x86_64-pc-windows-msvc.exe` |
 | VS Code extension   | `extension-vscode-api.vsix`          |
 | Zed extension       | `extension-zed-api.tar.gz`           |
+| JetBrains plugin    | `extension-jetbrains-api.zip`        |
 
 Or install from source:
 
 ```sh
-./scripts/install.sh --cli      # release binary
-./scripts/install.sh --vscode   # VS Code extension (.vsix)
-./scripts/install.sh --zed      # Zed extension (repo checkout)
-./scripts/install-local.sh      # build everything from this checkout
+./scripts/install.sh --cli        # release binary
+./scripts/install.sh --vscode     # VS Code extension (.vsix)
+./scripts/install.sh --zed        # Zed extension (repo checkout)
+./scripts/install.sh --jetbrains  # JetBrains plugin (.zip)
+./scripts/install-local.sh        # build everything from this checkout
 cargo install api-cli           # once published
 ```
 

@@ -1,0 +1,45 @@
+<idea-plugin>
+    <id>io.github.hieudoanm.api.idea</id>
+    <name>api — OpenAPI Converter</name>
+    <vendor>hieudoanm</vendor>
+    <description><![CDATA[
+        Convert OpenAPI 3.x JSON/YAML specs into API client collections and
+        HTML documentation previews via the `api` CLI.
+
+        Provides actions to convert the current spec (or a picked file) into
+        Postman, Bruno, Insomnia, Hoppscotch, REST Client, Thunder Client,
+        Yaak, Hurl, Kreya or curl collections under `api-collections/`, and to
+        generate browsable docs (Swagger UI, ReDoc, Scalar, Stoplight Elements,
+        RapiDoc) under `api-docs/` — next to the spec file.
+
+        Requires the `api` CLI on PATH (configurable in Settings → Tools → api).
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.json</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <notificationGroup
+            id="api"
+            displayType="BALLOON"/>
+        <applicationService
+            serviceImplementation="com.api.idea.ApiSettings"/>
+        <applicationConfigurable
+            parentId="tools"
+            instance="com.api.idea.ApiSettingsConfigurable"
+            id="com.api.idea.settings"
+            displayName="api"/>
+    </extensions>
+
+    <actions>
+        <group id="api" text="api" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+            <action id="api.ConvertSpec" class="com.api.idea.actions.ConvertSpecAction"
+                    text="Convert OpenAPI Spec" description="Convert an OpenAPI spec into API client collections"/>
+            <action id="api.PreviewSpec" class="com.api.idea.actions.PreviewSpecAction"
+                    text="Preview OpenAPI Spec" description="Generate browsable HTML API docs from an OpenAPI spec"/>
+            <action id="api.ListFormats" class="com.api.idea.actions.ListFormatsAction"
+                    text="List api Formats" description="Show the API client formats supported by the api CLI"/>
+        </group>
+    </actions>
+</idea-plugin>

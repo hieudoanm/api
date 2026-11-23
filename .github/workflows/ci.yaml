@@ -170,12 +170,58 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+  extension-jetbrains:
+    name: Extension - JetBrains
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v6.3.0
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Cache Gradle
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('packages/extensions/jetbrains/**/*.gradle*', 'packages/extensions/jetbrains/gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Build plugin
+        working-directory: packages/extensions/jetbrains
+        run: ./gradlew buildPlugin --no-daemon --console=plain
+
+      - name: Test plugin
+        working-directory: packages/extensions/jetbrains
+        run: ./gradlew test koverVerify --no-daemon --console=plain
+
+      - name: Rename plugin artifact
+        shell: bash
+        run: |
+          cd packages/extensions/jetbrains/build/distributions
+          for f in *.zip; do mv "$f" extension-jetbrains-api.zip; done
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: extension-jetbrains-api
+          path: packages/extensions/jetbrains/build/distributions/*.zip
+          if-no-files-found: error
+          retention-days: 7
+
   release:
     name: Release
     needs:
       - cli-build
       - extension-vscode
       - extension-zed
+      - extension-jetbrains
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:

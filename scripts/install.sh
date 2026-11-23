@@ -12,16 +12,17 @@ die()   { error "$*"; exit 1; }
 
 usage() {
   cat <<'EOF'
-Usage: install.sh [--cli|--vscode|--zed] [DEST]
+Usage: install.sh [--cli|--vscode|--zed|--jetbrains] [DEST]
 
-  --cli       Install the api CLI binary (default)
-  --vscode    Download the VS Code extension (extension-vscode-api.vsix) and install it
-  --zed       Clone the repo and point you at the Zed dev extension
-              (packages/extensions/zed — api-core is a path dependency, so the
-              extension must be built from a full checkout)
+  --cli        Install the api CLI binary (default)
+  --vscode     Download the VS Code extension (extension-vscode-api.vsix) and install it
+  --zed        Clone the repo and point you at the Zed dev extension
+               (packages/extensions/zed — api-core is a path dependency, so the
+               extension must be built from a full checkout)
+  --jetbrains  Download the JetBrains plugin zip (extension-jetbrains-api.zip)
 
-DEST is the install path for --cli, the download directory for --vscode,
-or the parent directory for --zed.
+DEST is the install path for --cli, the download directory for --vscode
+and --jetbrains, or the parent directory for --zed.
 
 Environment:
   INSTALL_DIR  fallback install dir for --cli (default ~/.local/bin)
@@ -34,9 +35,10 @@ MODE=cli
 DEST="${INSTALL_DIR:-}"
 for arg in "$@"; do
   case "$arg" in
-    --cli)     MODE=cli ;;
-    --vscode)  MODE=vscode ;;
-    --zed)     MODE=zed ;;
+    --cli)        MODE=cli ;;
+    --vscode)     MODE=vscode ;;
+    --zed)        MODE=zed ;;
+    --jetbrains)  MODE=jetbrains ;;
     -h|--help) usage 0 ;;
     --*)       die "Unknown flag: $arg" ;;
     *)         [ -z "$DEST" ] && DEST="$arg" || die "Unexpected argument: $arg" ;;
@@ -169,8 +171,26 @@ Next steps (Zed):
 EOF
 }
 
+# --- JetBrains (.zip) --------------------------------------------------------
+install_jetbrains() {
+  local dir="$DEST"
+  [ -z "$dir" ] && dir="$HOME/Downloads"
+  mkdir -p "$dir"
+  local zip="$dir/extension-jetbrains-api.zip"
+  download "$BASE_URL/extension-jetbrains-api.zip" "$zip"
+  cat <<EOF
+
+Next steps (JetBrains):
+  1. Open Settings → Plugins → ⚙ → "Install Plugin from Disk…"
+  2. Pick: $zip
+  The plugin shells out to the 'api' CLI — install it too
+  (./scripts/install.sh --cli) or set the path in Settings → Tools → api.
+EOF
+}
+
 case "$MODE" in
-  cli)     install_cli ;;
-  vscode)  install_vscode ;;
-  zed)     install_zed ;;
+  cli)        install_cli ;;
+  vscode)     install_vscode ;;
+  zed)        install_zed ;;
+  jetbrains)  install_jetbrains ;;
 esac

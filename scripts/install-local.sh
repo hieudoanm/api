@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 VSCODE_DIR="$REPO_ROOT/packages/extensions/vscode"
 ZED_DIR="$REPO_ROOT/packages/extensions/zed"
+JETBRAINS_DIR="$REPO_ROOT/packages/extensions/jetbrains"
 
 ts() { date '+%Y-%m-%dT%H:%M:%S%z'; }
 
@@ -14,15 +15,16 @@ die()   { error "$*"; exit 1; }
 
 usage() {
   cat <<'EOF'
-Usage: install-local.sh [--cli|--vscode|--zed] [DEST]
+Usage: install-local.sh [--cli|--vscode|--zed|--jetbrains] [DEST]
 
-  --cli       Build the api CLI from source and install it (default)
-  --vscode    Build the VS Code extension and install extension-vscode-api.vsix
-  --zed       Build the Zed extension and point you at the source dir
-              (Install Dev Extension — api-core is a path dependency)
+  --cli        Build the api CLI from source and install it (default)
+  --vscode     Build the VS Code extension and install extension-vscode-api.vsix
+  --zed        Build the Zed extension and point you at the source dir
+               (Install Dev Extension — api-core is a path dependency)
+  --jetbrains  Build the JetBrains plugin zip (./gradlew buildPlugin)
 
-DEST is the install path for --cli, the download directory for --vscode,
-or ignored for --zed.
+DEST is the install path for --cli, the download directory for --vscode
+and --jetbrains, or ignored for --zed.
 
 Environment:
   INSTALL_DIR  fallback install dir for --cli (default ~/.local/bin)
@@ -35,9 +37,10 @@ MODE=cli
 DEST="${INSTALL_DIR:-}"
 for arg in "$@"; do
   case "$arg" in
-    --cli)     MODE=cli ;;
-    --vscode)  MODE=vscode ;;
-    --zed)     MODE=zed ;;
+    --cli)        MODE=cli ;;
+    --vscode)     MODE=vscode ;;
+    --zed)        MODE=zed ;;
+    --jetbrains)  MODE=jetbrains ;;
     -h|--help) usage 0 ;;
     --*)       die "Unknown flag: $arg" ;;
     *)         [ -z "$DEST" ] && DEST="$arg" || die "Unexpected argument: $arg" ;;
@@ -160,8 +163,33 @@ Next steps (Zed):
 EOF
 }
 
+# --- JetBrains (plugin zip) ---------------------------------------------------
+install_jetbrains() {
+  command -v java >/dev/null 2>&1 || die "java not found; install JDK 21+"
+  log "Building JetBrains plugin (./gradlew buildPlugin)"
+  (cd "$JETBRAINS_DIR" && ./gradlew buildPlugin --console=plain)
+  local zip
+  zip="$(find "$JETBRAINS_DIR/build/distributions" -name '*.zip' | head -1)"
+  [ -f "$zip" ] || die "Expected a plugin zip under $JETBRAINS_DIR/build/distributions"
+
+  local dir="$DEST"
+  [ -z "$dir" ] && dir="$HOME/Downloads"
+  mkdir -p "$dir"
+  cp "$zip" "$dir/extension-jetbrains-api.zip"
+  log "Copied $dir/extension-jetbrains-api.zip"
+  cat <<EOF
+
+Next steps (JetBrains):
+  1. Open Settings → Plugins → ⚙ → "Install Plugin from Disk…"
+  2. Pick: $dir/extension-jetbrains-api.zip
+  The plugin shells out to the 'api' CLI — install it too
+  (./scripts/install-local.sh --cli) or set the path in Settings → Tools → api.
+EOF
+}
+
 case "$MODE" in
-  cli)     install_cli ;;
-  vscode)  install_vscode ;;
-  zed)     install_zed ;;
+  cli)        install_cli ;;
+  vscode)     install_vscode ;;
+  zed)        install_zed ;;
+  jetbrains)  install_jetbrains ;;
 esac
