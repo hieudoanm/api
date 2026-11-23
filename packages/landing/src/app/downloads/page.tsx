@@ -125,11 +125,25 @@ const Downloads: FC = () => (
             <FaPuzzlePiece className="text-primary h-5 w-5" />
             Editor extensions
           </h2>
-          <p className="text-base-content/60 text-sm">
-            The VS Code and Zed extensions are installed from source via{' '}
-            <code>install.sh --vscode</code> / <code>install.sh --zed</code>, or
-            build them from the <code>packages/extensions</code> directory in
-            the repository.
+          <div className="mt-4 flex flex-col gap-2">
+            <a
+              href={`${RELEASES}/extension-vscode-api.vsix`}
+              className="btn btn-primary btn-sm w-fit gap-2">
+              <FaDownload className="h-3.5 w-3.5" />
+              VS Code extension (.vsix)
+            </a>
+            <a
+              href={`${RELEASES}/extension-zed-api.tar.gz`}
+              className="btn btn-outline btn-sm w-fit gap-2">
+              <FaDownload className="h-3.5 w-3.5" />
+              Zed extension (source tarball)
+            </a>
+          </div>
+          <p className="text-base-content/60 mt-4 text-sm">
+            Or install from the command line: <code>install.sh --vscode</code> /{' '}
+            <code>install.sh --zed</code>. The Zed extension links{' '}
+            <code>api-core</code> by path, so it must be built from a repository
+            checkout — see <code>packages/extensions/zed</code>.
           </p>
         </div>
       </div>
