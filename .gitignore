@@ -13,3 +13,4 @@ packages/landing/out/
 .turbo/
 examples/output/
 .tracers-cache/
+.tracers/cache/
