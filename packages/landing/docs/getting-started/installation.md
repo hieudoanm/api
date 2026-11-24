@@ -1,5 +1,14 @@
 # Installation
 
+Step-by-step guides per platform and editor live under [Guides](../guides/) —
+CLI for [macOS (Apple Silicon)](../guides/how-to-install-cli-macos-silicon.md),
+[macOS (Intel)](../guides/how-to-install-cli-macos-intel.md),
+[Linux](../guides/how-to-install-cli-linux.md) and
+[Windows](../guides/how-to-install-cli-windows.md), plus the
+[VS Code](../guides/how-to-install-vscode.md),
+[Zed](../guides/how-to-install-zed.md) and
+[JetBrains](../guides/how-to-install-jetbrains.md) extensions.
+
 ## Prebuilt binaries
 
 Prebuilt binaries for Linux, macOS and Windows are attached to each

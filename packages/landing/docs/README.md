@@ -34,3 +34,13 @@ api is a Rust workspace:
 ### Guides
 
 - [Using api in CI](guides/ci.md)
+
+### Installation guides
+
+- [CLI on macOS (Apple Silicon)](guides/how-to-install-cli-macos-silicon.md)
+- [CLI on macOS (Intel)](guides/how-to-install-cli-macos-intel.md)
+- [CLI on Linux](guides/how-to-install-cli-linux.md)
+- [CLI on Windows](guides/how-to-install-cli-windows.md)
+- [VS Code extension](guides/how-to-install-vscode.md)
+- [Zed extension](guides/how-to-install-zed.md)
+- [JetBrains plugin](guides/how-to-install-jetbrains.md)
